@@ -59,7 +59,8 @@
       "mcp__playwright__browser_evaluate",
       "WebFetch(domain:docs.railway.com)",
       "WebFetch(domain:supabase.com)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": [],
