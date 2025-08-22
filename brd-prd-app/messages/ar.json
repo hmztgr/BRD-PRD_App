@@ -1,0 +1,213 @@
+{
+  "common": {
+    "loading": "جاري التحميل...",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "create": "إنشاء",
+    "update": "تحديث",
+    "confirm": "تأكيد",
+    "close": "إغلاق",
+    "next": "التالي",
+    "previous": "السابق",
+    "submit": "إرسال",
+    "search": "بحث",
+    "filter": "تصفية",
+    "reset": "إعادة تعيين",
+    "language": "اللغة",
+    "english": "English",
+    "arabic": "العربية"
+  },
+  "navigation": {
+    "dashboard": "لوحة التحكم",
+    "documents": "المستندات",
+    "templates": "النماذج",
+    "settings": "الإعدادات",
+    "pricing": "الأسعار",
+    "signIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب",
+    "signOut": "تسجيل الخروج",
+    "profile": "الملف الشخصي"
+  },
+  "header": {
+    "title": "منشئ متطلبات المشاريع",
+    "subtitle": "إنشاء مستندات الأعمال باستخدام الذكاء الاصطناعي"
+  },
+  "dashboard": {
+    "welcome": "مرحباً بعودتك",
+    "recentDocuments": "المستندات الأخيرة",
+    "quickActions": "الإجراءات السريعة",
+    "createNew": "إنشاء مستند جديد",
+    "viewAll": "عرض جميع المستندات",
+    "statistics": "الإحصائيات",
+    "totalDocuments": "إجمالي المستندات",
+    "tokensUsed": "الرموز المستخدمة",
+    "subscription": "الاشتراك"
+  },
+  "documents": {
+    "title": "المستندات",
+    "createNew": "إنشاء مستند جديد",
+    "noDocuments": "لا توجد مستندات",
+    "createFirst": "أنشئ مستندك الأول",
+    "lastModified": "آخر تعديل",
+    "createdAt": "تاريخ الإنشاء",
+    "type": "النوع",
+    "status": "الحالة",
+    "actions": "الإجراءات"
+  },
+  "auth": {
+    "signIn": {
+      "title": "تسجيل الدخول",
+      "subtitle": "مرحباً بعودتك! يرجى تسجيل الدخول إلى حسابك",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "rememberMe": "تذكرني",
+      "forgotPassword": "نسيت كلمة المرور؟",
+      "noAccount": "ليس لديك حساب؟",
+      "signUp": "أنشئ حساباً هنا",
+      "signingIn": "جاري تسجيل الدخول...",
+      "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة"
+    },
+    "signUp": {
+      "title": "إنشاء حساب",
+      "subtitle": "ابدأ مع حسابك المجاني",
+      "name": "الاسم الكامل",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "confirmPassword": "تأكيد كلمة المرور",
+      "agreeToTerms": "أوافق على شروط الخدمة وسياسة الخصوصية",
+      "hasAccount": "لديك حساب بالفعل؟",
+      "signIn": "سجل الدخول هنا",
+      "creatingAccount": "جاري إنشاء الحساب...",
+      "passwordMismatch": "كلمتا المرور غير متطابقتان"
+    }
+  },
+  "pricing": {
+    "title": "اختر خطتك",
+    "subtitle": "اختر الخطة المثالية لاحتياجات عملك",
+    "monthly": "شهرياً",
+    "yearly": "سنوياً",
+    "free": {
+      "name": "مجاني",
+      "price": "٠ ريال",
+      "period": "إلى الأبد",
+      "description": "مثالية لتجربة خدمتنا",
+      "features": [
+        "٥ مستندات شهرياً",
+        "النماذج الأساسية",
+        "دعم المجتمع"
+      ]
+    },
+    "professional": {
+      "name": "احترافي",
+      "price": "١٤.٢٥ ريال",
+      "period": "شهرياً",
+      "description": "للمحترفين والفرق الصغيرة",
+      "features": [
+        "٥٠ مستنداً شهرياً",
+        "النماذج المتقدمة",
+        "دعم أولوية",
+        "تصدير PDF/DOCX"
+      ]
+    },
+    "business": {
+      "name": "الأعمال",
+      "price": "٣٦.٧٥ ريال",
+      "period": "شهرياً",
+      "description": "للشركات النامية",
+      "features": [
+        "٢٠٠ مستنداً شهرياً",
+        "نماذج مخصصة",
+        "تعاون الفريق",
+        "مزايا الذكاء الاصطناعي المتقدمة"
+      ]
+    },
+    "enterprise": {
+      "name": "المؤسسات",
+      "price": "١٤٩.٢٥ ريال",
+      "period": "شهرياً",
+      "description": "للمؤسسات الكبيرة",
+      "features": [
+        "مستندات غير محدودة",
+        "تكاملات مخصصة",
+        "دعم مخصص",
+        "حلول العلامة البيضاء"
+      ]
+    },
+    "currentPlan": "الخطة الحالية",
+    "upgrade": "ترقية",
+    "subscribe": "اشترك الآن"
+  },
+  "document": {
+    "types": {
+      "brd": "وثيقة متطلبات الأعمال",
+      "prd": "وثيقة متطلبات المنتج",
+      "both": "وثيقة متطلبات مدمجة"
+    },
+    "form": {
+      "title": "إنشاء مستند جديد",
+      "projectName": "اسم المشروع",
+      "projectDescription": "وصف المشروع",
+      "documentType": "نوع المستند",
+      "additionalRequirements": "متطلبات إضافية",
+      "businessContext": "السياق التجاري",
+      "targetAudience": "الجمهور المستهدف",
+      "timeline": "الجدول الزمني",
+      "budget": "نطاق الميزانية",
+      "stakeholders": "أصحاب المصلحة الرئيسيين"
+    },
+    "chat": {
+      "placeholder": "اطرح أسئلة حول مستندك أو اطلب تعديلات...",
+      "send": "إرسال",
+      "thinking": "الذكاء الاصطناعي يفكر...",
+      "generating": "جاري إنشاء المستند..."
+    }
+  },
+  "subscription": {
+    "manage": "إدارة الاشتراك",
+    "upgrade": "ترقية الخطة",
+    "cancel": "إلغاء الاشتراك",
+    "renews": "يتجدد في",
+    "expires": "ينتهي في",
+    "usage": "الاستخدام",
+    "tokensRemaining": "الرموز المتبقية"
+  },
+  "errors": {
+    "general": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+    "network": "خطأ في الشبكة. يرجى فحص الاتصال.",
+    "unauthorized": "غير مخول لك تنفيذ هذا الإجراء.",
+    "notFound": "المورد المطلوب غير موجود.",
+    "validation": "يرجى مراجعة البيانات المدخلة والمحاولة مرة أخرى.",
+    "server": "خطأ في الخادم. يرجى المحاولة لاحقاً."
+  },
+  "success": {
+    "documentCreated": "تم إنشاء المستند بنجاح",
+    "documentUpdated": "تم تحديث المستند بنجاح",
+    "accountCreated": "تم إنشاء الحساب بنجاح",
+    "settingsSaved": "تم حفظ الإعدادات بنجاح",
+    "subscriptionUpdated": "تم تحديث الاشتراك بنجاح"
+  },
+  "saudi": {
+    "compliance": {
+      "zatca": "متوافق مع زاتكا",
+      "sama": "متوافق مع ساما",
+      "vision2030": "يدعم رؤية 2030",
+      "commercialRegistration": "السجل التجاري",
+      "ministryOfCommerce": "وزارة التجارة"
+    },
+    "business": {
+      "context": "السياق التجاري السعودي",
+      "regulations": "الأنظمة واللوائح",
+      "culturalConsiderations": "الاعتبارات الثقافية",
+      "localMarket": "السوق المحلي",
+      "stakeholdersManagement": "إدارة أصحاب المصلحة"
+    },
+    "templates": {
+      "government": "نماذج الجهات الحكومية",
+      "private": "نماذج القطاع الخاص",
+      "nonprofit": "نماذج المؤسسات غير الربحية",
+      "sme": "نماذج المنشآت الصغيرة والمتوسطة"
+    }
+  }
+}

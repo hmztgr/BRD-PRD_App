@@ -1,0 +1,191 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "create": "Create",
+    "update": "Update",
+    "confirm": "Confirm",
+    "close": "Close",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "search": "Search",
+    "filter": "Filter",
+    "reset": "Reset",
+    "language": "Language",
+    "english": "English",
+    "arabic": "العربية"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "documents": "Documents",
+    "templates": "Templates",
+    "settings": "Settings",
+    "pricing": "Pricing",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out",
+    "profile": "Profile"
+  },
+  "header": {
+    "title": "BRD/PRD Generator",
+    "subtitle": "AI-Powered Business Document Creation"
+  },
+  "dashboard": {
+    "welcome": "Welcome back",
+    "recentDocuments": "Recent Documents",
+    "quickActions": "Quick Actions",
+    "createNew": "Create New Document",
+    "viewAll": "View All Documents",
+    "statistics": "Statistics",
+    "totalDocuments": "Total Documents",
+    "tokensUsed": "Tokens Used",
+    "subscription": "Subscription"
+  },
+  "documents": {
+    "title": "Documents",
+    "createNew": "Create New Document",
+    "noDocuments": "No documents found",
+    "createFirst": "Create your first document",
+    "lastModified": "Last modified",
+    "createdAt": "Created at",
+    "type": "Type",
+    "status": "Status",
+    "actions": "Actions"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Sign In",
+      "subtitle": "Welcome back! Please sign in to your account",
+      "email": "Email Address",
+      "password": "Password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot your password?",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up here",
+      "signingIn": "Signing in...",
+      "invalidCredentials": "Invalid email or password"
+    },
+    "signUp": {
+      "title": "Create Account",
+      "subtitle": "Get started with your free account",
+      "name": "Full Name",
+      "email": "Email Address",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "agreeToTerms": "I agree to the Terms of Service and Privacy Policy",
+      "hasAccount": "Already have an account?",
+      "signIn": "Sign in here",
+      "creatingAccount": "Creating account...",
+      "passwordMismatch": "Passwords don't match"
+    }
+  },
+  "pricing": {
+    "title": "Choose Your Plan",
+    "subtitle": "Select the perfect plan for your business needs",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "free": {
+      "name": "Free",
+      "price": "$0",
+      "period": "forever",
+      "description": "Perfect for trying out our service",
+      "features": [
+        "5 documents per month",
+        "Basic templates",
+        "Community support"
+      ]
+    },
+    "professional": {
+      "name": "Professional",
+      "price": "$3.80",
+      "period": "per month",
+      "description": "For professionals and small teams",
+      "features": [
+        "50 documents per month",
+        "Advanced templates",
+        "Priority support",
+        "Export to PDF/DOCX"
+      ]
+    },
+    "business": {
+      "name": "Business",
+      "price": "$9.80",
+      "period": "per month",
+      "description": "For growing businesses",
+      "features": [
+        "200 documents per month",
+        "Custom templates",
+        "Team collaboration",
+        "Advanced AI features"
+      ]
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "price": "$39.80",
+      "period": "per month",
+      "description": "For large organizations",
+      "features": [
+        "Unlimited documents",
+        "Custom integrations",
+        "Dedicated support",
+        "White-label solution"
+      ]
+    },
+    "currentPlan": "Current Plan",
+    "upgrade": "Upgrade",
+    "subscribe": "Subscribe Now"
+  },
+  "document": {
+    "types": {
+      "brd": "Business Requirements Document",
+      "prd": "Product Requirements Document",
+      "both": "Combined BRD/PRD"
+    },
+    "form": {
+      "title": "Create New Document",
+      "projectName": "Project Name",
+      "projectDescription": "Project Description",
+      "documentType": "Document Type",
+      "additionalRequirements": "Additional Requirements",
+      "businessContext": "Business Context",
+      "targetAudience": "Target Audience",
+      "timeline": "Timeline",
+      "budget": "Budget Range",
+      "stakeholders": "Key Stakeholders"
+    },
+    "chat": {
+      "placeholder": "Ask questions about your document or request modifications...",
+      "send": "Send",
+      "thinking": "AI is thinking...",
+      "generating": "Generating document..."
+    }
+  },
+  "subscription": {
+    "manage": "Manage Subscription",
+    "upgrade": "Upgrade Plan",
+    "cancel": "Cancel Subscription",
+    "renews": "Renews on",
+    "expires": "Expires on",
+    "usage": "Usage",
+    "tokensRemaining": "Tokens Remaining"
+  },
+  "errors": {
+    "general": "Something went wrong. Please try again.",
+    "network": "Network error. Please check your connection.",
+    "unauthorized": "You are not authorized to perform this action.",
+    "notFound": "The requested resource was not found.",
+    "validation": "Please check your input and try again.",
+    "server": "Server error. Please try again later."
+  },
+  "success": {
+    "documentCreated": "Document created successfully",
+    "documentUpdated": "Document updated successfully",
+    "accountCreated": "Account created successfully",
+    "settingsSaved": "Settings saved successfully",
+    "subscriptionUpdated": "Subscription updated successfully"
+  }
+}

@@ -1,0 +1,315 @@
+// Production Prisma schema file for PostgreSQL deployment
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User management
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?   // For credentials authentication
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Profile information
+  companyName   String?
+  industry      String?
+  companySize   String?
+  location      String?
+  language      String    @default("en") // "en", "ar", "bilingual"
+  timezone      String?
+
+  // Subscription information
+  subscriptionTier   String    @default("free") // "free", "professional", "business", "enterprise"
+  subscriptionStatus String    @default("active") // "active", "canceled", "past_due"
+  tokensUsed         Int       @default(0)
+  tokensLimit        Int       @default(10000) // 10K tokens for free tier (production)
+  billingCycle       String    @default("monthly") // "monthly", "annual"
+  subscriptionEndsAt DateTime?
+  stripeCustomerId   String?   @unique // Stripe customer ID
+  stripeSubscriptionId String? @unique // Stripe subscription ID
+
+  // Referral system
+  referralCode       String    @unique @default(cuid())
+  referredBy         String?
+  referredByUser     User?     @relation("UserReferrals", fields: [referredBy], references: [id])
+  referrals          User[]    @relation("UserReferrals")
+  totalReferralTokens Int      @default(0)
+
+  // Relations
+  accounts          Account[]
+  sessions          Session[]
+  documents         Document[]
+  teams             TeamMember[]
+  referralRewards   ReferralReward[]
+  usageHistory      UsageHistory[]
+  payments          Payment[]
+  templates         Template[]
+  comments          Comment[]
+  conversations     Conversation[]
+
+  @@map("users")
+}
+
+// NextAuth required models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verificationtokens")
+}
+
+// Document management
+model Document {
+  id          String   @id @default(cuid())
+  title       String
+  content     String   @db.Text
+  type        String   // "brd", "prd", "technical", "project_management"
+  status      String   @default("draft") // "draft", "in_review", "approved", "archived"
+  language    String   @default("en")
+  tokensUsed  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // AI generation metadata
+  aiModel        String?  // "gpt-4", "gemini"
+  promptUsed     String?  @db.Text
+  generationTime Int?     // milliseconds
+
+  // User and team
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  teamId      String?
+  team        Team?    @relation(fields: [teamId], references: [id])
+
+  // Additional metadata for chat-generated documents
+  metadata    Json?    // Stores conversationId, model info, etc.
+
+  // Collaboration
+  versions    DocumentVersion[]
+  comments    Comment[]
+  shares      DocumentShare[]
+
+  @@map("documents")
+}
+
+model DocumentVersion {
+  id         String   @id @default(cuid())
+  version    Int
+  content    String   @db.Text
+  changes    String?  @db.Text
+  createdAt  DateTime @default(now())
+  createdBy  String
+
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@unique([documentId, version])
+  @@map("document_versions")
+}
+
+model Comment {
+  id         String   @id @default(cuid())
+  content    String   @db.Text
+  position   Int?     // Character position in document
+  resolved   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  authorId   String
+  author     User     @relation(fields: [authorId], references: [id])
+
+  // Threading
+  parentId   String?
+  parent     Comment? @relation("CommentThread", fields: [parentId], references: [id])
+  replies    Comment[] @relation("CommentThread")
+
+  @@map("comments")
+}
+
+model DocumentShare {
+  id         String   @id @default(cuid())
+  shareCode  String   @unique @default(cuid())
+  permission String   @default("view") // "view", "comment", "edit"
+  expiresAt  DateTime?
+  createdAt  DateTime @default(now())
+
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  sharedBy   String
+  sharedWith String?
+
+  @@map("document_shares")
+}
+
+// Team collaboration
+model Team {
+  id          String   @id @default(cuid())
+  name        String
+  description String?  @db.Text
+  plan        String   @default("business") // "business", "enterprise"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  members     TeamMember[]
+  documents   Document[]
+
+  @@map("teams")
+}
+
+model TeamMember {
+  id        String   @id @default(cuid())
+  role      String   @default("member") // "owner", "admin", "member", "viewer"
+  joinedAt  DateTime @default(now())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  teamId    String
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, teamId])
+  @@map("team_members")
+}
+
+// Referral system
+model ReferralReward {
+  id          String   @id @default(cuid())
+  type        String   // "signup", "subscription", "upgrade", "social_follow"
+  tokens      Int
+  description String
+  claimed     Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  referredId  String?  // ID of the referred user
+
+  @@map("referral_rewards")
+}
+
+// Usage tracking
+model UsageHistory {
+  id           String   @id @default(cuid())
+  date         DateTime @default(now())
+  tokensUsed   Int
+  operation    String   // "document_generation", "ai_query", "export"
+  documentType String?
+  aiModel      String?
+  success      Boolean  @default(true)
+
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+  @@map("usage_history")
+}
+
+// Payment tracking
+model Payment {
+  id               String   @id @default(cuid())
+  stripePaymentId  String   @unique
+  amount           Int      // amount in cents
+  currency         String   @default("usd")
+  status           String   // "succeeded", "failed", "pending"
+  description      String?
+  createdAt        DateTime @default(now())
+
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+// AI templates and customization
+model Template {
+  id          String   @id @default(cuid())
+  name        String
+  description String?  @db.Text
+  category    String   // "brd", "prd", "technical", "industry_specific"
+  industry    String?  // "healthcare", "finance", "ecommerce", "government"
+  language    String   @default("en")
+  prompt      String   @db.Text
+  structure   Json     // JSON structure for the template
+  isPublic    Boolean  @default(false)
+  usageCount  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  createdBy   String?
+  creator     User?    @relation(fields: [createdBy], references: [id])
+
+  @@index([category, language])
+  @@map("templates")
+}
+
+// Chat conversation models
+model Conversation {
+  id        String   @id @default(cuid())
+  status    String   @default("active") // "active", "ready_for_generation", "document_generated", "archived"
+  metadata  Json?    // Store additional conversation data
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  Message[]
+
+  @@index([userId, status])
+  @@map("conversations")
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  role      String   // "user", "assistant"
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId])
+  @@map("messages")
+}

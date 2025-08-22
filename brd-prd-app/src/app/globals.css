@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-arabic: 'Noto Sans Arabic', 'Noto Kufi Arabic', 'Tahoma', 'Arial Unicode MS', sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+/* Base styles */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  transition: direction 0.3s ease;
+}
+
+/* Arabic/RTL specific styles */
+[dir="rtl"] {
+  font-family: var(--font-arabic);
+}
+
+[dir="rtl"] body {
+  font-family: var(--font-arabic);
+  text-align: right;
+}
+
+/* RTL-aware utilities */
+.rtl-flip {
+  transform: scaleX(-1);
+}
+
+[dir="rtl"] .rtl-flip {
+  transform: scaleX(1);
+}
+
+/* Custom RTL utilities for margins and padding */
+.ms-auto {
+  margin-inline-start: auto;
+}
+
+.me-auto {
+  margin-inline-end: auto;
+}
+
+.ps-4 {
+  padding-inline-start: 1rem;
+}
+
+.pe-4 {
+  padding-inline-end: 1rem;
+}
+
+/* Arabic text optimization */
+[dir="rtl"] {
+  font-feature-settings: "liga" 1, "kern" 1;
+  font-variant-ligatures: common-ligatures;
+  text-rendering: optimizeLegibility;
+}
+
+/* Number formatting for Arabic */
+[dir="rtl"] .numbers-arabic {
+  font-variant-numeric: lining-nums;
+}
+
+[dir="rtl"] .numbers-western {
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Smooth transitions for language switching */
+* {
+  transition: font-family 0.2s ease, text-align 0.2s ease;
+}
+
+/* Fix for form elements in RTL */
+[dir="rtl"] input,
+[dir="rtl"] textarea,
+[dir="rtl"] select {
+  text-align: right;
+}
+
+[dir="rtl"] input[type="email"],
+[dir="rtl"] input[type="url"],
+[dir="rtl"] input[type="tel"] {
+  direction: ltr;
+  text-align: left;
+}
+
+/* Saudi cultural color scheme support */
+.saudi-theme {
+  --saudi-green: #006c35;
+  --saudi-white: #ffffff;
+  --saudi-gold: #ffd700;
+}
+
+/* Improved Arabic typography spacing */
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] h4,
+[dir="rtl"] h5,
+[dir="rtl"] h6 {
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+[dir="rtl"] p {
+  line-height: 1.6;
+}

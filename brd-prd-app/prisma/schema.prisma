@@ -1,0 +1,415 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// User management
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?   // For credentials authentication
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Profile information
+  companyName   String?
+  industry      String?
+  companySize   String?
+  location      String?
+  language      String    @default("en") // "en", "ar", "bilingual"
+  timezone      String?
+
+  // Subscription information
+  subscriptionTier   String    @default("free") // "free", "hobby", "professional", "business", "enterprise"
+  subscriptionStatus String    @default("active") // "active", "canceled", "past_due"
+  tokensUsed         Int       @default(0)
+  tokensLimit        Int       @default(10000) // 10K tokens for free tier (updated)
+  billingCycle       String    @default("monthly") // "monthly", "annual"
+  subscriptionEndsAt DateTime?
+  stripeCustomerId   String?   @unique // Stripe customer ID
+  stripeSubscriptionId String? @unique // Stripe subscription ID
+
+  // Admin role
+  role               String    @default("user") // "user", "admin", "super_admin"
+  adminPermissions   Json?     // ["manage_users", "manage_feedback", "manage_content"]
+
+  // Referral system
+  referralCode       String    @unique @default(cuid())
+  referredBy         String?
+  referredByUser     User?     @relation("UserReferrals", fields: [referredBy], references: [id])
+  referrals          User[]    @relation("UserReferrals")
+  totalReferralTokens Int      @default(0)
+
+  // Relations
+  accounts          Account[]
+  sessions          Session[]
+  documents         Document[]
+  teams             TeamMember[]
+  referralRewards   ReferralReward[]
+  usageHistory      UsageHistory[]
+  payments          Payment[]
+  templates         Template[]
+  comments          Comment[]
+  conversations     Conversation[]
+  emailTokens       EmailToken[]
+  feedback          Feedback[]
+  contactRequests   ContactRequest[]
+  supportTickets    SupportTicket[]
+  adminActivities   AdminActivity[]
+
+  @@map("users")
+}
+
+// NextAuth required models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verificationtokens")
+}
+
+// Custom tokens for email verification and password reset
+model EmailToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  type      String   // "email_verification", "password_reset"
+  userId    String
+  email     String
+  expires   DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("email_tokens")
+}
+
+// Document management
+model Document {
+  id          String   @id @default(cuid())
+  title       String
+  content     String
+  type        String   // "brd", "prd", "technical", "project_management"
+  status      String   @default("draft") // "draft", "in_review", "approved", "archived"
+  language    String   @default("en")
+  tokensUsed  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // AI generation metadata
+  aiModel     String?  // "gpt-4", "gemini"
+  promptUsed  String?
+  generationTime Int?  // milliseconds
+
+  // User and team
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  teamId      String?
+  team        Team?    @relation(fields: [teamId], references: [id])
+
+  // Additional metadata for chat-generated documents
+  metadata    Json?    // Stores conversationId, model info, etc.
+
+  // Collaboration
+  versions    DocumentVersion[]
+  comments    Comment[]
+  shares      DocumentShare[]
+
+  @@map("documents")
+}
+
+model DocumentVersion {
+  id         String   @id @default(cuid())
+  version    Int
+  content    String
+  changes    String?
+  createdAt  DateTime @default(now())
+  createdBy  String
+
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@unique([documentId, version])
+  @@map("document_versions")
+}
+
+model Comment {
+  id         String   @id @default(cuid())
+  content    String
+  position   Int?     // Character position in document
+  resolved   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  authorId   String
+  author     User     @relation(fields: [authorId], references: [id])
+
+  // Threading
+  parentId   String?
+  parent     Comment? @relation("CommentThread", fields: [parentId], references: [id])
+  replies    Comment[] @relation("CommentThread")
+
+  @@map("comments")
+}
+
+model DocumentShare {
+  id         String   @id @default(cuid())
+  shareCode  String   @unique @default(cuid())
+  permission String   @default("view") // "view", "comment", "edit"
+  expiresAt  DateTime?
+  createdAt  DateTime @default(now())
+
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  sharedBy   String
+  sharedWith String?
+
+  @@map("document_shares")
+}
+
+// Team collaboration
+model Team {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  plan        String   @default("business") // "business", "enterprise"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  members     TeamMember[]
+  documents   Document[]
+
+  @@map("teams")
+}
+
+model TeamMember {
+  id        String   @id @default(cuid())
+  role      String   @default("member") // "owner", "admin", "member", "viewer"
+  joinedAt  DateTime @default(now())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  teamId    String
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, teamId])
+  @@map("team_members")
+}
+
+// Referral system
+model ReferralReward {
+  id          String   @id @default(cuid())
+  type        String   // "signup", "subscription", "upgrade", "social_follow"
+  tokens      Int
+  description String
+  claimed     Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  referredId  String?  // ID of the referred user
+
+  @@map("referral_rewards")
+}
+
+// Usage tracking
+model UsageHistory {
+  id           String   @id @default(cuid())
+  date         DateTime @default(now())
+  tokensUsed   Int
+  operation    String   // "document_generation", "ai_query", "export"
+  documentType String?
+  aiModel      String?
+  success      Boolean  @default(true)
+
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("usage_history")
+}
+
+// Payment tracking
+model Payment {
+  id               String   @id @default(cuid())
+  stripePaymentId  String   @unique
+  amount           Int      // amount in cents
+  currency         String   @default("usd")
+  status           String   // "succeeded", "failed", "pending"
+  description      String?
+  createdAt        DateTime @default(now())
+
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+// AI templates and customization
+model Template {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  category    String   // "brd", "prd", "technical", "industry_specific"
+  industry    String?  // "healthcare", "finance", "ecommerce", "government"
+  language    String   @default("en")
+  prompt      String
+  structure   Json     // JSON structure for the template
+  isPublic    Boolean  @default(false)
+  usageCount  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  createdBy   String?
+  creator     User?    @relation(fields: [createdBy], references: [id])
+
+  @@map("templates")
+}
+
+// Chat conversation models
+model Conversation {
+  id        String   @id @default(cuid())
+  status    String   @default("active") // "active", "ready_for_generation", "document_generated", "archived"
+  metadata  Json?    // Store additional conversation data
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  Message[]
+
+  @@map("conversations")
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  role      String   // "user", "assistant"
+  content   String
+  createdAt DateTime @default(now())
+
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@map("messages")
+}
+
+// Feedback system
+model Feedback {
+  id          String   @id @default(cuid())
+  userId      String?  // Optional for anonymous feedback
+  email       String?  // For anonymous users
+  name        String?  // For anonymous users
+  rating      Int      // 1-5 stars
+  title       String
+  message     String
+  category    String   // "feature", "bug", "improvement", "praise", "complaint"
+  status      String   @default("pending") // "pending", "approved", "rejected", "spam"
+  isPublic    Boolean  @default(false) // Whether to show on homepage
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  approvedAt  DateTime?
+  approvedBy  String?  // Admin user ID
+  
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("feedback")
+}
+
+// Contact system
+model ContactRequest {
+  id           String   @id @default(cuid())
+  name         String
+  email        String
+  subject      String
+  message      String
+  type         String   @default("general") // "general", "support", "sales", "technical", "billing"
+  status       String   @default("open") // "open", "in_progress", "resolved", "closed"
+  priority     String   @default("medium") // "low", "medium", "high", "urgent"
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  respondedAt  DateTime?
+  respondedBy  String?  // Admin user ID
+  response     String?  // Admin response
+  
+  userId       String?  // Optional if user is logged in
+  user         User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("contact_requests")
+}
+
+// Support tickets (from AI chat escalation)
+model SupportTicket {
+  id           String   @id @default(cuid())
+  title        String
+  description  String
+  chatContext  Json?    // Original chat conversation context
+  category     String   // Auto-categorized: "technical", "billing", "feature", "bug"
+  status       String   @default("open") // "open", "in_progress", "resolved", "closed"
+  priority     String   @default("medium") // "low", "medium", "high", "urgent"
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  resolvedAt   DateTime?
+  assignedTo   String?  // Admin user ID
+  
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("support_tickets")
+}
+
+// Admin activity tracking
+model AdminActivity {
+  id        String   @id @default(cuid())
+  adminId   String
+  action    String   // "approve_feedback", "respond_contact", "resolve_ticket", "user_management"
+  targetId  String?  // ID of affected resource
+  details   Json?    // Additional action details
+  createdAt DateTime @default(now())
+  
+  admin     User     @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@map("admin_activities")
+}
