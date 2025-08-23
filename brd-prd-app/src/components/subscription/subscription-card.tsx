@@ -47,7 +47,7 @@ const PLAN_ICONS = {
 
 const PLAN_COLORS = {
   free: 'bg-gray-100 text-gray-800',
-  professional: 'bg-blue-100 text-blue-800',
+  professional: 'bg-blue-100 text-blue-300',
   business: 'bg-purple-100 text-purple-800',
   enterprise: 'bg-yellow-100 text-yellow-800',
 }

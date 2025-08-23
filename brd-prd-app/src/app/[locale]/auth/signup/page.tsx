@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+import React, { Suspense } from 'react'
 import { SignUpForm } from '@/components/forms/signup-form'
 import { FileText } from 'lucide-react'
 import Link from 'next/link'
@@ -7,11 +7,17 @@ function SignUpFormWrapper() {
   return <SignUpForm />
 }
 
-export default function SignUpPage() {
+interface SignUpPageProps {
+  params: Promise<{ locale: string }>;
+}
+
+export default async function SignUpPage({ params }: SignUpPageProps) {
+  const { locale } = await params;
+  
   return (
     <div className="min-h-screen flex flex-col">
       <div className="flex items-center justify-center p-6">
-        <Link href="/" className="flex items-center space-x-2">
+        <Link href={`/${locale}`} className="flex items-center space-x-2">
           <FileText className="h-8 w-8 text-primary" />
           <span className="text-2xl font-bold">BRD/PRD Generator</span>
         </Link>

@@ -118,7 +118,7 @@ export default function SettingsPage({ params: { locale } }: SettingsPageProps) 
             className={`${isRTL ? 'text-right' : ''} opacity-50`}
           />
         </div>
-        <Button className={`${isRTL ? 'flex-row-reverse' : ''}`}>
+        <Button variant="outline" className={`${isRTL ? 'flex-row-reverse' : ''}`}>
           <Save className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
           {locale === 'ar' ? 'حفظ التغييرات' : 'Save Changes'}
         </Button>
@@ -156,7 +156,7 @@ export default function SettingsPage({ params: { locale } }: SettingsPageProps) 
         </div>
         <div className="pt-4">
           <Link href={`/${locale}/pricing`}>
-            <Button className="w-full">
+            <Button variant="outline" className="w-full">
               {locale === 'ar' ? 'ترقية الخطة' : 'Upgrade Plan'}
             </Button>
           </Link>
@@ -290,7 +290,7 @@ export default function SettingsPage({ params: { locale } }: SettingsPageProps) 
         {/* Page Header */}
         <div className="mb-8">
           <div className={`flex items-center gap-3 mb-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-            <Settings className="h-8 w-8 text-blue-600" />
+            <Settings className="h-8 w-8 text-blue-400" />
             <h1 className="text-3xl font-bold text-gray-900">
               {locale === 'ar' ? 'الإعدادات' : 'Settings'}
             </h1>
@@ -322,7 +322,7 @@ export default function SettingsPage({ params: { locale } }: SettingsPageProps) 
                         onClick={() => setActiveTab(tab.id)}
                         className={`w-full flex items-center px-4 py-3 text-sm font-medium border-r-2 transition-colors ${
                           activeTab === tab.id
-                            ? 'bg-blue-50 border-blue-500 text-blue-700'
+                            ? 'bg-blue-900 border-blue-400 text-blue-300'
                             : 'border-transparent text-gray-600 hover: hover:text-gray-900'
                         } ${isRTL ? 'flex-row-reverse text-right border-r-0 border-l-2' : ''}`}
                       >

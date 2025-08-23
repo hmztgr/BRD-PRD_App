@@ -61,7 +61,7 @@ export default function ContactPage({ params: { locale } }: ContactPageProps) {
         {/* Page Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <Mail className="h-8 w-8 text-blue-600" />
+            <Mail className="h-8 w-8 text-blue-400" />
             <h1 className="text-3xl font-bold text-gray-900">
               {locale === 'ar' ? 'تواصل معنا' : 'Contact Us'}
             </h1>
@@ -91,7 +91,7 @@ export default function ContactPage({ params: { locale } }: ContactPageProps) {
                 
                 <div className="space-y-4">
                   <div className={`flex items-start gap-3 ${isRTL ? 'flex-row-reverse text-right' : ''}`}>
-                    <Mail className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                    <Mail className="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" />
                     <div>
                       <p className="font-medium text-gray-900">
                         {locale === 'ar' ? 'البريد الإلكتروني' : 'Email'}
@@ -151,7 +151,7 @@ export default function ContactPage({ params: { locale } }: ContactPageProps) {
                     const Icon = reason.icon
                     return (
                       <div key={index} className={`flex items-start gap-3 p-3 rounded-lg  ${isRTL ? 'flex-row-reverse text-right' : ''}`}>
-                        <Icon className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                        <Icon className="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" />
                         <div>
                           <p className="font-medium text-gray-900 text-sm">{reason.title}</p>
                           <p className="text-gray-600 text-xs mt-1">{reason.description}</p>
@@ -166,7 +166,7 @@ export default function ContactPage({ params: { locale } }: ContactPageProps) {
             {/* FAQ Link */}
             <Card>
               <CardContent className="p-6 text-center">
-                <HelpCircle className="h-8 w-8 text-blue-600 mx-auto mb-3" />
+                <HelpCircle className="h-8 w-8 text-blue-400 mx-auto mb-3" />
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   {locale === 'ar' ? 'الأسئلة الشائعة' : 'Frequently Asked Questions'}
                 </h3>
@@ -177,7 +177,7 @@ export default function ContactPage({ params: { locale } }: ContactPageProps) {
                   }
                 </p>
                 {/* TODO: Add FAQ page link when implemented */}
-                <p className="text-blue-600 text-sm">
+                <p className="text-blue-400 text-sm">
                   {locale === 'ar' ? 'صفحة الأسئلة الشائعة قريباً' : 'FAQ page coming soon'}
                 </p>
               </CardContent>
@@ -196,7 +196,7 @@ export default function ContactPage({ params: { locale } }: ContactPageProps) {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
                 <div>
                   <div className="bg-blue-100 rounded-full p-3 w-12 h-12 mx-auto mb-3 flex items-center justify-center">
-                    <Mail className="h-6 w-6 text-blue-600" />
+                    <Mail className="h-6 w-6 text-blue-400" />
                   </div>
                   <h3 className="font-semibold text-gray-900 mb-2">
                     {locale === 'ar' ? 'استجابة سريعة' : 'Quick Response'}

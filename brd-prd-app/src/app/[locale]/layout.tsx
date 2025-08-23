@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 import { SimpleHeader } from '@/components/layout/simple-header';
 import { AuthProvider } from '@/components/providers/session-provider';

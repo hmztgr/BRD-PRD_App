@@ -952,6 +952,17 @@ Create the leading AI-powered BRD/PRD generation platform with exceptional Arabi
 | 🟡 MEDIUM | **Password Reset Functionality** | 1-2 days | Aug 27, 2025 |
 | 🟢 LOW | **Admin Panel Basic UI** | 3-4 days | Aug 30, 2025 |
 
+### **🎨 Enhanced UI/UX Features (IMMEDIATE PRIORITY)**
+| Priority | Item | Estimated Effort | Target Date |
+|----------|------|-----------------|-------------|
+| 🔴 HIGH | **Dashboard Modal for Generation Options** | 1-2 days | Aug 28, 2025 |
+| 🔴 HIGH | **Enhanced /documents/new Chat Interface** | 3-4 days | Sep 2, 2025 |
+| 🔴 HIGH | **Document Upload Dropzone Area** | 2-3 days | Sep 5, 2025 |
+| 🔴 HIGH | **Generated Files/Folders Sidebar** | 2-3 days | Sep 7, 2025 |
+| 🟡 MEDIUM | **Progress Roadmap Tracker** | 3-4 days | Sep 10, 2025 |
+| 🟡 MEDIUM | **Research Findings Panel** | 2-3 days | Sep 12, 2025 |
+| 🟡 MEDIUM | **Multi-Document Generation Support** | 4-5 days | Sep 16, 2025 |
+
 ### **🧪 Testing & Quality Assurance**
 | Item | Status | Action Required |
 |------|--------|-----------------|
@@ -972,6 +983,31 @@ Create the leading AI-powered BRD/PRD generation platform with exceptional Arabi
 - [ ] **Security Review**: Address any security vulnerabilities
 
 ### **🎯 Revised MVP Launch Target: August 31, 2025**
+
+### **🔬 Advanced Iterative Business Planning System (POST-MVP ENHANCEMENT)**
+
+#### **Phase A: Research Engine Foundation (October 2025)**
+| Component | Description | Effort | Target Date |
+|-----------|-------------|---------|-------------|
+| **Universal Research Assistant** | AI research system for any data gathering step | 5-7 days | Oct 15, 2025 |
+| **Country Intelligence Engine** | Dynamic research for any country's requirements | 7-10 days | Oct 25, 2025 |
+| **Saudi Intelligence Integration** | Premium tier using Saudi-Market-Advantage-Plan | 3-5 days | Oct 30, 2025 |
+
+#### **Phase B: Planning Intelligence Core (November 2025)**
+| Component | Description | Effort | Target Date |
+|-----------|-------------|---------|-------------|
+| **Document Planning AI** | Analyze ideas and determine required documents | 4-6 days | Nov 10, 2025 |
+| **Iterative Data Collection** | Step-by-step guided business planning | 7-10 days | Nov 20, 2025 |
+| **Progress Management System** | Save/resume with roadmap tracking | 3-5 days | Nov 25, 2025 |
+
+#### **Phase C: Advanced Features Integration (December 2025)**
+| Component | Description | Effort | Target Date |
+|-----------|-------------|---------|-------------|
+| **Document Processing Engine** | Parse uploaded PDFs, Word docs, images | 5-7 days | Dec 10, 2025 |
+| **Multi-Document Generation** | Generate complete business plan sets | 7-10 days | Dec 20, 2025 |
+| **Advanced UI Integration** | Seamless integration with enhanced chat interface | 3-5 days | Dec 30, 2025 |
+
+**Target Launch: Advanced Planning System Beta - January 1, 2026**
 
 ---
 

@@ -1,3 +1,4 @@
+import React from 'react'
 import { getServerSession } from 'next-auth/next'
 import { redirect } from 'next/navigation'
 import { authOptions } from '@/lib/auth'
@@ -24,7 +25,6 @@ const translations = {
     documentsCreated: "documents created",
     tokensUsed: "Tokens Used",
     tokensOf: "of {limit} ({tier} tier)",
-    tokensUsedPercent: "{percent}% used",
     referrals: "Referrals",
     usersReferred: "users referred",
     bonusTokensEarned: "+{tokens} bonus tokens earned",
@@ -54,7 +54,6 @@ const translations = {
     documentsCreated: "مستند تم إنشاؤه",
     tokensUsed: "الرموز المستخدمة",
     tokensOf: "من {limit} (باقة {tier})",
-    tokensUsedPercent: "{percent}% مستخدم",
     referrals: "الإحالات",
     usersReferred: "مستخدم تمت إحالته",
     bonusTokensEarned: "+{tokens} رموز مكافأة مكتسبة",
@@ -142,7 +141,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
                 <Plus className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <Button asChild className="w-full">
+                <Button variant="outline" asChild className="w-full">
                   <Link href={`/${locale}/documents/new`}>{t.newDocument}</Link>
                 </Button>
               </CardContent>
@@ -181,7 +180,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
                   />
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  {template(t.tokensUsedPercent, { percent: tokenUsagePercentage })}
+                  {locale === 'ar' ? `${tokenUsagePercentage}% مستخدم` : `${tokenUsagePercentage}% used`}
                 </p>
               </CardContent>
             </Card>
@@ -224,7 +223,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
                     <li>{t.quickStartStep4}</li>
                   </ul>
                 </div>
-                <Button asChild>
+                <Button variant="outline" asChild>
                   <Link href={`/${locale}/documents/new`}>{t.createFirstDocument}</Link>
                 </Button>
               </CardContent>

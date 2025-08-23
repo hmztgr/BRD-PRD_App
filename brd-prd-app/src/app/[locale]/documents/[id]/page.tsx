@@ -1,3 +1,4 @@
+import React from 'react'
 import { getServerSession } from 'next-auth/next'
 import { redirect, notFound } from 'next/navigation'
 import { authOptions } from '@/lib/auth'
@@ -9,16 +10,17 @@ import { ArrowLeft } from 'lucide-react'
 
 interface DocumentPageProps {
   params: Promise<{
-    id: string
+    locale: string;
+    id: string;
   }>
 }
 
 export default async function DocumentPage({ params }: DocumentPageProps) {
-  const { id } = await params
+  const { locale, id } = await params
   const session = await getServerSession(authOptions)
 
   if (!session?.user) {
-    redirect('/auth/signin')
+    redirect(`/${locale}/auth/signin`)
   }
 
   const document = await prisma.document.findFirst({
@@ -51,7 +53,7 @@ export default async function DocumentPage({ params }: DocumentPageProps) {
           {/* Breadcrumb */}
           <div className="mb-6">
             <Link 
-              href="/documents"
+              href={`/${locale}/documents`}
               className="inline-flex items-center text-sm text-muted-foreground hover:text-primary"
             >
               <ArrowLeft className="h-4 w-4 mr-1" />

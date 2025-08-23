@@ -22,15 +22,43 @@ function isArabicText(text: string): boolean {
 
 interface ChatInterfaceProps {
   userName: string
+  locale?: string
 }
 
-export function ChatInterface({ userName }: ChatInterfaceProps) {
+// Static translations
+const translations = {
+  en: {
+    title: 'AI Document Assistant',
+    welcomeMessage: (name: string) => `Hello ${name}! I'm here to help you create professional business documents. Tell me about your project idea and I'll ask clarifying questions to ensure we capture all the important details.`,
+    placeholder: 'Tell me about your project idea...',
+    sendHint: 'Press Enter to send • Shift+Enter for new line',
+    send: 'Send',
+    generating: 'Generating...',
+    generateDocument: 'Generate Document',
+    newChat: 'New Chat'
+  },
+  ar: {
+    title: 'مساعد الذكاء الاصطناعي للمستندات',
+    welcomeMessage: (name: string) => `مرحباً ${name}! أنا هنا لمساعدتك في إنشاء مستندات أعمال احترافية. أخبرني عن فكرة مشروعك وسأطرح أسئلة توضيحية للتأكد من أننا نلتقط جميع التفاصيل المهمة.`,
+    placeholder: 'أخبرني عن فكرة مشروعك...',
+    sendHint: 'اضغط Enter للإرسال • Shift+Enter للسطر الجديد',
+    send: 'إرسال',
+    generating: 'جاري الإنشاء...',
+    generateDocument: 'إنشاء المستند',
+    newChat: 'محادثة جديدة'
+  }
+}
+
+export function ChatInterface({ userName, locale = 'en' }: ChatInterfaceProps) {
   const router = useRouter()
+  const t = translations[locale as keyof typeof translations] || translations.en;
+  const isRTL = locale === 'ar';
+  
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
       role: 'assistant',
-      content: `Hello ${userName}! I'm here to help you create professional business documents. Tell me about your project idea and I'll ask clarifying questions to ensure we capture all the important details.`,
+      content: t.welcomeMessage(userName),
       timestamp: new Date()
     }
   ])
@@ -137,7 +165,7 @@ export function ChatInterface({ userName }: ChatInterfaceProps) {
     const generatingMessage: Message = {
       id: 'generating',
       role: 'assistant',
-      content: hasArabicInConversation ? 
+      content: isRTL ? 
         'ممتاز! لدي كل المعلومات التي أحتاجها. دعني أنشئ وثيقتك المهنية الآن...' :
         'Perfect! I have all the information I need. Let me generate your professional document now...',
       timestamp: new Date()
@@ -167,7 +195,7 @@ export function ChatInterface({ userName }: ChatInterfaceProps) {
       const successMessage: Message = {
         id: Date.now().toString(),
         role: 'assistant',
-        content: hasArabicInConversation ? 
+        content: isRTL ? 
           `رائع! لقد أنشأت وثيقة ${data.documentType} بنجاح. تتضمن الوثيقة جميع التفاصيل التي ناقشناها وتتبع المعايير المهنية. يمكنك الآن عرضها وتنزيلها.` :
           `Great! I've generated your ${data.documentType} successfully. The document includes all the details we discussed and follows professional standards. You can view and download it now.`,
         timestamp: new Date()
@@ -201,11 +229,11 @@ export function ChatInterface({ userName }: ChatInterfaceProps) {
   }
 
   return (
-    <Card className="flex flex-col h-[600px] max-w-4xl mx-auto">
-      <div className="flex items-center justify-between p-4 border-b">
-        <div className="flex items-center gap-2">
+    <Card className="flex flex-col h-[600px] max-w-4xl mx-auto" dir={isRTL ? 'rtl' : 'ltr'}>
+      <div className={`flex items-center justify-between p-4 border-b ${isRTL ? 'flex-row-reverse' : ''}`}>
+        <div className={`flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
           <Bot className="h-5 w-5 text-primary" />
-          <h3 className="font-semibold">AI Document Assistant</h3>
+          <h3 className="font-semibold">{t.title}</h3>
         </div>
         {canGenerateDocument && (
           <Button 
@@ -215,7 +243,7 @@ export function ChatInterface({ userName }: ChatInterfaceProps) {
             className="flex items-center gap-2"
           >
             <FileText className="h-4 w-4" />
-            Generate Document
+            {t.generateDocument}
           </Button>
         )}
       </div>
@@ -298,9 +326,10 @@ export function ChatInterface({ userName }: ChatInterfaceProps) {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Tell me about your project idea..."
+            placeholder={t.placeholder}
             disabled={isLoading}
-            className="flex-1 min-h-[40px] max-h-[120px] p-3 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className={`flex-1 min-h-[40px] max-h-[120px] p-3 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${isRTL ? 'text-right' : 'text-left'}`}
+            dir={isRTL ? 'rtl' : 'ltr'}
             rows={1}
             style={{
               height: 'auto',
@@ -325,8 +354,8 @@ export function ChatInterface({ userName }: ChatInterfaceProps) {
             )}
           </Button>
         </div>
-        <p className="text-xs text-gray-500 mt-2">
-          Press Enter to send • Shift+Enter for new line
+        <p className={`text-xs text-gray-500 mt-2 ${isRTL ? 'text-right' : 'text-left'}`}>
+          {t.sendHint}
         </p>
       </div>
     </Card>

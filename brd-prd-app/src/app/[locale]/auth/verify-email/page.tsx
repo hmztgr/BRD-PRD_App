@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { redirect } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -102,7 +102,7 @@ async function VerifyEmailContent({ searchParams, locale }: { searchParams: { to
       <Card className="w-full max-w-md mx-auto">
         <CardHeader className="text-center">
           <div className="mx-auto w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-            <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
+            <Loader2 className="w-6 h-6 text-blue-400 animate-spin" />
           </div>
           <CardTitle>{t.verifying}</CardTitle>
           <CardDescription>Please wait while we verify your email address...</CardDescription>
@@ -127,7 +127,7 @@ export default async function VerifyEmailPage({ params, searchParams }: VerifyEm
           <Card className="w-full max-w-md mx-auto">
             <CardHeader className="text-center">
               <div className="mx-auto w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
+                <Loader2 className="w-6 h-6 text-blue-400 animate-spin" />
               </div>
               <CardTitle>Loading...</CardTitle>
             </CardHeader>

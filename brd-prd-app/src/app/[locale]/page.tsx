@@ -1,3 +1,4 @@
+import React from "react"
 import Link from "next/link"
 import { FileText, Sparkles, Globe, Zap, Shield, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"

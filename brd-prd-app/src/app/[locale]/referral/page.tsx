@@ -125,7 +125,7 @@ export default function ReferralPage({ params: { locale } }: ReferralPageProps) 
       <div className="min-h-screen  flex items-center justify-center">
         <Card className="max-w-md mx-auto">
           <CardHeader className="text-center">
-            <Users className="h-12 w-12 text-blue-500 mx-auto mb-4" />
+            <Users className="h-12 w-12 text-blue-400 mx-auto mb-4" />
             <CardTitle>
               {locale === 'ar' ? 'تسجيل الدخول مطلوب' : 'Login Required'}
             </CardTitle>
@@ -154,7 +154,7 @@ export default function ReferralPage({ params: { locale } }: ReferralPageProps) 
       tokens: 5000,
       title: locale === 'ar' ? 'البداية' : 'Starter',
       icon: Gift,
-      color: 'text-blue-500'
+      color: 'text-blue-400'
     },
     {
       referrals: 5,
@@ -178,7 +178,7 @@ export default function ReferralPage({ params: { locale } }: ReferralPageProps) 
         {/* Page Header */}
         <div className="mb-8">
           <div className={`flex items-center gap-3 mb-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-            <Users className="h-8 w-8 text-blue-600" />
+            <Users className="h-8 w-8 text-blue-400" />
             <h1 className="text-3xl font-bold text-gray-900">
               {locale === 'ar' ? 'برنامج الإحالات' : 'Referral Program'}
             </h1>
@@ -427,7 +427,7 @@ export default function ReferralPage({ params: { locale } }: ReferralPageProps) 
               <CardContent className="space-y-4">
                 <div className={`flex gap-3 ${isRTL ? 'flex-row-reverse text-right' : ''}`}>
                   <div className="flex-shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-blue-600 text-sm font-bold">1</span>
+                    <span className="text-blue-400 text-sm font-bold">1</span>
                   </div>
                   <div>
                     <div className="font-medium mb-1">
@@ -444,7 +444,7 @@ export default function ReferralPage({ params: { locale } }: ReferralPageProps) 
                 
                 <div className={`flex gap-3 ${isRTL ? 'flex-row-reverse text-right' : ''}`}>
                   <div className="flex-shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-blue-600 text-sm font-bold">2</span>
+                    <span className="text-blue-400 text-sm font-bold">2</span>
                   </div>
                   <div>
                     <div className="font-medium mb-1">
@@ -461,7 +461,7 @@ export default function ReferralPage({ params: { locale } }: ReferralPageProps) 
                 
                 <div className={`flex gap-3 ${isRTL ? 'flex-row-reverse text-right' : ''}`}>
                   <div className="flex-shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-blue-600 text-sm font-bold">3</span>
+                    <span className="text-blue-400 text-sm font-bold">3</span>
                   </div>
                   <div>
                     <div className="font-medium mb-1">

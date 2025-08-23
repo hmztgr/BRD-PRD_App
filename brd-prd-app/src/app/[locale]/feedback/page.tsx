@@ -31,7 +31,7 @@ export default function FeedbackPage({ params: { locale } }: FeedbackPageProps) 
         {/* Page Header */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <MessageSquare className="h-8 w-8 text-blue-600" />
+            <MessageSquare className="h-8 w-8 text-blue-400" />
             <h1 className="text-3xl font-bold text-gray-900">
               {locale === 'ar' ? 'آراء وتقييمات العملاء' : 'Customer Feedback'}
             </h1>
@@ -78,20 +78,20 @@ export default function FeedbackPage({ params: { locale } }: FeedbackPageProps) 
         </Tabs>
 
         {/* Additional Information */}
-        <div className="mt-16 bg-white rounded-lg shadow-sm p-8">
-          <h2 className={`text-2xl font-bold text-gray-900 mb-6 ${isRTL ? 'text-right' : ''}`}>
+        <div className="mt-16 bg-black border-2 border-white rounded-lg shadow-sm p-8">
+          <h2 className={`text-2xl font-bold text-white mb-6 ${isRTL ? 'text-right' : ''}`}>
             {locale === 'ar' ? 'لماذا رأيك مهم؟' : 'Why Your Feedback Matters'}
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className={`text-center ${isRTL ? 'text-right md:text-center' : ''}`}>
               <div className="bg-blue-100 rounded-full p-3 w-12 h-12 mx-auto mb-4 flex items-center justify-center">
-                <MessageSquare className="h-6 w-6 text-blue-600" />
+                <MessageSquare className="h-6 w-6 text-blue-400" />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">
+              <h3 className="font-semibold text-white mb-2">
                 {locale === 'ar' ? 'تحسين الخدمة' : 'Improve Service'}
               </h3>
-              <p className="text-gray-600 text-sm">
+              <p className="text-gray-300 text-sm">
                 {locale === 'ar' 
                   ? 'نستخدم ملاحظاتكم لتطوير منصتنا وتحسين تجربة المستخدم'
                   : 'We use your feedback to enhance our platform and improve user experience'
@@ -103,10 +103,10 @@ export default function FeedbackPage({ params: { locale } }: FeedbackPageProps) 
               <div className="bg-green-100 rounded-full p-3 w-12 h-12 mx-auto mb-4 flex items-center justify-center">
                 <Plus className="h-6 w-6 text-green-600" />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">
+              <h3 className="font-semibold text-white mb-2">
                 {locale === 'ar' ? 'ميزات جديدة' : 'New Features'}
               </h3>
-              <p className="text-gray-600 text-sm">
+              <p className="text-gray-300 text-sm">
                 {locale === 'ar' 
                   ? 'اقتراحاتكم تساعدنا في إضافة ميزات جديدة مفيدة'
                   : 'Your suggestions help us add valuable new features'

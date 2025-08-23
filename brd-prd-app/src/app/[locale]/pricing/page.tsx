@@ -525,36 +525,36 @@ function PricingPageClient({ locale, t, isRTL }: { locale: string, t: any, isRTL
   return (
     <div className={`min-h-screen ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Header */}
-      <div className="bg-white border-b">
+      <div className="bg-black border-b border-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900">
+            <h1 className="text-4xl font-bold text-white">
               {t.title}
             </h1>
-            <p className="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="mt-4 text-xl text-gray-300 max-w-3xl mx-auto">
               {t.subtitle}
             </p>
           </div>
 
           {/* Billing Toggle */}
           <div className="mt-8 flex justify-center">
-            <div className="bg-gray-100 rounded-lg p-1">
+            <div className="bg-gray-800 rounded-lg p-1">
               <button
                 onClick={() => setBillingCycle('monthly')}
-                className={`px-6 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`px-6 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer ${
                   billingCycle === 'monthly'
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-white text-black shadow-sm'
+                    : 'text-gray-300 hover:text-white'
                 }`}
               >
                 {t.monthly}
               </button>
               <button
                 onClick={() => setBillingCycle('yearly')}
-                className={`px-6 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`px-6 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer ${
                   billingCycle === 'yearly'
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-white text-black shadow-sm'
+                    : 'text-gray-300 hover:text-white'
                 }`}
               >
                 {t.yearly}
@@ -621,7 +621,7 @@ function PricingPageClient({ locale, t, isRTL }: { locale: string, t: any, isRTL
                   )}
 
                   <div className="mt-2">
-                    <span className="text-lg font-medium text-blue-600">
+                    <span className="text-lg font-medium text-blue-400">
                       {plan.tokens} {t.tokensPerMonth}
                     </span>
                     {billingCycle === 'yearly' && price > 0 && (
@@ -666,44 +666,44 @@ function PricingPageClient({ locale, t, isRTL }: { locale: string, t: any, isRTL
         </div>
 
         {/* FAQ Section */}
-        <div className="mt-16 bg-white rounded-lg shadow-sm p-8">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">
+        <div className="mt-16 bg-black border-2 border-white rounded-lg shadow-sm p-8">
+          <h2 className="text-2xl font-bold text-white text-center mb-8">
             {t.faqTitle}
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-2">
+              <h3 className="font-semibold text-white mb-2">
                 {t.faqQuestions.tokens.question}
               </h3>
-              <p className="text-gray-600 text-sm">
+              <p className="text-gray-300 text-sm">
                 {t.faqQuestions.tokens.answer}
               </p>
             </div>
 
             <div>
-              <h3 className="font-semibold text-gray-900 mb-2">
+              <h3 className="font-semibold text-white mb-2">
                 {t.faqQuestions.upgrade.question}
               </h3>
-              <p className="text-gray-600 text-sm">
+              <p className="text-gray-300 text-sm">
                 {t.faqQuestions.upgrade.answer}
               </p>
             </div>
 
             <div>
-              <h3 className="font-semibold text-gray-900 mb-2">
+              <h3 className="font-semibold text-white mb-2">
                 {t.faqQuestions.refunds.question}
               </h3>
-              <p className="text-gray-600 text-sm">
+              <p className="text-gray-300 text-sm">
                 {t.faqQuestions.refunds.answer}
               </p>
             </div>
 
             <div>
-              <h3 className="font-semibold text-gray-900 mb-2">
+              <h3 className="font-semibold text-white mb-2">
                 {t.faqQuestions.security.question}
               </h3>
-              <p className="text-gray-600 text-sm">
+              <p className="text-gray-300 text-sm">
                 {t.faqQuestions.security.answer}
               </p>
             </div>

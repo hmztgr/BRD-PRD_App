@@ -1,3 +1,4 @@
+import React from 'react'
 import { getServerSession } from 'next-auth/next'
 import { redirect } from 'next/navigation'
 import { authOptions } from '@/lib/auth'
@@ -9,11 +10,16 @@ import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { FileText, Plus, Clock, Zap } from 'lucide-react'
 
-export default async function DocumentsPage() {
+interface DocumentsPageProps {
+  params: Promise<{ locale: string }>;
+}
+
+export default async function DocumentsPage({ params }: DocumentsPageProps) {
+  const { locale } = await params;
   const session = await getServerSession(authOptions)
 
   if (!session?.user) {
-    redirect('/auth/signin')
+    redirect(`/${locale}/auth/signin`)
   }
 
   const documents = await prisma.document.findMany({
@@ -50,7 +56,7 @@ export default async function DocumentsPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'draft': return 'bg-yellow-100 text-yellow-800'
-      case 'in_review': return 'bg-blue-100 text-blue-800'
+      case 'in_review': return 'bg-blue-100 text-blue-400800'
       case 'approved': return 'bg-green-100 text-green-800'
       case 'archived': return 'bg-gray-100 text-gray-800'
       default: return 'bg-gray-100 text-gray-800'
@@ -82,8 +88,8 @@ export default async function DocumentsPage() {
               </p>
             </div>
             
-            <Button asChild>
-              <Link href="/documents/new">
+            <Button variant="outline" asChild>
+              <Link href={`/${locale}/documents/new`}>
                 <Plus className="h-4 w-4 mr-2" />
                 New Document
               </Link>
@@ -99,8 +105,8 @@ export default async function DocumentsPage() {
                 <CardDescription className="mb-6">
                   Create your first AI-powered document to get started
                 </CardDescription>
-                <Button asChild>
-                  <Link href="/documents/new">
+                <Button variant="outline" asChild>
+                  <Link href={`/${locale}/documents/new`}>
                     <Plus className="h-4 w-4 mr-2" />
                     Create First Document
                   </Link>
@@ -125,7 +131,7 @@ export default async function DocumentsPage() {
                     </div>
                     <CardTitle className="line-clamp-2 text-lg">
                       <Link 
-                        href={`/documents/${document.id}`}
+                        href={`/${locale}/documents/${document.id}`}
                         className="hover:text-primary transition-colors"
                       >
                         {document.title}
@@ -156,7 +162,7 @@ export default async function DocumentsPage() {
                       )}
                       
                       <Button asChild variant="outline" size="sm" className="w-full">
-                        <Link href={`/documents/${document.id}`}>
+                        <Link href={`/${locale}/documents/${document.id}`}>
                           View Document
                         </Link>
                       </Button>
