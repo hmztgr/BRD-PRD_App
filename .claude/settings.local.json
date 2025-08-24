@@ -76,7 +76,14 @@
       "WebFetch(domain:www.getbash.com)",
       "Bash(git checkout:*)",
       "WebFetch(domain:sandbox.zatca.gov.sa)",
-      "WebFetch(domain:zatca.gov.sa)"
+      "WebFetch(domain:zatca.gov.sa)",
+      "Bash(npm start)",
+      "Bash(taskkill:*)",
+      "Bash(next dev:*)",
+      "mcp__playwright__browser_type",
+      "mcp__playwright__browser_wait_for",
+      "mcp__playwright__browser_hover",
+      "mcp__playwright__browser_press_key"
     ],
     "deny": [],
     "ask": [],
