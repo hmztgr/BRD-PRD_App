@@ -66,6 +66,7 @@ model User {
   contactRequests   ContactRequest[]
   supportTickets    SupportTicket[]
   adminActivities   AdminActivity[]
+  researchRequests  ResearchRequest[]
 
   @@map("users")
 }
@@ -328,12 +329,35 @@ model Message {
   id        String   @id @default(cuid())
   role      String   // "user", "assistant"
   content   String
+  metadata  Json?    // Additional message metadata
   createdAt DateTime @default(now())
 
   conversationId String
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 
   @@map("messages")
+}
+
+// Research system
+model ResearchRequest {
+  id            String   @id @default(cuid())
+  type          String   // "market-analysis", "competitor-research", etc.
+  query         String
+  priority      String   // "low", "medium", "high", "critical"
+  status        String   @default("pending") // "pending", "researching", "completed", "error"
+  sessionId     String?  // Optional planning session ID
+  findings      Json?    // Research findings data
+  confidence    Int?     // Overall confidence score 0-100
+  sources       String[] // Array of source references
+  metadata      Json?    // Additional metadata
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  completedAt   DateTime?
+
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("research_requests")
 }
 
 // Feedback system

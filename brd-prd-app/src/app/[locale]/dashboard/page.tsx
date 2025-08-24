@@ -3,12 +3,14 @@ import { getServerSession } from 'next-auth/next'
 import { redirect } from 'next/navigation'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { Sidebar } from '@/components/layout/sidebar'
+import { SidebarClient } from '@/components/layout/sidebar-client'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { FileText, Plus, Users, Zap } from 'lucide-react'
 import Link from 'next/link'
 import { formatTokens } from '@/lib/utils'
+import { DashboardClient } from './dashboard-client'
+import { CreateDocumentButton } from '@/components/dashboard/create-document-button'
 
 interface DashboardPageProps {
   params: Promise<{ locale: string }>;
@@ -119,7 +121,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
   return (
     <div className={`flex min-h-screen ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
       <aside className={`w-64 border-r bg-gray-50/40 ${isRTL ? 'order-2' : ''}`}>
-        <Sidebar />
+        <SidebarClient userTier={user.subscriptionTier} />
       </aside>
       
       <main className={`flex-1 p-6 ${isRTL ? 'order-1' : ''}`}>
@@ -135,17 +137,11 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
 
           {/* Quick Actions */}
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{t.createDocument}</CardTitle>
-                <Plus className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <Button variant="outline" asChild className="w-full">
-                  <Link href={`/${locale}/documents/new`}>{t.newDocument}</Link>
-                </Button>
-              </CardContent>
-            </Card>
+            <DashboardClient 
+              locale={locale}
+              t={t}
+              userTier={user.subscriptionTier}
+            />
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -223,9 +219,13 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
                     <li>{t.quickStartStep4}</li>
                   </ul>
                 </div>
-                <Button variant="outline" asChild>
-                  <Link href={`/${locale}/documents/new`}>{t.createFirstDocument}</Link>
-                </Button>
+                <CreateDocumentButton
+                  locale={locale}
+                  userTier={user.subscriptionTier}
+                  variant="outline"
+                >
+                  {t.createFirstDocument}
+                </CreateDocumentButton>
               </CardContent>
             </Card>
 

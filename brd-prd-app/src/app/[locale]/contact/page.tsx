@@ -16,12 +16,13 @@ import {
 } from 'lucide-react'
 
 interface ContactPageProps {
-  params: {
+  params: Promise<{
     locale: string
-  }
+  }>
 }
 
-export default function ContactPage({ params: { locale } }: ContactPageProps) {
+export default async function ContactPage({ params }: ContactPageProps) {
+  const { locale } = await params
   const isRTL = locale === 'ar'
 
   const contactReasons = [
