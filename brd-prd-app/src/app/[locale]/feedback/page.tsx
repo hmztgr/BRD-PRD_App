@@ -32,11 +32,11 @@ export default function FeedbackPage({ params: { locale } }: FeedbackPageProps) 
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">
             <MessageSquare className="h-8 w-8 text-blue-400" />
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bold text-white">
               {locale === 'ar' ? 'آراء وتقييمات العملاء' : 'Customer Feedback'}
             </h1>
           </div>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-300 max-w-2xl mx-auto">
             {locale === 'ar' 
               ? 'شارك تجربتك معنا أو اطلع على تقييمات العملاء الآخرين لمنصتنا'
               : 'Share your experience with us or explore what other customers think about our platform'

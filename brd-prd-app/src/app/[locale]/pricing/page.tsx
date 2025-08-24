@@ -593,22 +593,22 @@ function PricingPageClient({ locale, t, isRTL }: { locale: string, t: any, isRTL
                 )}
 
                 <div className="text-center">
-                  <Icon className="mx-auto h-12 w-12 text-gray-600" />
-                  <h3 className="mt-4 text-2xl font-semibold text-gray-900">
+                  <Icon className="mx-auto h-12 w-12 text-blue-400" />
+                  <h3 className="mt-4 text-2xl font-semibold text-blue-400">
                     {t.plans[key as keyof typeof t.plans].name}
                   </h3>
-                  <p className="mt-2 text-gray-600">
+                  <p className="mt-2 text-gray-300">
                     {t.plans[key as keyof typeof t.plans].description}
                   </p>
                 </div>
 
                 <div className="mt-6 text-center">
                   <div className="flex items-baseline justify-center">
-                    <span className="text-4xl font-bold text-gray-900">
+                    <span className="text-4xl font-bold text-white">
                       {formatPrice(price)}
                     </span>
                     {price > 0 && (
-                      <span className="ml-1 text-gray-600">
+                      <span className="ml-1 text-gray-300">
                         {t.perMonth}
                       </span>
                     )}
@@ -645,7 +645,7 @@ function PricingPageClient({ locale, t, isRTL }: { locale: string, t: any, isRTL
                   {t.plans[key as keyof typeof t.plans].features.map((feature, index) => (
                     <div key={index} className="flex items-start">
                       <Check className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                      <span className="ml-3 text-sm text-gray-700">
+                      <span className="ml-3 text-sm text-gray-300">
                         {feature}
                       </span>
                     </div>
@@ -654,7 +654,7 @@ function PricingPageClient({ locale, t, isRTL }: { locale: string, t: any, isRTL
                   {t.plans[key as keyof typeof t.plans].limitations.map((limitation, index) => (
                     <div key={index} className="flex items-start">
                       <X className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
-                      <span className="ml-3 text-sm text-gray-500">
+                      <span className="ml-3 text-sm text-gray-400">
                         {limitation}
                       </span>
                     </div>

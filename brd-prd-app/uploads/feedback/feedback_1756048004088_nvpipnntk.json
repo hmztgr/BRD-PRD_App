@@ -1,0 +1,18 @@
+{
+  "id": "feedback_1756048004088_nvpipnntk",
+  "type": "bug",
+  "message": "test",
+  "email": "hmztgr@gmail.com",
+  "url": "http://localhost:3005/en",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+  "timestamp": "2025-08-24T15:06:42.298Z",
+  "includeConsoleLog": true,
+  "consoleLogs": "Navigation timing: {\"name\":\"http://localhost:3005/en\",\"entryType\":\"navigation\",\"startTime\":0,\"duration\":43564.70000001788,\"initiatorType\":\"navigation\",\"deliveryType\":\"\",\"nextHopProtocol\":\"http/1.1\",\"renderBlockingStatus\":\"non-blocking\",\"workerStart\":0,\"redirectStart\":0,\"redirectEnd\":0,\"fetchStart\":9.099999994039536,\"domainLookupStart\":9.099999994039536,\"domainLookupEnd\":9.099999994039536,\"connectStart\":9.099999994039536,\"secureConnectionStart\":0,\"connectEnd\":9.099999994039536,\"requestStart\":28.5,\"responseStart\":20378.80000001192,\"firstInterimResponseStart\":0,\"finalResponseHeadersStart\":20378.80000001192,\"responseEnd\":26082.80000001192,\"transferSize\":20214,\"encodedBodySize\":19914,\"decodedBodySize\":65990,\"responseStatus\":200,\"serverTiming\":[],\"unloadEventStart\":0,\"unloadEventEnd\":0,\"domInteractive\":31472.30000001192,\"domContentLoadedEventStart\":31472.40000000596,\"domContentLoadedEventEnd\":31474.20000001788,\"domComplete\":43564.59999999404,\"loadEventStart\":43564.70000001788,\"loadEventEnd\":43564.70000001788,\"type\":\"back_forward\",\"redirectCount\":0,\"activationStart\":0,\"criticalCHRestart\":0,\"notRestoredReasons\":null}\nURL: http://localhost:3005/en\nUser Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36\nScreen: 1920x1080\nViewport: 1920x919\nTimestamp: 2025-08-24T15:06:42.303Z",
+  "screenshot": "C:\\projects\\Cursor projects\\BRD-PRD App claude\\brd-prd-app\\uploads\\feedback\\feedback_1756048004088_nvpipnntk_screenshot_كل عام و انتم بخير.jpg",
+  "attachments": [
+    "C:\\projects\\Cursor projects\\BRD-PRD App claude\\brd-prd-app\\uploads\\feedback\\feedback_1756048004088_nvpipnntk_attachment_0_aug.png",
+    "C:\\projects\\Cursor projects\\BRD-PRD App claude\\brd-prd-app\\uploads\\feedback\\feedback_1756048004088_nvpipnntk_attachment_1_al mahd logo.png"
+  ],
+  "submittedAt": "2025-08-24T15:06:44.124Z",
+  "ipAddress": "::1"
+}

@@ -135,10 +135,10 @@ export function FeedbackDisplay({
       <div className="space-y-4">
         {showHeader && (
           <div className={`text-center ${isRTL ? 'rtl' : ''}`}>
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-2xl font-bold text-white">
               {locale === 'ar' ? 'آراء عملائنا' : 'What Our Customers Say'}
             </h2>
-            <p className="mt-2 text-gray-600">
+            <p className="mt-2 text-gray-300">
               {locale === 'ar' 
                 ? 'اكتشف تجارب المستخدمين مع منصتنا'
                 : 'Discover what users think about our platform'
@@ -186,10 +186,10 @@ export function FeedbackDisplay({
     <div className={`space-y-6 ${isRTL ? 'rtl' : ''}`}>
       {showHeader && (
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900">
+          <h2 className="text-2xl font-bold text-white">
             {locale === 'ar' ? 'آراء عملائنا' : 'What Our Customers Say'}
           </h2>
-          <p className="mt-2 text-gray-600">
+          <p className="mt-2 text-gray-300">
             {locale === 'ar' 
               ? 'اكتشف تجارب المستخدمين مع منصتنا'
               : 'Discover what users think about our platform'
@@ -218,7 +218,7 @@ export function FeedbackDisplay({
                   </AvatarFallback>
                 </Avatar>
                 <div className={`flex-1 ${isRTL ? 'text-right' : ''}`}>
-                  <p className="font-medium text-gray-900">{item.userName}</p>
+                  <p className="font-medium text-white">{item.userName}</p>
                   <p className="text-sm text-gray-500">{formatDate(item.createdAt)}</p>
                 </div>
               </div>
@@ -234,12 +234,12 @@ export function FeedbackDisplay({
               </div>
 
               {/* Title */}
-              <h3 className={`font-semibold text-gray-900 mb-2 line-clamp-2 ${isRTL ? 'text-right' : ''}`}>
+              <h3 className={`font-semibold text-white mb-2 line-clamp-2 ${isRTL ? 'text-right' : ''}`}>
                 {item.title}
               </h3>
 
               {/* Message */}
-              <p className={`text-gray-600 text-sm line-clamp-4 leading-relaxed ${isRTL ? 'text-right' : ''}`}>
+              <p className={`text-gray-300 text-sm line-clamp-4 leading-relaxed ${isRTL ? 'text-right' : ''}`}>
                 {item.message}
               </p>
             </CardContent>

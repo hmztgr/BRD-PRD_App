@@ -39,7 +39,7 @@ const authMiddleware = withAuth(
       },
     },
     pages: {
-      signIn: '/auth/signin',
+      signIn: '/en/auth/signin',
     },
   }
 );

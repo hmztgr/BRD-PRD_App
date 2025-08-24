@@ -63,11 +63,11 @@ export default async function ContactPage({ params }: ContactPageProps) {
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
             <Mail className="h-8 w-8 text-blue-400" />
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bold text-white">
               {locale === 'ar' ? 'تواصل معنا' : 'Contact Us'}
             </h1>
           </div>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-300 max-w-2xl mx-auto">
             {locale === 'ar' 
               ? 'نحن هنا لمساعدتك. تواصل معنا لأي استفسار أو مساعدة تحتاجها'
               : 'We\'re here to help you. Reach out to us for any questions or assistance you need'
@@ -86,7 +86,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
             {/* Contact Methods */}
             <Card>
               <CardContent className="p-6">
-                <h3 className={`text-lg font-semibold text-gray-900 mb-4 ${isRTL ? 'text-right' : ''}`}>
+                <h3 className={`text-lg font-semibold text-white mb-4 ${isRTL ? 'text-right' : ''}`}>
                   {locale === 'ar' ? 'طرق التواصل' : 'Get In Touch'}
                 </h3>
                 
@@ -94,20 +94,20 @@ export default async function ContactPage({ params }: ContactPageProps) {
                   <div className={`flex items-start gap-3 ${isRTL ? 'flex-row-reverse text-right' : ''}`}>
                     <Mail className="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" />
                     <div>
-                      <p className="font-medium text-gray-900">
+                      <p className="font-medium text-white">
                         {locale === 'ar' ? 'البريد الإلكتروني' : 'Email'}
                       </p>
-                      <p className="text-gray-600 text-sm">support@brd-prd-app.com</p>
+                      <p className="text-gray-300 text-sm">support@brd-prd-app.com</p>
                     </div>
                   </div>
 
                   <div className={`flex items-start gap-3 ${isRTL ? 'flex-row-reverse text-right' : ''}`}>
                     <MessageCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
                     <div>
-                      <p className="font-medium text-gray-900">
+                      <p className="font-medium text-white">
                         {locale === 'ar' ? 'الدردشة المباشرة' : 'Live Chat'}
                       </p>
-                      <p className="text-gray-600 text-sm">
+                      <p className="text-gray-300 text-sm">
                         {locale === 'ar' ? 'متاح قريباً' : 'Coming Soon'}
                       </p>
                     </div>
@@ -116,10 +116,10 @@ export default async function ContactPage({ params }: ContactPageProps) {
                   <div className={`flex items-start gap-3 ${isRTL ? 'flex-row-reverse text-right' : ''}`}>
                     <Clock className="h-5 w-5 text-orange-600 mt-0.5 flex-shrink-0" />
                     <div>
-                      <p className="font-medium text-gray-900">
+                      <p className="font-medium text-white">
                         {locale === 'ar' ? 'أوقات الاستجابة' : 'Response Time'}
                       </p>
-                      <p className="text-gray-600 text-sm">
+                      <p className="text-gray-300 text-sm">
                         {locale === 'ar' ? 'خلال 24 ساعة' : 'Within 24 hours'}
                       </p>
                     </div>
@@ -128,10 +128,10 @@ export default async function ContactPage({ params }: ContactPageProps) {
                   <div className={`flex items-start gap-3 ${isRTL ? 'flex-row-reverse text-right' : ''}`}>
                     <MapPin className="h-5 w-5 text-purple-600 mt-0.5 flex-shrink-0" />
                     <div>
-                      <p className="font-medium text-gray-900">
+                      <p className="font-medium text-white">
                         {locale === 'ar' ? 'المنطقة الزمنية' : 'Timezone'}
                       </p>
-                      <p className="text-gray-600 text-sm">
+                      <p className="text-gray-300 text-sm">
                         {locale === 'ar' ? 'توقيت السعودية (GMT+3)' : 'Saudi Arabia (GMT+3)'}
                       </p>
                     </div>
@@ -143,7 +143,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
             {/* Common Inquiries */}
             <Card>
               <CardContent className="p-6">
-                <h3 className={`text-lg font-semibold text-gray-900 mb-4 ${isRTL ? 'text-right' : ''}`}>
+                <h3 className={`text-lg font-semibold text-white mb-4 ${isRTL ? 'text-right' : ''}`}>
                   {locale === 'ar' ? 'الاستفسارات الشائعة' : 'Common Inquiries'}
                 </h3>
                 
@@ -154,8 +154,8 @@ export default async function ContactPage({ params }: ContactPageProps) {
                       <div key={index} className={`flex items-start gap-3 p-3 rounded-lg  ${isRTL ? 'flex-row-reverse text-right' : ''}`}>
                         <Icon className="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" />
                         <div>
-                          <p className="font-medium text-gray-900 text-sm">{reason.title}</p>
-                          <p className="text-gray-600 text-xs mt-1">{reason.description}</p>
+                          <p className="font-medium text-white text-sm">{reason.title}</p>
+                          <p className="text-gray-300 text-xs mt-1">{reason.description}</p>
                         </div>
                       </div>
                     )
@@ -168,10 +168,10 @@ export default async function ContactPage({ params }: ContactPageProps) {
             <Card>
               <CardContent className="p-6 text-center">
                 <HelpCircle className="h-8 w-8 text-blue-400 mx-auto mb-3" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                <h3 className="text-lg font-semibold text-white mb-2">
                   {locale === 'ar' ? 'الأسئلة الشائعة' : 'Frequently Asked Questions'}
                 </h3>
-                <p className="text-gray-600 text-sm mb-4">
+                <p className="text-gray-300 text-sm mb-4">
                   {locale === 'ar' 
                     ? 'قد تجد إجابة سؤالك في قائمة الأسئلة الشائعة'
                     : 'Find quick answers to common questions'
@@ -190,7 +190,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
         <div className="mt-16">
           <Card>
             <CardContent className="p-8">
-              <h2 className={`text-2xl font-bold text-gray-900 mb-6 text-center ${isRTL ? 'text-right' : ''}`}>
+              <h2 className={`text-2xl font-bold text-white mb-6 text-center ${isRTL ? 'text-right' : ''}`}>
                 {locale === 'ar' ? 'نحن نقدر تواصلكم معنا' : 'We Value Your Communication'}
               </h2>
               
@@ -199,10 +199,10 @@ export default async function ContactPage({ params }: ContactPageProps) {
                   <div className="bg-blue-100 rounded-full p-3 w-12 h-12 mx-auto mb-3 flex items-center justify-center">
                     <Mail className="h-6 w-6 text-blue-400" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-2">
+                  <h3 className="font-semibold text-white mb-2">
                     {locale === 'ar' ? 'استجابة سريعة' : 'Quick Response'}
                   </h3>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-gray-300 text-sm">
                     {locale === 'ar' 
                       ? 'نرد على جميع الاستفسارات خلال 24 ساعة'
                       : 'We respond to all inquiries within 24 hours'
@@ -214,10 +214,10 @@ export default async function ContactPage({ params }: ContactPageProps) {
                   <div className="bg-green-100 rounded-full p-3 w-12 h-12 mx-auto mb-3 flex items-center justify-center">
                     <Users className="h-6 w-6 text-green-600" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-2">
+                  <h3 className="font-semibold text-white mb-2">
                     {locale === 'ar' ? 'فريق خبير' : 'Expert Team'}
                   </h3>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-gray-300 text-sm">
                     {locale === 'ar' 
                       ? 'فريق دعم متخصص ومدرب لمساعدتكم'
                       : 'Specialized and trained support team to help you'
@@ -229,10 +229,10 @@ export default async function ContactPage({ params }: ContactPageProps) {
                   <div className="bg-purple-100 rounded-full p-3 w-12 h-12 mx-auto mb-3 flex items-center justify-center">
                     <MessageCircle className="h-6 w-6 text-purple-600" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-2">
+                  <h3 className="font-semibold text-white mb-2">
                     {locale === 'ar' ? 'دعم شامل' : 'Comprehensive Support'}
                   </h3>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-gray-300 text-sm">
                     {locale === 'ar' 
                       ? 'دعم في جميع جوانب استخدام المنصة'
                       : 'Support for all aspects of using the platform'
@@ -244,10 +244,10 @@ export default async function ContactPage({ params }: ContactPageProps) {
                   <div className="bg-orange-100 rounded-full p-3 w-12 h-12 mx-auto mb-3 flex items-center justify-center">
                     <Settings className="h-6 w-6 text-orange-600" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-2">
+                  <h3 className="font-semibold text-white mb-2">
                     {locale === 'ar' ? 'حلول مخصصة' : 'Custom Solutions'}
                   </h3>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-gray-300 text-sm">
                     {locale === 'ar' 
                       ? 'نقدم حلول مخصصة حسب احتياجاتكم'
                       : 'We provide custom solutions based on your needs'

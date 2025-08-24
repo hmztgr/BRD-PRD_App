@@ -425,11 +425,11 @@ export function DataGatheringPanel({
             <select 
               value={newType}
               onChange={(e) => setNewType(e.target.value as ResearchType)}
-              className={`w-full p-2 border rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 ${isRTL ? 'text-right' : ''}`}
+              className={`w-full p-2 border rounded-md bg-white dark:bg-gray-800 text-white dark:text-gray-100 border-gray-300 dark:border-gray-600 ${isRTL ? 'text-right' : ''}`}
               dir={isRTL ? 'rtl' : 'ltr'}
             >
               {Object.entries(t.researchTypes).map(([key, label]) => (
-                <option key={key} value={key} className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">{label}</option>
+                <option key={key} value={key} className="bg-white dark:bg-gray-800 text-white dark:text-gray-100">{label}</option>
               ))}
             </select>
           </div>
@@ -441,11 +441,11 @@ export function DataGatheringPanel({
             <select 
               value={newPriority}
               onChange={(e) => setNewPriority(e.target.value as any)}
-              className={`w-full p-2 border rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 ${isRTL ? 'text-right' : ''}`}
+              className={`w-full p-2 border rounded-md bg-white dark:bg-gray-800 text-white dark:text-gray-100 border-gray-300 dark:border-gray-600 ${isRTL ? 'text-right' : ''}`}
               dir={isRTL ? 'rtl' : 'ltr'}
             >
               {Object.entries(t.priorities).map(([key, label]) => (
-                <option key={key} value={key} className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">{label}</option>
+                <option key={key} value={key} className="bg-white dark:bg-gray-800 text-white dark:text-gray-100">{label}</option>
               ))}
             </select>
           </div>

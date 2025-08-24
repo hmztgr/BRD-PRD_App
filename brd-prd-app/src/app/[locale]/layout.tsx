@@ -1,7 +1,9 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, use } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 import { SimpleHeader } from '@/components/layout/simple-header';
 import { AuthProvider } from '@/components/providers/session-provider';
+import { FeedbackButton } from '@/components/feedback/feedback-button';
+import { Toaster } from '@/components/ui/toaster';
 import { notFound } from 'next/navigation';
 import { locales } from '@/i18n';
 import enMessages from '../../../messages/en.json';
@@ -26,11 +28,11 @@ export async function generateMetadata({
   };
 }
 
-export default async function LocaleLayout({
+export default function LocaleLayout({
   children,
   params
 }: Props) {
-  const { locale } = await params;
+  const { locale } = use(params);
   
   // Validate locale
   if (!locales.includes(locale as any)) {
@@ -46,6 +48,12 @@ export default async function LocaleLayout({
       <main className="min-h-screen">
         {children}
       </main>
+      <FeedbackButton 
+        locale={locale}
+        variant="floating"
+        size="md"
+      />
+      <Toaster />
     </AuthProvider>
   );
 }

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { use } from "react"
 import Link from "next/link"
 import { FileText, Sparkles, Globe, Zap, Shield, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -8,8 +8,8 @@ interface HomeProps {
   params: Promise<{ locale: string }>;
 }
 
-export default async function Home({ params }: HomeProps) {
-  const { locale } = await params;
+export default function Home({ params }: HomeProps) {
+  const { locale } = use(params);
   const isRTL = locale === 'ar';
   
   return (

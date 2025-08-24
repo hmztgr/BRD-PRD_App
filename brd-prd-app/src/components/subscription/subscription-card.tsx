@@ -149,9 +149,9 @@ export default function SubscriptionCard() {
       <Card className="p-6">
         <div className="flex items-start justify-between mb-6">
           <div className="flex items-center space-x-3">
-            <Icon className="h-8 w-8 text-gray-600" />
+            <Icon className="h-8 w-8 text-blue-400" />
             <div>
-              <h2 className="text-2xl font-bold capitalize text-gray-900">
+              <h2 className="text-2xl font-bold capitalize text-white">
                 {subscription.tier} Plan
               </h2>
               <div className="flex items-center space-x-2 mt-1">
@@ -220,7 +220,7 @@ export default function SubscriptionCard() {
               <span className="font-medium text-gray-700">Billing Period</span>
             </div>
             
-            <div className="space-y-2 text-sm text-gray-600">
+            <div className="space-y-2 text-sm text-gray-300">
               <div className="flex justify-between">
                 <span>Current period:</span>
                 <span>

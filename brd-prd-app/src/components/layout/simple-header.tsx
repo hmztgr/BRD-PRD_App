@@ -124,7 +124,7 @@ export function SimpleHeader({ locale }: SimpleHeaderProps) {
               <div className="relative" ref={userMenuRef}>
                 <button
                   onClick={() => setShowUserMenu(!showUserMenu)}
-                  className={`flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 ${isRTL ? 'space-x-reverse space-x-1' : 'space-x-1'}`}
+                  className={`flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-white ${isRTL ? 'space-x-reverse space-x-1' : 'space-x-1'}`}
                 >
                   <User className="h-4 w-4" />
                   <span className="hidden sm:block">{session.user?.name || session.user?.email}</span>

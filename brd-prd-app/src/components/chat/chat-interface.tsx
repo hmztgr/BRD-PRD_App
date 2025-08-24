@@ -261,7 +261,7 @@ export function ChatInterface({ userName, locale = 'en' }: ChatInterfaceProps) {
             >
               <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
                 message.role === 'user' 
-                  ? 'bg-primary text-white' 
+                  ? 'bg-blue-600 text-white' 
                   : 'bg-gray-200 dark:bg-gray-700'
               }`}>
                 {message.role === 'user' ? (
@@ -274,7 +274,7 @@ export function ChatInterface({ userName, locale = 'en' }: ChatInterfaceProps) {
               <div
                 className={`rounded-lg px-4 py-2 ${
                   message.role === 'user'
-                    ? 'bg-primary text-white'
+                    ? 'bg-blue-600 text-white'
                     : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100'
                 }`}
                 style={{

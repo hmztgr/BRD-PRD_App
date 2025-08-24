@@ -191,7 +191,7 @@ export function DocumentGenerationForm({ onDocumentGenerated }: DocumentGenerati
               disabled={isGenerating}
               className="w-full min-h-[150px] px-3 py-2 border border-gray-600 bg-gray-800 text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary resize-none placeholder-gray-400"
             />
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-300">
               Our AI will analyze your idea and ask for clarification if needed before generating comprehensive documentation.
             </p>
           </div>
@@ -208,7 +208,7 @@ export function DocumentGenerationForm({ onDocumentGenerated }: DocumentGenerati
               disabled={isGenerating || isAnalyzing}
               className="w-full px-3 py-2 border border-gray-600 bg-gray-800 text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary/80"
             />
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-300">
               Supported formats: .txt, .md, .pdf, .docx, .doc (Max 10MB per file)
             </p>
             {uploadedFiles.length > 0 && (

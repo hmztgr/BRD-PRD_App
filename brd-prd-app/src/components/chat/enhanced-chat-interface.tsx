@@ -513,7 +513,7 @@ export function EnhancedChatInterface({
                       ? 'bg-blue-600 text-white dark:bg-blue-500 dark:text-white'
                       : message.role === 'system'
                         ? 'bg-blue-100 dark:bg-blue-900 text-blue-900 dark:text-blue-100'
-                        : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100'
+                        : 'bg-gray-100 dark:bg-gray-800 text-gray-200 dark:text-gray-100'
                   }`}
                   style={{
                     direction: isArabicText(message.content) ? 'rtl' : 'ltr',

@@ -167,7 +167,7 @@ export function ContactForm({ locale = 'en', onSuccess, compact = false }: Conta
                 {Object.entries(CONTACT_TYPES).map(([key, details]) => {
                   const Icon = details.icon
                   return (
-                    <SelectItem key={key} value={key} className="hover:bg-gray-100 text-gray-900">
+                    <SelectItem key={key} value={key} className="hover:bg-gray-100 text-white">
                       <div className={`flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
                         <Icon className="h-4 w-4" />
                         {details[locale as keyof typeof details] as string}
@@ -272,10 +272,10 @@ export function ContactForm({ locale = 'en', onSuccess, compact = false }: Conta
 
         {/* Additional contact info */}
         <div className={`mt-8 pt-6 border-t ${isRTL ? 'text-right' : ''}`}>
-          <h3 className="font-semibold text-gray-900 mb-3">
+          <h3 className="font-semibold text-white mb-3">
             {locale === 'ar' ? 'طرق أخرى للتواصل' : 'Other Ways to Reach Us'}
           </h3>
-          <div className="space-y-2 text-sm text-gray-600">
+          <div className="space-y-2 text-sm text-gray-300">
             <div className={`flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
               <Mail className="h-4 w-4" />
               <span>support@brd-prd-app.com</span>

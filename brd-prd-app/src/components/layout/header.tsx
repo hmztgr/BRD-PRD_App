@@ -117,12 +117,12 @@ export function Header() {
                 "flex items-center",
                 isRTL ? "space-x-reverse space-x-2" : "space-x-2"
               )}>
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" className="text-white hover:text-gray-300" style={{ color: '#ffffff !important' }}>
                   <User className={cn(
-                    "h-4 w-4",
+                    "h-4 w-4 text-white",
                     isRTL ? "ml-2" : "mr-2"
                   )} />
-                  {session.user.name || session.user.email}
+                  <span style={{ color: '#ffffff !important' }}>{session.user.name || session.user.email}</span>
                 </Button>
                 <Button variant="ghost" size="sm" asChild>
                   <Link href={`/${currentLocale}/settings`}>

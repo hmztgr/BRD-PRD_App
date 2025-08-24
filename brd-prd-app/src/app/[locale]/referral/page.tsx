@@ -11,9 +11,9 @@ import { Users, Gift, Copy, Check, Share2, Zap, Crown, Star } from 'lucide-react
 import Link from 'next/link'
 
 interface ReferralPageProps {
-  params: {
+  params: Promise<{
     locale: string
-  }
+  }>
 }
 
 interface ReferralData {
@@ -31,11 +31,19 @@ interface ReferralData {
   }[]
 }
 
-export default function ReferralPage({ params: { locale } }: ReferralPageProps) {
+export default function ReferralPage({ params }: ReferralPageProps) {
+  const [locale, setLocale] = useState<string>('en')
   const { data: session, status } = useSession()
   const [referralData, setReferralData] = useState<ReferralData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [copied, setCopied] = useState(false)
+  
+  // Resolve params promise
+  useEffect(() => {
+    params.then(({ locale: resolvedLocale }) => {
+      setLocale(resolvedLocale)
+    })
+  }, [params])
   
   const isRTL = locale === 'ar'
   const referralUrl = typeof window !== 'undefined' 
@@ -179,11 +187,11 @@ export default function ReferralPage({ params: { locale } }: ReferralPageProps) 
         <div className="mb-8">
           <div className={`flex items-center gap-3 mb-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
             <Users className="h-8 w-8 text-blue-400" />
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bold text-white">
               {locale === 'ar' ? 'برنامج الإحالات' : 'Referral Program'}
             </h1>
           </div>
-          <p className={`text-lg text-gray-600 ${isRTL ? 'text-right' : ''}`}>
+          <p className={`text-lg text-gray-300 ${isRTL ? 'text-right' : ''}`}>
             {locale === 'ar' 
               ? 'ادع الأصدقاء واكسب رموز مجانية لكل شخص ينضم'
               : 'Invite friends and earn free tokens for each person who joins'

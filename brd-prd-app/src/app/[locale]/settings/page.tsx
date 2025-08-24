@@ -291,11 +291,11 @@ export default function SettingsPage({ params: { locale } }: SettingsPageProps) 
         <div className="mb-8">
           <div className={`flex items-center gap-3 mb-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
             <Settings className="h-8 w-8 text-blue-400" />
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bold text-white">
               {locale === 'ar' ? 'الإعدادات' : 'Settings'}
             </h1>
           </div>
-          <p className={`text-lg text-gray-600 ${isRTL ? 'text-right' : ''}`}>
+          <p className={`text-lg text-gray-300 ${isRTL ? 'text-right' : ''}`}>
             {locale === 'ar' 
               ? 'إدارة تفضيلات حسابك وإعدادات التطبيق'
               : 'Manage your account preferences and application settings'
@@ -323,7 +323,7 @@ export default function SettingsPage({ params: { locale } }: SettingsPageProps) 
                         className={`w-full flex items-center px-4 py-3 text-sm font-medium border-r-2 transition-colors ${
                           activeTab === tab.id
                             ? 'bg-blue-900 border-blue-400 text-blue-300'
-                            : 'border-transparent text-gray-600 hover: hover:text-gray-900'
+                            : 'border-transparent text-gray-300 hover: hover:text-white'
                         } ${isRTL ? 'flex-row-reverse text-right border-r-0 border-l-2' : ''}`}
                       >
                         <IconComponent className={`h-5 w-5 ${isRTL ? 'ml-3' : 'mr-3'}`} />

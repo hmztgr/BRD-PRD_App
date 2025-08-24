@@ -193,7 +193,7 @@ export function FeedbackForm({ locale = 'en', onSuccess, compact = false }: Feed
                   />
                 </button>
               ))}
-              <span className={`ml-3 text-sm text-gray-600 ${isRTL ? 'mr-3 ml-0' : ''}`}>
+              <span className={`ml-3 text-sm text-gray-300 ${isRTL ? 'mr-3 ml-0' : ''}`}>
                 {formData.rating > 0 && (
                   <>
                     {formData.rating}/5 

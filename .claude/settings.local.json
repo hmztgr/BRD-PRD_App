@@ -83,7 +83,10 @@
       "mcp__playwright__browser_type",
       "mcp__playwright__browser_wait_for",
       "mcp__playwright__browser_hover",
-      "mcp__playwright__browser_press_key"
+      "mcp__playwright__browser_press_key",
+      "Bash(npm run:*)",
+      "Bash(del .env)",
+      "Bash(npm info:*)"
     ],
     "deny": [],
     "ask": [],

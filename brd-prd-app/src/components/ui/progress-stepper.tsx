@@ -191,7 +191,7 @@ export function ProgressStepper({
                 step.status === 'completed' ? 'text-green-700' :
                 step.status === 'active' ? 'text-blue-700' :
                 step.status === 'error' ? 'text-red-700' :
-                'text-gray-600'
+                'text-gray-300'
               )}>
                 {step.title}
               </h4>
