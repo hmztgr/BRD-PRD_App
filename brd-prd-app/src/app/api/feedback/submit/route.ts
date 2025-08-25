@@ -107,19 +107,12 @@ export async function POST(request: NextRequest) {
       
       await prisma.feedback.create({
         data: {
-          type: feedback.type,
+          category: feedback.type === 'review' ? 'praise' : feedback.type === 'suggestion' ? 'feature' : feedback.type,
+          title: `${feedback.type.charAt(0).toUpperCase() + feedback.type.slice(1)} Report`,
           message: feedback.message,
           email: feedback.email || null,
-          rating: 0,
-          status: 'pending',
-          metadata: JSON.stringify({
-            url: feedback.url,
-            userAgent: feedback.userAgent,
-            consoleLogs: feedback.consoleLogs,
-            screenshot: screenshotPath ? screenshotName : null,
-            attachments: attachmentPaths.map(path => path.split('/').pop()),
-            ipAddress: feedbackRecord.ipAddress
-          })
+          rating: 5,
+          status: 'pending'
         }
       })
       
