@@ -8,7 +8,20 @@ import { prisma } from '@/lib/prisma';
 
 // Email transporter configuration
 const createTransporter = () => {
-  // For development: use Nodemailer test account
+  // Priority 1: Use Mailjet SMTP if configured (works in both dev and prod)
+  if (process.env.MAILJET_API_KEY && process.env.MAILJET_SECRET_KEY) {
+    return nodemailer.createTransport({
+      host: 'in.mailjet.com',
+      port: 2525,
+      secure: false,
+      auth: {
+        user: process.env.MAILJET_API_KEY,
+        pass: process.env.MAILJET_SECRET_KEY
+      }
+    });
+  }
+
+  // Priority 2: For development without Mailjet - use Ethereal test account
   if (process.env.NODE_ENV === 'development') {
     return nodemailer.createTransport({
       host: 'smtp.ethereal.email',
@@ -21,20 +34,7 @@ const createTransporter = () => {
     });
   }
 
-  // For production: use SendGrid SMTP
-  if (process.env.SENDGRID_API_KEY) {
-    return nodemailer.createTransport({
-      host: 'smtp.sendgrid.net',
-      port: 587,
-      secure: false,
-      auth: {
-        user: 'apikey',
-        pass: process.env.SENDGRID_API_KEY
-      }
-    });
-  }
-
-  // Fallback: Gmail SMTP (for testing)
+  // Priority 3: Fallback Gmail SMTP (for testing)
   return nodemailer.createTransport({
     service: 'gmail',
     auth: {

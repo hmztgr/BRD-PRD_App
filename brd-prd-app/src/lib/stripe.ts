@@ -18,52 +18,68 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 // Stripe product and price configuration
 export const STRIPE_CONFIG = {
   products: {
+    hobby: {
+      name: 'Hobby Plan',
+      description: 'Enhanced AI-powered generation for personal projects',
+    },
     professional: {
       name: 'Professional Plan',
-      description: 'Advanced AI-powered document generation with priority support',
+      description: 'Premium AI-powered document generation with advanced features',
     },
     business: {
       name: 'Business Plan', 
-      description: 'Team collaboration features with advanced templates and API access',
+      description: 'Team collaboration with enhanced AI models and templates',
     },
     enterprise: {
       name: 'Enterprise Plan',
-      description: 'Custom solutions with dedicated support and unlimited usage',
+      description: 'Custom solutions with premium AI models and dedicated support',
     },
   },
   prices: {
-    professional_monthly: {
+    hobby_monthly: {
       amount: 380, // $3.80
+      currency: 'usd',
+      interval: 'month',
+      productId: 'hobby',
+    },
+    hobby_yearly: {
+      amount: 325, // $3.25 (annually)
+      currency: 'usd',
+      interval: 'year',
+      productId: 'hobby',
+    },
+    professional_monthly: {
+      amount: 1980, // $19.80
       currency: 'usd',
       interval: 'month',
       productId: 'professional',
     },
     professional_yearly: {
-      amount: 3420, // $34.20 (15% discount + 10% bonus tokens)
+      amount: 1650, // $16.50 (annually)
       currency: 'usd', 
       interval: 'year',
       productId: 'professional',
     },
     business_monthly: {
-      amount: 980, // $9.80
+      amount: 1680, // $16.80
       currency: 'usd',
       interval: 'month',
       productId: 'business',
     },
     business_yearly: {
-      amount: 8820, // $88.20 (15% discount + 10% bonus tokens)
+      amount: 1480, // $14.80 (annually)
       currency: 'usd',
       interval: 'year', 
       productId: 'business',
     },
     enterprise_monthly: {
-      amount: 3980, // $39.80
+      amount: 19900, // $199.00
       currency: 'usd',
       interval: 'month',
       productId: 'enterprise',
     },
     enterprise_yearly: {
-      amount: 35820, // $358.20 (15% discount + 10% bonus tokens)
+      amount: 14990, // $149.90 (annually)
       currency: 'usd',
       interval: 'year',
       productId: 'enterprise',
@@ -74,7 +90,8 @@ export const STRIPE_CONFIG = {
 // Token limits for each plan
 export const TOKEN_LIMITS = {
   free: 10000,        // 10K tokens/month
-  professional: 50000, // 50K tokens/month
+  hobby: 50000,       // 50K tokens/month
+  professional: 100000, // 100K tokens/month
   business: 200000,    // 200K tokens/month  
   enterprise: 1000000, // 1M tokens/month
 };

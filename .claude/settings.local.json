@@ -86,7 +86,9 @@
       "mcp__playwright__browser_press_key",
       "Bash(npm run:*)",
       "Bash(del .env)",
-      "Bash(npm info:*)"
+      "Bash(npm info:*)",
+      "Bash(git fetch:*)",
+      "Bash(git stash:*)"
     ],
     "deny": [],
     "ask": [],
