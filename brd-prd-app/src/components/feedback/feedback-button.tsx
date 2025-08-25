@@ -192,7 +192,7 @@ export function FeedbackButton({
       console.error('Screenshot capture failed:', error)
       
       // Provide user-friendly error message
-      if (error.name === 'NotAllowedError') {
+      if (error instanceof Error && error.name === 'NotAllowedError') {
         toast({
           title: 'Screenshot Cancelled',
           description: 'You can upload a screenshot instead using the upload button.',
