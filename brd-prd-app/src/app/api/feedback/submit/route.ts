@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
           type: feedback.type,
           message: feedback.message,
           email: feedback.email || null,
-          rating: null,
+          rating: 0,
           status: 'pending',
           metadata: JSON.stringify({
             url: feedback.url,
