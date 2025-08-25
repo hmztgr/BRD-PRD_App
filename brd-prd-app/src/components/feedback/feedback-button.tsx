@@ -332,7 +332,7 @@ export function FeedbackButton({
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          size={size}
+          size={size === 'md' ? 'default' : size}
           className={`${floatingStyles} ${buttonSizes[size]} ${className}`}
         >
           <MessageSquare className="h-4 w-4 mr-2" />
