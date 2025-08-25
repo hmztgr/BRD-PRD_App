@@ -52,7 +52,9 @@ export const reducer = (state: State, action: Action): State => {
     case "ADD_TOAST":
       return {
         ...state,
-        toasts: [action.toast, ...state.toasts].slice(0, TOAST_LIMIT),
+        toasts: action.toast 
+          ? [action.toast, ...state.toasts].slice(0, TOAST_LIMIT)
+          : state.toasts,
       }
 
     case "UPDATE_TOAST":
