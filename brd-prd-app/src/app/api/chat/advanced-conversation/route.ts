@@ -109,7 +109,7 @@ export async function POST(req: NextRequest) {
           ...currentMetadata,
           lastActivity: new Date(),
           messageCount: messageHistory.length + 2,
-          planningSession: aiResponse.planningSession
+          planningSession: aiResponse.planningSession ? JSON.parse(JSON.stringify(aiResponse.planningSession)) : null
         }
       }
     })
