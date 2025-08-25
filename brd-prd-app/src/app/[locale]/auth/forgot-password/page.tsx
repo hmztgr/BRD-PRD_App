@@ -7,9 +7,9 @@ export const metadata: Metadata = {
 }
 
 interface ForgotPasswordPageProps {
-  params: {
+  params: Promise<{
     locale: string
-  }
+  }>
 }
 
 export default async function ForgotPasswordPage({ params }: ForgotPasswordPageProps) {
