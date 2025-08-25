@@ -548,7 +548,7 @@ Based on the example project template structure, the system will generate:
 - **Google Gemini**: Free AI service for Free tier users
 - **Stripe**: Payment processing and subscription management
 - **AWS S3**: File storage and document management
-- **SendGrid**: Email notifications and communications
+- **Mailjet**: Email notifications and communications
 
 ### **Appendix B: Third-Party Services**
 - **Vercel**: Frontend hosting and deployment
