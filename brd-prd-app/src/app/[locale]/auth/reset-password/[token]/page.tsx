@@ -7,10 +7,10 @@ export const metadata: Metadata = {
 }
 
 interface ResetPasswordPageProps {
-  params: {
+  params: Promise<{
     locale: string
     token: string
-  }
+  }>
 }
 
 export default async function ResetPasswordPage({ params }: ResetPasswordPageProps) {

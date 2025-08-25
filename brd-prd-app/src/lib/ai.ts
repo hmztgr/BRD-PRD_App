@@ -217,5 +217,50 @@ export async function generateDocument(
   }
 }
 
+export async function getUserTokenUsage(userId: string) {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        tokensUsed: true,
+        plan: true,
+        _count: {
+          select: {
+            documents: true,
+            usageHistory: true
+          }
+        },
+        usageHistory: {
+          orderBy: { createdAt: 'desc' },
+          take: 10,
+          select: {
+            tokensUsed: true,
+            operation: true,
+            documentType: true,
+            aiModel: true,
+            success: true,
+            createdAt: true
+          }
+        }
+      }
+    })
+
+    if (!user) {
+      throw new Error('User not found')
+    }
+
+    return {
+      tokensUsed: user.tokensUsed || 0,
+      plan: user.plan,
+      documentsCount: user._count.documents,
+      usageHistoryCount: user._count.usageHistory,
+      recentUsage: user.usageHistory
+    }
+  } catch (error) {
+    console.error('Get user token usage error:', error)
+    throw error
+  }
+}
+
 // Re-export OpenAI functions for backward compatibility
 export { analyzeProjectIdea } from './ai/openai'
