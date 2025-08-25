@@ -1,6 +1,7 @@
 import { NextAuthOptions } from "next-auth"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import GoogleProvider from "next-auth/providers/google"
+import LinkedInProvider from "next-auth/providers/linkedin"
 import CredentialsProvider from "next-auth/providers/credentials"
 import bcrypt from "bcryptjs"
 import { prisma } from "@/lib/prisma"
@@ -12,6 +13,10 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+    LinkedInProvider({
+      clientId: process.env.LINKEDIN_CLIENT_ID!,
+      clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,
     }),
     CredentialsProvider({
       name: "credentials",
@@ -73,7 +78,7 @@ export const authOptions: NextAuthOptions = {
     },
     async jwt({ token, user, account }) {
       // Add referral code after user is created by adapter
-      if (user && account?.provider === "google") {
+      if (user && (account?.provider === "google" || account?.provider === "linkedin")) {
         try {
           // Check if user needs referral code
           const dbUser = await prisma.user.findUnique({

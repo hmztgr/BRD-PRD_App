@@ -52,9 +52,21 @@ export function SignInForm() {
   const handleGoogleSignIn = async () => {
     setIsLoading(true)
     try {
-      await signIn('google', { callbackUrl: `/${currentLocale}/dashboard` })
+      const callbackUrl = `${window.location.origin}/${currentLocale}/dashboard`
+      await signIn('google', { callbackUrl })
     } catch {
       setError('Google sign-in failed. Please try again.')
+      setIsLoading(false)
+    }
+  }
+
+  const handleLinkedInSignIn = async () => {
+    setIsLoading(true)
+    try {
+      const callbackUrl = `${window.location.origin}/${currentLocale}/dashboard`
+      await signIn('linkedin', { callbackUrl })
+    } catch {
+      setError('LinkedIn sign-in failed. Please try again.')
       setIsLoading(false)
     }
   }
@@ -68,15 +80,26 @@ export function SignInForm() {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <Button 
-          variant="outline" 
-          className="w-full" 
-          onClick={handleGoogleSignIn}
-          disabled={isLoading}
-        >
-          <Icons.google className="mr-2 h-4 w-4" />
-          Sign in with Google
-        </Button>
+        <div className="space-y-2">
+          <Button 
+            variant="outline" 
+            className="w-full" 
+            onClick={handleGoogleSignIn}
+            disabled={isLoading}
+          >
+            <Icons.google className="mr-2 h-4 w-4" />
+            Sign in with Google
+          </Button>
+          <Button 
+            variant="outline" 
+            className="w-full" 
+            onClick={handleLinkedInSignIn}
+            disabled={isLoading}
+          >
+            <Icons.linkedin className="mr-2 h-4 w-4" />
+            Sign in with LinkedIn
+          </Button>
+        </div>
         
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
@@ -103,7 +126,15 @@ export function SignInForm() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password">Password</Label>
+              <Link
+                href={`/${currentLocale}/auth/forgot-password`}
+                className="text-sm text-muted-foreground hover:text-primary underline underline-offset-4"
+              >
+                Forgot password?
+              </Link>
+            </div>
             <Input
               id="password"
               type="password"

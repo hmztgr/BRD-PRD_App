@@ -190,7 +190,7 @@ export async function sendPasswordResetEmail(
     const transporter = createTransporter();
     
     const appUrl = process.env.APP_URL || 'http://localhost:3001';
-    const resetUrl = `${appUrl}/${locale}/auth/reset-password?token=${token}`;
+    const resetUrl = `${appUrl}/${locale}/auth/reset-password/${token}`;
 
     const translations = {
       en: {
