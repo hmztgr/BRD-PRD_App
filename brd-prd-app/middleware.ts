@@ -47,14 +47,6 @@ const authMiddleware = withAuth(
 export default function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
   
-  // Always run intl middleware first to handle locale redirects
-  const response = intlMiddleware(req);
-  
-  // If intl middleware returned a redirect, return it
-  if (response && response.status >= 300 && response.status < 400) {
-    return response;
-  }
-  
   // Check if pathname starts with a valid locale for auth checking
   const supportedLocales = ['en', 'ar'];
   const locale = pathname.split('/')[1];
@@ -72,12 +64,12 @@ export default function middleware(req: NextRequest) {
     
     // Use auth middleware for protected routes
     if (isProtectedRoute) {
-      return authMiddleware(req);
+      return (authMiddleware as any)(req);
     }
   }
   
-  // Return the intl middleware response for all other cases
-  return response || intlMiddleware(req);
+  // For all other cases, use intl middleware
+  return intlMiddleware(req);
 }
 
 export const config = {
