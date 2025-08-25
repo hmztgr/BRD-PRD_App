@@ -94,7 +94,9 @@
       "WebFetch(domain:dev.mailjet.com)",
       "WebFetch(domain:moyasar.com)",
       "Bash(cmd /c:*)",
-      "Bash(del .next)"
+      "Bash(del .next)",
+      "Bash(git ls-tree:*)",
+      "Bash(git pull:*)"
     ],
     "deny": [],
     "ask": [],
