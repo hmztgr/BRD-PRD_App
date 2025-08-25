@@ -4,7 +4,7 @@ import { getRequestConfig } from 'next-intl/server';
 // Can be imported from a shared config
 export const locales = ['en', 'ar'] as const;
 
-export default getRequestConfig(async ({ locale }) => {
+export default getRequestConfig(async ({ locale }): Promise<{messages: Record<string, any>; timeZone: string}> => {
   // Validate that the incoming `locale` parameter is valid
   if (!locales.includes(locale as 'en' | 'ar')) notFound();
 
