@@ -642,7 +642,7 @@ function PricingPageClient({ locale, t, isRTL }: { locale: string, t: any, isRTL
                 </Button>
 
                 <div className="mt-6 space-y-3">
-                  {t.plans[key as keyof typeof t.plans].features.map((feature, index) => (
+                  {t.plans[key as keyof typeof t.plans].features.map((feature: string, index: number) => (
                     <div key={index} className="flex items-start">
                       <Check className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
                       <span className="ml-3 text-sm text-gray-300">
@@ -651,7 +651,7 @@ function PricingPageClient({ locale, t, isRTL }: { locale: string, t: any, isRTL
                     </div>
                   ))}
                   
-                  {t.plans[key as keyof typeof t.plans].limitations.map((limitation, index) => (
+                  {t.plans[key as keyof typeof t.plans].limitations.map((limitation: string, index: number) => (
                     <div key={index} className="flex items-start">
                       <X className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
                       <span className="ml-3 text-sm text-gray-400">
