@@ -231,7 +231,7 @@ export async function getUserTokenUsage(userId: string) {
           }
         },
         usageHistory: {
-          orderBy: { createdAt: 'desc' },
+          orderBy: { date: 'desc' },
           take: 10,
           select: {
             tokensUsed: true,
@@ -239,7 +239,7 @@ export async function getUserTokenUsage(userId: string) {
             documentType: true,
             aiModel: true,
             success: true,
-            createdAt: true
+            date: true
           }
         }
       }
