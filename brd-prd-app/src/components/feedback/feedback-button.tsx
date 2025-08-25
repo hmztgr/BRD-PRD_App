@@ -140,7 +140,6 @@ export function FeedbackButton({
       if (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) {
         const stream = await navigator.mediaDevices.getDisplayMedia({
           video: { 
-            mediaSource: 'screen',
             width: { ideal: 1920, max: 1920 },
             height: { ideal: 1080, max: 1080 }
           },
