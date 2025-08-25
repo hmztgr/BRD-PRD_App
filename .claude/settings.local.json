@@ -88,7 +88,11 @@
       "Bash(del .env)",
       "Bash(npm info:*)",
       "Bash(git fetch:*)",
-      "Bash(git stash:*)"
+      "Bash(git stash:*)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs",
+      "WebFetch(domain:dev.mailjet.com)",
+      "WebFetch(domain:moyasar.com)"
     ],
     "deny": [],
     "ask": [],
