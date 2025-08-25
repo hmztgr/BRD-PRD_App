@@ -9,7 +9,6 @@ export default getRequestConfig(async ({ locale }) => {
   if (!locales.includes(locale as 'en' | 'ar')) notFound();
 
   return {
-    messages: (await import(`../messages/${locale}.json`)).default as Record<string, any>,
-    timeZone: 'Asia/Riyadh' as const
+    messages: (await import(`../messages/${locale}.json`)).default
   };
 });
