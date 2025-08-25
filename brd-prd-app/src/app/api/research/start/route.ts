@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
       data: {
         status: 'completed',
         completedAt: new Date(),
-        findings: findings,
+        findings: JSON.parse(JSON.stringify(findings)),
         confidence: calculateOverallConfidence(findings),
         sources: extractSources(findings)
       }
