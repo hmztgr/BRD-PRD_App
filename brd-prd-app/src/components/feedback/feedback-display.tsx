@@ -229,7 +229,7 @@ export function FeedbackDisplay({
                   {renderStars(item.rating)}
                 </div>
                 <Badge variant="secondary" className="text-xs">
-                  {CATEGORY_LABELS[item.category as keyof typeof CATEGORY_LABELS]?.[locale] || item.category}
+                  {CATEGORY_LABELS[item.category as keyof typeof CATEGORY_LABELS]?.[locale as 'en' | 'ar'] || item.category}
                 </Badge>
               </div>
 
