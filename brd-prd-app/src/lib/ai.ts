@@ -223,7 +223,7 @@ export async function getUserTokenUsage(userId: string) {
       where: { id: userId },
       select: {
         tokensUsed: true,
-        plan: true,
+        subscriptionTier: true,
         _count: {
           select: {
             documents: true,
@@ -251,7 +251,7 @@ export async function getUserTokenUsage(userId: string) {
 
     return {
       tokensUsed: user.tokensUsed || 0,
-      plan: user.plan,
+      plan: user.subscriptionTier,
       documentsCount: user._count.documents,
       usageHistoryCount: user._count.usageHistory,
       recentUsage: user.usageHistory
