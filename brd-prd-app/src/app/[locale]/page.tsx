@@ -19,10 +19,10 @@ export default function Home({ params }: HomeProps) {
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center space-y-8 text-center">
             <div className="space-y-4">
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
+              <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none mt-8">
                 {locale === 'ar' 
-                  ? 'إنشاء مستندات احترافية للمتطلبات'
-                  : 'Create Professional BRDs & PRDs'
+                  ? 'إنشاء مستندات الأعمال الاحترافية'
+                  : 'Create Professional Business Documents'
                 }
                 <span className="block text-primary">
                   {locale === 'ar' 
@@ -31,10 +31,10 @@ export default function Home({ params }: HomeProps) {
                   }
                 </span>
               </h1>
-              <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
+              <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400 text-center">
                 {locale === 'ar'
-                  ? 'إنشاء مستندات شاملة لمتطلبات الأعمال والمنتجات بمساعدة الذكاء الاصطناعي. يدعم العربية والإنجليزية مع الوعي الثقافي.'
-                  : 'Generate comprehensive Business Requirements Documents and Product Requirements Documents with AI-powered assistance. Supports Arabic and English with cultural awareness.'
+                  ? 'إنشاء مجموعة شاملة من مستندات الأعمال المهنية بمساعدة الذكاء الاصطناعي. يدعم العربية والإنجليزية مع الوعي الثقافي.'
+                  : 'Generate a comprehensive suite of professional business documents with AI-powered assistance. Supports Arabic and English with cultural awareness.'
                 }
               </p>
             </div>
@@ -70,52 +70,53 @@ export default function Home({ params }: HomeProps) {
                 </h2>
                 <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400 mx-auto">
                   {locale === 'ar'
-                    ? 'مجموعة متكاملة من الأدوات لإنشاء وإدارة مستندات متطلبات المشاريع'
-                    : 'A comprehensive suite of tools for creating and managing project requirement documents'
+                    ? 'مجموعة متكاملة من الأدوات لإنشاء وإدارة الوثائق التجارية المهنية'
+                    : 'A comprehensive suite of tools for creating and managing professional business documentation'
                   }
                 </p>
               </div>
             </div>
             
-            <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-3 lg:gap-12">
-              <div className="grid gap-1">
-                <div className="flex items-center gap-2">
+            <div className="mx-auto max-w-6xl py-12">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 lg:gap-12 place-items-center justify-items-center">
+              <div className="flex flex-col items-center text-center gap-4 w-80 max-w-sm">
+                <div className="flex flex-col items-center gap-3">
                   <FileText className="h-8 w-8 text-primary" />
                   <h3 className="text-xl font-bold">
                     {locale === 'ar' ? 'إنشاء المستندات' : 'Document Generation'}
                   </h3>
                 </div>
-                <p className="text-gray-500 dark:text-gray-400">
+                <p className="text-gray-500 dark:text-gray-400 text-center text-sm leading-relaxed">
                   {locale === 'ar'
-                    ? 'إنشاء مستندات BRD و PRD شاملة وعالية الجودة باستخدام الذكاء الاصطناعي'
-                    : 'Generate comprehensive, high-quality BRDs and PRDs with AI assistance'
+                    ? 'إنشاء وثائق الأعمال المهنية الشاملة بما في ذلك المقترحات والتقارير والخطط الاستراتيجية بمساعدة الذكاء الاصطناعي'
+                    : 'Generate comprehensive professional business documents including proposals, reports, strategic plans, and executive presentations with AI assistance'
                   }
                 </p>
               </div>
               
-              <div className="grid gap-1">
-                <div className="flex items-center gap-2">
+              <div className="flex flex-col items-center text-center gap-4 w-80 max-w-sm">
+                <div className="flex flex-col items-center gap-3">
                   <Globe className="h-8 w-8 text-primary" />
                   <h3 className="text-xl font-bold">
                     {locale === 'ar' ? 'دعم متعدد اللغات' : 'Multi-language Support'}
                   </h3>
                 </div>
-                <p className="text-gray-500 dark:text-gray-400">
+                <p className="text-gray-500 dark:text-gray-400 text-center text-sm leading-relaxed">
                   {locale === 'ar'
-                    ? 'دعم كامل للعربية والإنجليزية مع الوعي الثقافي والتخصيص للسوق السعودي'
-                    : 'Full Arabic and English support with cultural awareness and Saudi market customization'
+                    ? 'دعم كامل للعربية والإنجليزية مع الوعي الثقافي والخبرة في الأسواق الشرق أوسطية'
+                    : 'Full Arabic and English support with cultural awareness and Middle Eastern market expertise'
                   }
                 </p>
               </div>
               
-              <div className="grid gap-1">
-                <div className="flex items-center gap-2">
+              <div className="flex flex-col items-center text-center gap-4 w-80 max-w-sm">
+                <div className="flex flex-col items-center gap-3">
                   <Zap className="h-8 w-8 text-primary" />
                   <h3 className="text-xl font-bold">
                     {locale === 'ar' ? 'إنتاجية عالية' : 'Fast & Efficient'}
                   </h3>
                 </div>
-                <p className="text-gray-500 dark:text-gray-400">
+                <p className="text-gray-500 dark:text-gray-400 text-center text-sm leading-relaxed">
                   {locale === 'ar'
                     ? 'توليد مستندات عالية الجودة في دقائق بدلاً من ساعات أو أيام'
                     : 'Generate high-quality documents in minutes instead of hours or days'
@@ -123,14 +124,14 @@ export default function Home({ params }: HomeProps) {
                 </p>
               </div>
               
-              <div className="grid gap-1">
-                <div className="flex items-center gap-2">
+              <div className="flex flex-col items-center text-center gap-4 w-80 max-w-sm">
+                <div className="flex flex-col items-center gap-3">
                   <Shield className="h-8 w-8 text-primary" />
                   <h3 className="text-xl font-bold">
                     {locale === 'ar' ? 'آمن وموثوق' : 'Secure & Reliable'}
                   </h3>
                 </div>
-                <p className="text-gray-500 dark:text-gray-400">
+                <p className="text-gray-500 dark:text-gray-400 text-center text-sm leading-relaxed">
                   {locale === 'ar'
                     ? 'حماية متقدمة للبيانات مع نسخ احتياطي تلقائي وتشفير شامل'
                     : 'Enterprise-grade security with automatic backups and end-to-end encryption'
@@ -138,14 +139,14 @@ export default function Home({ params }: HomeProps) {
                 </p>
               </div>
               
-              <div className="grid gap-1">
-                <div className="flex items-center gap-2">
+              <div className="flex flex-col items-center text-center gap-4 w-80 max-w-sm">
+                <div className="flex flex-col items-center gap-3">
                   <Users className="h-8 w-8 text-primary" />
                   <h3 className="text-xl font-bold">
                     {locale === 'ar' ? 'تعاون الفريق' : 'Team Collaboration'}
                   </h3>
                 </div>
-                <p className="text-gray-500 dark:text-gray-400">
+                <p className="text-gray-500 dark:text-gray-400 text-center text-sm leading-relaxed">
                   {locale === 'ar'
                     ? 'مشاركة وتعديل المستندات مع الفريق في الوقت الفعلي'
                     : 'Share and collaborate on documents with your team in real-time'
@@ -153,19 +154,20 @@ export default function Home({ params }: HomeProps) {
                 </p>
               </div>
               
-              <div className="grid gap-1">
-                <div className="flex items-center gap-2">
+              <div className="flex flex-col items-center text-center gap-4 w-80 max-w-sm">
+                <div className="flex flex-col items-center gap-3">
                   <Sparkles className="h-8 w-8 text-primary" />
                   <h3 className="text-xl font-bold">
                     {locale === 'ar' ? 'قوالب ذكية' : 'Smart Templates'}
                   </h3>
                 </div>
-                <p className="text-gray-500 dark:text-gray-400">
+                <p className="text-gray-500 dark:text-gray-400 text-center text-sm leading-relaxed">
                   {locale === 'ar'
-                    ? 'قوالب جاهزة مخصصة للسوق السعودي ومختلف الصناعات'
-                    : 'Pre-built templates customized for Saudi market and various industries'
+                    ? 'قوالب متخصصة حسب الصناعة مع دعم محسن للأسواق الشرق أوسطية والمعايير التجارية الدولية'
+                    : 'Industry-specific templates with enhanced support for Middle Eastern markets and international business standards'
                   }
                 </p>
+              </div>
               </div>
             </div>
           </div>
@@ -202,7 +204,7 @@ export default function Home({ params }: HomeProps) {
                   : 'Start Creating Your Documents Today'
                 }
               </h2>
-              <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+              <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400 mx-auto text-center">
                 {locale === 'ar'
                   ? 'انضم إلى آلاف المهنيين الذين يستخدمون منصتنا لإنشاء مستندات عالية الجودة'
                   : 'Join thousands of professionals who use our platform to create high-quality documents'

@@ -29,7 +29,7 @@ const translations = {
     faqQuestions: {
       tokens: {
         question: "What are tokens?",
-        answer: "Tokens measure AI usage for document generation. Typically, 1,000 tokens = 1 standard business document. Your token limit resets monthly."
+        answer: "Tokens measure AI usage for document generation. Token usage varies based on document complexity and length. Your token limit resets monthly."
       },
       upgrade: {
         question: "Can I upgrade or downgrade anytime?",
@@ -147,7 +147,7 @@ const translations = {
     faqQuestions: {
       tokens: {
         question: "ما هي الرموز؟",
-        answer: "الرموز تقيس استخدام الذكاء الاصطناعي لإنشاء المستندات. عادة، 1000 رمز = مستند أعمال واحد قياسي. حد الرموز الخاص بك يعاد تعيينه شهرياً."
+        answer: "الرموز تقيس استخدام الذكاء الاصطناعي لإنشاء المستندات. يختلف استخدام الرموز حسب تعقد المستند وطوله. حد الرموز الخاص بك يعاد تعيينه شهرياً."
       },
       upgrade: {
         question: "هل يمكنني الترقية أو التراجع في أي وقت؟",

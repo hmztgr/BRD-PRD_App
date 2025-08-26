@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl'
 import { usePathname, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { User, FileText, Settings, LogOut } from 'lucide-react'
+import { Logo } from '@/components/ui/logo'
 import { cn } from '@/lib/utils'
 
 export function Header() {
@@ -41,19 +42,16 @@ export function Header() {
       <div className="container flex h-14 items-center">
         <div className={cn(
           "hidden md:flex",
-          isRTL ? "ml-4" : "mr-4"
+          isRTL ? "ml-8" : "mr-8"
         )}>
           <Link 
             href={`/${currentLocale}`} 
             className={cn(
               "flex items-center",
-              isRTL ? "ml-6 space-x-reverse space-x-2" : "mr-6 space-x-2"
+              isRTL ? "ml-8 space-x-reverse space-x-2" : "mr-8 space-x-2"
             )}
           >
-            <FileText className="h-6 w-6" />
-            <span className="hidden font-bold sm:inline-block">
-              {t('header.title')}
-            </span>
+            <Logo variant="full" size="md" className="text-foreground" />
           </Link>
         </div>
         

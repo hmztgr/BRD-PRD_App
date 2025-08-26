@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
 import { User, LogOut, Settings, ChevronDown } from 'lucide-react'
+import { Logo } from '@/components/ui/logo'
 
 interface SimpleHeaderProps {
   locale: string;
@@ -47,11 +48,9 @@ export function SimpleHeader({ locale }: SimpleHeaderProps) {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center">
-        <div className={isRTL ? "ml-4 hidden md:flex" : "mr-4 hidden md:flex"}>
-          <Link href={`/${locale}`} className={isRTL ? "ml-6 flex items-center space-x-reverse space-x-2" : "mr-6 flex items-center space-x-2"}>
-            <span className="hidden font-bold sm:inline-block">
-              {locale === 'ar' ? 'منشئ متطلبات المشاريع' : 'BRD/PRD Generator'}
-            </span>
+        <div className={isRTL ? "ml-8 hidden md:flex" : "mr-8 hidden md:flex"}>
+          <Link href={`/${locale}`} className={isRTL ? "ml-8 flex items-center space-x-reverse space-x-2" : "mr-8 flex items-center space-x-2"}>
+            <Logo variant="full" size="md" className="text-foreground" />
           </Link>
         </div>
         

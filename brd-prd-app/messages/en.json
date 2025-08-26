@@ -31,7 +31,7 @@
     "profile": "Profile"
   },
   "header": {
-    "title": "BRD/PRD Generator",
+    "title": "Smart-Business-Docs-AI",
     "subtitle": "AI-Powered Business Document Creation"
   },
   "dashboard": {
@@ -141,9 +141,10 @@
   },
   "document": {
     "types": {
-      "brd": "Business Requirements Document",
-      "prd": "Product Requirements Document",
-      "both": "Combined BRD/PRD"
+      "proposal": "Business Proposal",
+      "report": "Business Report", 
+      "plan": "Strategic Plan",
+      "analysis": "Business Analysis"
     },
     "form": {
       "title": "Create New Document",

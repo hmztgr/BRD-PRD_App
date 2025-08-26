@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "BRD/PRD Generator - AI-Powered Business Document Creation",
-  description: "Create professional Business Requirements Documents (BRDs) and Product Requirements Documents (PRDs) with AI assistance. Supports Arabic and English with cultural awareness.",
+  title: "Smart-Business-Docs-AI - AI-Powered Professional Document Creation",
+  description: "Create comprehensive professional business documents including proposals, reports, strategic plans, and executive presentations with AI assistance. Supports Arabic and English with cultural awareness.",
 };
 
 export default function RootLayout({

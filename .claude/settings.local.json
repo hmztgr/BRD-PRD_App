@@ -96,7 +96,11 @@
       "Bash(cmd /c:*)",
       "Bash(del .next)",
       "Bash(git ls-tree:*)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "Bash(set NODE_OPTIONS=\"--max-old-space-size=4096\")",
+      "Bash(claude config list)",
+      "Bash(del /S /Q .next)",
+      "Bash(npm ci:*)"
     ],
     "deny": [],
     "ask": [],

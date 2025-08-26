@@ -106,7 +106,7 @@ export default function ReferralPage({ params }: ReferralPageProps) {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: locale === 'ar' ? 'انضم إلى منصة BRD/PRD' : 'Join BRD/PRD Platform',
+          title: locale === 'ar' ? 'انضم إلى منصة الوثائق التجارية الذكية' : 'Join Smart Business Docs Platform',
           text: locale === 'ar' 
             ? 'احصل على أدوات الذكي الاصطناعي المجانية لإنشاء الوثائق التجارية'
             : 'Get free AI tools for generating business documents',
