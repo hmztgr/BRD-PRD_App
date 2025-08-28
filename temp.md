@@ -189,3 +189,37 @@ Fixed authentication bypass
 
 new issues
 - when i logout i get an error "This site can’t be reached"
+
+
+
+
+
+
+
+
+
+
+
+i would like you to add this to the @"Project documents\Payment-Options-Comparison.md"  and is it even worth using stripe atlas for international payments? is there any benifits from using stripe atlas if we used Moyasar and/or Paylink? also can you make a .md and fill it with this
+  1. find the API pricing for those models claude opus 4, claude sonnet 4, GPT-5, GPT-4 and gemini pro and map it to the pricing in our app (ignore fallback always assume the main model AI).
+  2. suggest pricing strategy for each product based on those models API pricing and  payment methods payout. (percentage and fixed)
+  3.  create scenarios assuming different sales numbers, keep in mind referal rewards reducing sales initially probably, do this step for current products prices, also keep in mind the token usage per document and  make sure the price makes sense per document, and suggested products prices.
+  4.  also create a table comparing the revenue, cost and profit for each scenario.
+  5. create price-impact and margin-impact scenarios and compare them.
+  6. if possible compare those with competitor pricing and margin and get to a conclusion of which pricing is better and why.
+
+here are some refrences we researched earlier but i want you to use the internet to confirm the pricing of the models, competitors prices, competitors services, and the payment methods payout.
+@payment @roadmap @case study @competitor 
+
+claude ultrathink, answer short
+
+
+
+
+
+
+
+
+i need you to research if we use stripe either by creating an establishment in one of the countries supported by stripe or using stipe atlas how do we transfare money to my account in Saudi Arabia and what are the costs in details ultrathing answer short
+
+save the answer in a .md file in 
