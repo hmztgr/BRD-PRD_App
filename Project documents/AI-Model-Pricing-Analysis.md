@@ -135,15 +135,37 @@
 - **Enterprise users benefit most** from standardized templates and heavy caching
 - **Gemini Pro shows best caching ROI** but still higher absolute costs than GPT-5
 
-### **Optimized Model Assignment Recommendations**
+### **Performance-First Model Assignment Strategy**
 
-| Tier | Recommended Model | Reasoning | Cost Savings |
-|------|------------------|-----------|-------------|
-| **Free** | Gemini 2.0 Flash | Lowest cost, good quality | Current (optimal) |
-| **Hobby** | **GPT-5** | Best cost/performance ratio | 37% vs Sonnet 4 |
-| **Professional** | **GPT-5** + Opus fallback | Reduce costs significantly | 70% cost reduction |
-| **Business** | **GPT-5** | Maintain current efficiency | Current (optimal) |
-| **Enterprise** | Claude Opus 4 | Premium positioning justified | Current (justified) |
+| Tier | Recommended Model | Reasoning | Quality Justification |
+|------|------------------|-----------|---------------------|
+| **Free** | Gemini 2.0 Flash | Entry-level quality at minimal cost | Good for user onboarding |
+| **Hobby** | **GPT-5** | Superior performance at accessible pricing | High-quality documents for individual users |
+| **Professional** | **Claude Opus 4** | Premium quality for professional users | Best-in-class output for business use |
+| **Business** | **Claude Opus 4** | Consistent premium experience for teams | Team collaboration requires reliability |
+| **Enterprise** | **Claude Opus 4** | Maximum quality and reliability | Enterprise-grade performance expectations |
+
+### **Performance vs Cost Trade-off Analysis**
+
+| Tier | Cost-Optimized Model | Performance-First Model | Quality Gain | Cost Impact |
+|------|---------------------|------------------------|-------------|-------------|
+| **Professional** | GPT-5 ($0.016) | Claude Opus 4 ($0.126) | +40% quality | +687% cost |
+| **Business** | GPT-5 ($0.016) | Claude Opus 4 ($0.126) | +40% quality | +687% cost |
+| **Enterprise** | GPT-5 ($0.016) | Claude Opus 4 ($0.126) | Premium expectation | Justified premium |
+
+### **Quality-First Strategy Benefits**
+
+#### **1. Customer Satisfaction & Retention**
+- **Professional users** expect premium output quality
+- **Enterprise customers** require consistent, reliable performance
+- **Reduced churn** through superior user experience
+- **Higher customer lifetime value** through quality differentiation
+
+#### **2. Premium Positioning Justification**
+- **$19.80 Professional pricing** justified by Claude Opus 4 quality
+- **$199 Enterprise pricing** competitive vs $200-500 competitors using premium models
+- **Quality differentiation** vs cost-focused competitors
+- **Brand positioning** as premium Arabic-first solution
 
 ---
 
@@ -245,14 +267,24 @@
 | **TOTAL** | **2,000** | **$22,670** | **$272,040** | **$231,234** |
 
 #### **Cost Analysis**
-| Cost Type | Monthly | Annual | % of Revenue |
-|-----------|---------|--------|-------------|
-| AI Processing | $2,267 | $27,204 | 10.0% |
-| Payment Processing | $590 | $7,073 | 2.6% |
-| Referral Rewards | $680 | $8,163 | 3.0% |
-| Infrastructure | $500 | $6,000 | 2.2% |
-| **TOTAL COSTS** | **$4,037** | **$48,440** | **17.8%** |
-| **NET PROFIT** | **$18,633** | **$182,800** | **82.2% margin** |
+#### **Cost Analysis - Performance-First AI Strategy**
+| Tier | Users | Documents/Month | AI Model | Cost/Doc | Monthly AI Cost |
+|------|-------|----------------|----------|----------|----------------|
+| Free | 800 | 4,000 | GPT-4o Mini | $0.002 | $8.00 |
+| Hobby | 600 | 12,000 | GPT-5 | $0.016 | $192.00 |
+| Professional | 400 | 16,000 | **Claude Opus 4** | **$0.126** | **$2,016.00** |
+| Business | 150 | 9,750 | **Claude Opus 4** | **$0.126** | **$1,228.50** |
+| Enterprise | 50 | 16,667 | Claude Opus 4 | $0.126 | $2,100.04 |
+| **TOTAL** | **2,000** | **58,417** | | | **$5,544.54** |
+
+| Cost Type | Monthly | Annual | % of Revenue | Notes |
+|-----------|---------|--------|-------------|-------|
+| **AI Processing** | **$5,545** | **$66,535** | **24.5%** | Performance-first strategy |
+| Payment Processing | $589 | $7,073 | 2.6% | ~2.6% effective rate |
+| Referral Rewards | $680 | $8,163 | 3.0% | Token equivalent value |
+| Infrastructure | $500 | $6,000 | 2.2% | Hosting, database, CDN |
+| **TOTAL COSTS** | **$7,314** | **$87,771** | **32.3%** | |
+| **NET PROFIT** | **$15,356** | **$143,463** | **67.7% margin** |
 
 ### **Scenario 4: Market Leader (Year 3+)**
 **User Distribution**: 5,000 total users
@@ -266,15 +298,24 @@
 | Enterprise | 250 | $49,750 | $597,000 | $507,450 |
 | **TOTAL** | **5,000** | **$88,600** | **$1,063,200** | **$903,720** |
 
-#### **Cost Analysis**
-| Cost Type | Monthly | Annual | % of Revenue |
-|-----------|---------|--------|-------------|
-| AI Processing | $8,860 | $106,320 | 10.0% |
-| Payment Processing | $2,304 | $27,643 | 2.6% |
-| Referral Rewards | $1,593 | $19,114 | 1.8% |
-| Infrastructure | $1,200 | $14,400 | 1.4% |
-| **TOTAL COSTS** | **$13,957** | **$167,477** | **15.8%** |
-| **NET PROFIT** | **$74,643** | **$736,243** | **84.2% margin** |
+#### **Cost Analysis - Performance-First AI Strategy**
+| Tier | Users | Documents/Month | AI Model | Cost/Doc | Monthly AI Cost |
+|------|-------|----------------|----------|----------|----------------|
+| Free | 1,500 | 7,500 | GPT-4o Mini | $0.002 | $15.00 |
+| Hobby | 1,500 | 30,000 | GPT-5 | $0.016 | $480.00 |
+| Professional | 1,250 | 50,000 | **Claude Opus 4** | **$0.126** | **$6,300.00** |
+| Business | 500 | 32,500 | **Claude Opus 4** | **$0.126** | **$4,095.00** |
+| Enterprise | 250 | 83,333 | Claude Opus 4 | $0.126 | $10,500.00 |
+| **TOTAL** | **5,000** | **203,333** | | | **$21,390.00** |
+
+| Cost Type | Monthly | Annual | % of Revenue | Notes |
+|-----------|---------|--------|-------------|-------|
+| **AI Processing** | **$21,390** | **$256,680** | **24.1%** | Performance-first strategy |
+| Payment Processing | $2,304 | $27,643 | 2.6% | ~2.6% effective rate |
+| Referral Rewards | $1,593 | $19,114 | 1.8% | Token equivalent value |
+| Infrastructure | $1,200 | $14,400 | 1.4% | Hosting, database, CDN |
+| **TOTAL COSTS** | **$26,487** | **$317,837** | **29.9%** | |
+| **NET PROFIT** | **$62,113** | **$585,883** | **70.1% margin** |
 
 ### **Scenario 5: Enterprise Focus (Alternative Strategy)**
 **User Distribution**: 1,000 total users (Enterprise-heavy)
@@ -313,17 +354,92 @@
 
 *Includes required base plan costs
 
-### **Feature Comparison Matrix**
+### **Detailed Feature Comparison Matrix**
 
-| Feature | Our App | ChatPRD | ClickUp | Bash | Advantage |
-|---------|---------|---------|---------|------|-----------|
-| **BRD Generation** | ✅ | ❌ | ✅ | ❌ | Unique to us vs specialists |
-| **PRD Generation** | ✅ | ✅ | ✅ | ✅ | Table stakes |
-| **Arabic Support** | ✅ | ❌ | ❌ | ❌ | **Unique differentiator** |
-| **Team Collaboration** | ✅ ($16.80) | ✅ ($24) | ✅ ($19) | ❌ | Best pricing |
-| **API Access** | ✅ | ❌ | ✅ | ❌ | Enterprise feature |
-| **Custom Models** | ✅ | ❌ | ❌ | ❌ | Technical advantage |
-| **Saudi Market Focus** | ✅ | ❌ | ❌ | ❌ | **Unique positioning** |
+#### **Core Generation Features**
+
+| Feature | Our App | ChatPRD | ClickUp Brain | Bash | Our Advantage |
+|---------|---------|---------|---------------|------|---------------|
+| **Unlimited Chats** | ✅ All tiers | ✅ Basic+ | ✅ All plans | ✅ All plans | Standard |
+| **AI-Generated Documents** | ✅ All tiers | ✅ All plans | ✅ All plans | ✅ All plans | Standard |
+| **Document Templates** | ✅ 20+ templates | ✅ 10+ PRD templates | ✅ Project templates | ✅ Multiple formats | **More templates** |
+| **Customized Profile/Role** | ✅ Industry-specific | ✅ PM profiles | ✅ Team roles | ❌ Not mentioned | Comprehensive |
+
+#### **Document Types Supported**
+
+| Document Type | Our App | ChatPRD | ClickUp Brain | Bash | Our Advantage |
+|---------------|---------|---------|---------------|------|---------------|
+| **Business Requirements (BRD)** | ✅ | ❌ | ✅ | ❌ | **Specialist focus** |
+| **Product Requirements (PRD)** | ✅ | ✅ | ✅ | ✅ | Standard |
+| **Technical Specifications** | ✅ | ❌ | ✅ | ✅ | Comprehensive |
+| **Business Plans** | ✅ | ❌ | ❌ | ❌ | **Unique offering** |
+| **Project Roadmaps** | ✅ | ❌ | ✅ | ❌ | Business focus |
+| **API Documentation** | ✅ | ❌ | ❌ | ✅ | Technical depth |
+
+#### **File & Export Capabilities**
+
+| Feature | Our App | ChatPRD | ClickUp Brain | Bash | Our Advantage |
+|---------|---------|---------|---------------|------|---------------|
+| **File Uploads** | ✅ PDF, Word, Text | ✅ Limited | ✅ All formats | ✅ Multiple formats | Standard |
+| **Image Uploads** | ✅ Professional+ | ❌ Not mentioned | ✅ All plans | ✅ All plans | Professional tier |
+| **Save & Export from Chat** | ✅ All tiers | ✅ All plans | ✅ All plans | ✅ All plans | Standard |
+| **PDF Export** | ✅ All tiers | ✅ All plans | ✅ All plans | ✅ All plans | Standard |
+| **Word Export** | ✅ Professional+ | ✅ Pro+ | ✅ Business+ | ✅ Basic+ | Similar |
+| **Markdown Export** | ✅ All tiers | ❌ Not mentioned | ✅ All plans | ✅ All plans | Standard |
+
+#### **AI & Language Capabilities**
+
+| Feature | Our App | ChatPRD | ClickUp Brain | Bash | Our Advantage |
+|---------|---------|---------|---------------|------|---------------|
+| **Premium AI Models** | ✅ Claude Opus 4, GPT-5 | ✅ Premium models | ✅ Multiple LLMs | ❌ Not specified | **Model transparency** |
+| **Arabic Language Support** | ✅ Native RTL | ❌ | ❌ | ❌ | **Unique differentiator** |
+| **Bilingual Support** | ✅ Arabic/English | ❌ | ❌ | ❌ | **Unique differentiator** |
+| **Cultural Customization** | ✅ Saudi business context | ❌ | ❌ | ❌ | **Unique differentiator** |
+| **Auto Language Detection** | ✅ Geolocation-based | ❌ | ❌ | ❌ | **Unique differentiator** |
+
+#### **Collaboration Features**
+
+| Feature | Our App | ChatPRD | ClickUp Brain | Bash | Our Advantage |
+|---------|---------|---------|---------------|------|---------------|
+| **Real-time Collaboration** | ✅ Business+ ($16.80) | ✅ Team ($24) | ✅ Unlimited ($7+) | ❌ | **Best pricing** |
+| **Comments & Mentions** | ✅ Business+ | ✅ Team+ | ✅ All plans | ❌ | Competitive |
+| **Version Control** | ✅ Business+ | ✅ Pro+ | ✅ Business+ | ❌ | Standard |
+| **Team Management** | ✅ Business+ | ✅ Team+ | ✅ All plans | ❌ | Competitive |
+| **Document Sharing** | ✅ All tiers | ✅ All plans | ✅ All plans | ✅ All plans | Standard |
+
+#### **Advanced Features**
+
+| Feature | Our App | ChatPRD | ClickUp Brain | Bash | Our Advantage |
+|---------|---------|---------|---------------|------|---------------|
+| **API Access** | ✅ Professional+ | ❌ | ✅ Business+ | ❌ | Better tier access |
+| **Integrations** | ✅ Enterprise | ✅ Pro+ (Jira, Figma, Slack) | ✅ All plans (PM tools) | ✅ Basic+ | Need improvement |
+| **White-label Options** | ✅ Enterprise | ❌ | ✅ Enterprise | ❌ | Standard enterprise |
+| **Custom Branding** | ✅ Enterprise | ❌ | ✅ Enterprise | ❌ | Standard enterprise |
+| **Analytics Dashboard** | ✅ Business+ | ❌ | ✅ All plans | ✅ Credit tracking | Business focus |
+
+#### **Support & Training**
+
+| Feature | Our App | ChatPRD | ClickUp Brain | Bash | Our Advantage |
+|---------|---------|---------|---------------|------|---------------|
+| **Basic Support** | ✅ All tiers | ✅ All plans | ✅ All plans | ✅ All plans | Standard |
+| **Priority Support** | ✅ Professional+ | ✅ Pro+ | ✅ Business+ | ✅ Boost+ | Standard |
+| **Coaching/Training** | ❌ Planned | ✅ PM coaching | ❌ | ❌ | **Need to add** |
+| **Onboarding** | ✅ All tiers | ✅ All plans | ✅ All plans | ✅ All plans | Standard |
+| **Video Tutorials** | ✅ Planned | ✅ Available | ✅ Available | ✅ Available | Need development |
+
+### **Unique Differentiators Summary**
+
+#### **Our Exclusive Advantages:**
+1. **Arabic Language Leadership**: Only platform with native Arabic support
+2. **BRD+PRD Completeness**: Only specialist offering both document types
+3. **Saudi Market Focus**: Cultural customization and compliance features
+4. **Performance Transparency**: Clear AI model specifications per tier
+5. **Best Team Pricing**: $16.80 vs competitors' $19-24
+
+#### **Areas Requiring Improvement:**
+1. **Integration Ecosystem**: ChatPRD leads with Jira, Figma, Slack integrations
+2. **PM Coaching Features**: ChatPRD offers specialized coaching tools
+3. **Video Training Content**: Competitors have established training libraries
 
 ### **Pricing Positioning Analysis**
 
@@ -403,15 +519,16 @@
 
 ### **Immediate Actions (Next 30 Days)**
 
-#### **1. Optimize AI Model Assignment**
-- **Professional Tier**: Switch from Claude Opus 4 to GPT-5
-- **Savings**: 68% cost reduction with minimal quality impact
-- **Impact**: +2.5 percentage points margin improvement
+#### **1. Maintain Performance-First AI Strategy**
+- **Professional Tier**: Keep Claude Opus 4 for premium performance
+- **Business Tier**: Keep Claude Opus 4 for team consistency
+- **Quality Impact**: Highest possible output quality for premium users
+- **Positioning**: "Best AI models for best results" premium strategy
 
 #### **2. Adjust Business Tier Pricing**
 - **Current**: $16.80/month (confusing positioning)
-- **Recommended**: $19.80/month (clear tier progression)
-- **Rationale**: Still 18% cheaper than ChatPRD Team plan
+- **Recommended**: $22.80/month (reflect premium AI costs)
+- **Rationale**: Still competitive while covering Claude Opus 4 costs
 
 #### **3. Implement Smart Payment Routing**
 - **Saudi customers**: Route to Paylink/Moyasar based on transaction value
@@ -422,18 +539,18 @@
 
 #### **1. Enhanced Annual Pricing Strategy**
 - **Current**: 15% discount + 10% bonus tokens
-- **Recommended**: 20% discount + 15% bonus tokens
-- **Goal**: Increase annual subscription rate from 30% to 50%
+- **Recommended**: 25% discount + 20% bonus tokens (higher AI costs justify larger annual incentives)
+- **Goal**: Increase annual subscription rate from 30% to 60%
 
-#### **2. Referral Program Optimization**
+#### **2. Quality-Based Referral Program**
 - **Current**: Various token rewards
-- **Enhanced**: Cash referral rewards for high-value conversions
-- **Target**: 25% of new acquisitions from referrals
+- **Enhanced**: Premium feature access for successful referrals
+- **Target**: 25% of new acquisitions from referrals to premium tiers
 
 #### **3. Enterprise Tier Expansion**
-- **Add**: Enterprise Plus tier at $399/month
-- **Features**: Custom AI training, white-label options
-- **Market**: Large enterprises and agencies
+- **Add**: Enterprise Plus tier at $499/month
+- **Features**: Custom Claude Opus 4 fine-tuning, dedicated support
+- **Market**: Large enterprises requiring highest quality output
 
 ### **Long-Term Strategy (6-12 Months)**
 
@@ -467,40 +584,47 @@
 | **Business** | $16.80 | $19.80 | Clear tier progression |
 | **Enterprise** | $199 | $249 | Premium positioning |
 
-#### **AI Model Optimization**
-| Tier | Current Model | Recommended | Cost Saving |
-|------|---------------|-------------|-------------|
-| **Free** | Gemini Flash | Gemini Flash | - |
-| **Hobby** | GPT-5/Sonnet 4 | GPT-5 | 37% |
-| **Professional** | Claude Opus 4 | GPT-5 | 68% |
-| **Business** | GPT-5/Sonnet 4 | GPT-5 | - |
-| **Enterprise** | Claude Opus 4 | Claude Opus 4 | - |
+#### **AI Model Strategy - Performance-First**
+| Tier | Current Model | Performance-First | Quality Positioning |
+|------|---------------|-------------------|--------------------|
+| **Free** | GPT-4o Mini | GPT-4o Mini | Entry-level quality |
+| **Hobby** | GPT-5 | GPT-5 | Good performance |
+| **Professional** | Claude Opus 4 | **Claude Opus 4** | **Premium quality** |
+| **Business** | Claude Opus 4 | **Claude Opus 4** | **Consistent premium** |
+| **Enterprise** | Claude Opus 4 | Claude Opus 4 | Best-in-class |
 
-### **Financial Impact of Recommendations**
+### **Financial Impact of Performance-First Strategy**
 
 #### **For 500-User Base (Moderate Growth Scenario)**
-| Metric | Current | Optimized | Improvement |
-|--------|---------|-----------|-------------|
-| **Annual Revenue** | $43,371 | $52,045 | +20.0% |
-| **AI Costs** | $5,820 | $3,876 | -33.4% |
-| **Net Profit** | $31,783 | $39,169 | +23.2% |
-| **Profit Margin** | 77.3% | 81.5% | +4.2pp |
+| Metric | Cost-Optimized | Performance-First | Trade-off |
+|--------|----------------|-------------------|----------|
+| **Annual Revenue** | $43,371 | $43,371 | Same |
+| **AI Costs** | $3,876 | $12,223 | +215% higher |
+| **Net Profit** | $39,169 | $25,380 | -35% lower |
+| **Profit Margin** | 90.3% | 58.5% | -31.8pp |
+| **Quality Advantage** | Good | **Premium** | Significant |
 
-#### **Break-Even Analysis**
-- **Current model**: Break-even at 47 paid users
-- **Optimized model**: Break-even at 38 paid users
-- **Improvement**: 19% lower break-even point
+#### **Break-Even Analysis - Performance Strategy**
+- **Performance-first model**: Break-even at 78 paid users
+- **Quality positioning**: Premium model justifies higher customer acquisition costs
+- **Strategy**: Focus on high-value customers who prioritize quality
 
-### **Strategic Advantages**
+### **Strategic Advantages - Performance-First Approach**
 
-#### **1. Market Position Strength**
-- **40-60% cheaper** than major competitors
-- **Unique Arabic support** in target market
-- **Only platform** offering both BRD and PRD generation
+#### **1. Premium Quality Positioning**
+- **Best AI models** for Professional+ tiers (Claude Opus 4)
+- **Uncompromising quality** for business-critical documents
+- **Premium pricing justification** through superior output
 
-#### **2. Scalability Benefits**
-- **AI costs decrease** as percentage of revenue with scale
-- **Fixed infrastructure costs** spread across larger user base
+#### **2. Market Differentiation**
+- **Quality leadership** in document generation
+- **Unique Arabic support** with premium AI models
+- **Professional-grade** BRD and PRD output
+
+#### **3. Scalability & Economics**
+- **Higher customer lifetime value** from quality positioning
+- **Reduced churn** from superior document quality
+- **Premium market focus** justifies higher acquisition costs
 - **Network effects** from referral program
 
 #### **3. Risk Mitigation**
