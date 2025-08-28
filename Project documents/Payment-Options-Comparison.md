@@ -34,6 +34,7 @@
 | **PayTabs** | $400 setup | 2.85% + 1 SAR | ✅ Saudi-focused | ✅ Available | ✅ Required | Pending Reg |
 | **Moyasar** | $0 | Contact for pricing | ✅ Saudi-based | ✅ Available | ✅ Required | Pending Reg |
 | **HyperPay** | $0 | 2.5% + 0.75 SAR | ✅ MENA-focused | ✅ Available | ✅ Required | Pending Reg |
+| **Paylink** | Free/1000 SAR | 1-2.75% + 1 SAR | ✅ Saudi-focused | ✅ 1% MADA | ✅ Required | Free Plan Applied |
 
 ---
 
@@ -144,6 +145,34 @@
 - Less Saudi-specific features
 - Requires business registration
 
+### **Paylink** ⭐ **FREE PLAN APPLIED**
+**💰 Cost Structure:**
+- **البداية (Start - Free Plan)**: No setup cost
+- MADA: 1% + 1 SAR fixed fee
+- Local Visa/MasterCard: 2.75% + 1 SAR
+- International Visa/MasterCard: 2.75% + 1 SAR
+- Apple Pay: Commission according to card used
+- **Upgrade Options**: Growth (1000 SAR setup) or Business (1000 SAR setup)
+
+**✅ Advantages:**
+- **FREE start plan** - no upfront costs
+- Competitive MADA rates (1%)
+- Local Saudi payment methods (STCPay available on Growth+)
+- BNPL integration (Tamara, Tabby on Growth+)
+- Multiple SDKs including JavaScript
+- E-commerce platform plugins
+
+**❌ Disadvantages:**
+- **International payment acceptance unclear** - needs research
+- Limited features on free plan (no recurring payments)
+- Requires Saudi business registration
+- Advanced features require paid upgrade
+
+**🔍 Research Needed:**
+- International payment processing capabilities
+- Geographic restrictions for card acceptance
+- Cross-border transaction support
+
 ---
 
 ## 🏛️ **ZATCA VAT E-INVOICING COMPLIANCE**
@@ -247,15 +276,18 @@ While waiting for business registration:
 4. **Focus on product development** and user acquisition
 
 ### **Upon Business Registration Approval**
-1. **Primary:** Integrate Tap Payments for Saudi market focus
-2. **Secondary:** Add Stripe for international expansion  
-3. **Compliance:** Integrate ZATCA API provider for VAT compliance
-4. **Testing:** Thoroughly test payment flows before full launch
+1. **Primary:** Integrate Paylink (Free Plan) for Saudi market focus
+2. **Secondary:** Add Stripe for international expansion (pending international payment research)
+3. **Research:** Validate Paylink international payment acceptance capabilities
+4. **Compliance:** Integrate ZATCA API provider for VAT compliance
+5. **Testing:** Thoroughly test payment flows before full launch
 
 ### **Long-term Strategy**
-- Optimize for Saudi market with local payment methods
-- Expand internationally with Stripe
-- Consider Stripe Atlas only if international growth exceeds expectations
+- Start with Paylink Free Plan for Saudi market
+- Research and validate international payment acceptance
+- Upgrade to Paylink Growth/Business plans as revenue grows
+- Add Stripe only if Paylink lacks international coverage
+- Consider dual-gateway approach: Paylink (Saudi) + Stripe (International)
 - Monitor new payment providers entering Saudi market
 
 ---
@@ -291,7 +323,9 @@ While waiting for business registration:
 - ZATCA e-invoicing requirement changes
 
 ### **Monitoring Items**
-- Registration application status
+- **Paylink Free Plan approval status**
+- Saudi business registration application status
+- **Paylink international payment capabilities research**
 - Payment gateway fee changes
 - New local payment methods
 - Competitor payment integration strategies

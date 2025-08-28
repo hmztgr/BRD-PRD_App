@@ -101,7 +101,9 @@
       "Bash(claude config list)",
       "Bash(del /S /Q .next)",
       "Bash(npm ci:*)",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "WebFetch(domain:developer.paylink.sa)",
+      "WebFetch(domain:paylink.sa)"
     ],
     "deny": [],
     "ask": [],
