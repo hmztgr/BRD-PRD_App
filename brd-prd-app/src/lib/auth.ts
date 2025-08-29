@@ -10,10 +10,10 @@ import { generateReferralCode } from "@/lib/utils"
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as any,
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
+    // GoogleProvider({
+    //   clientId: process.env.GOOGLE_CLIENT_ID!,
+    //   clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    // }),
     LinkedInProvider({
       clientId: process.env.LINKEDIN_CLIENT_ID!,
       clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,
@@ -105,15 +105,15 @@ export const authOptions: NextAuthOptions = {
       // This runs on every token refresh, so we get up-to-date role information
       if (token.id && (trigger === 'signIn' || trigger === 'update' || !token.role)) {
         try {
-          // Use raw query to handle enum type mismatch
-          const result = await prisma.$queryRaw`
-            SELECT email, "adminPermissions", "subscriptionTier", "subscriptionStatus"
-            FROM users 
-            WHERE id = ${token.id as string}
-            LIMIT 1
-          `
-          
-          const dbUser = result && result.length > 0 ? result[0] : null
+          const dbUser = await prisma.user.findUnique({
+            where: { id: token.id as string },
+            select: {
+              email: true,
+              adminPermissions: true,
+              subscriptionTier: true,
+              subscriptionStatus: true
+            }
+          })
           
           if (dbUser) {
             // Determine role based on adminPermissions or email
@@ -123,7 +123,7 @@ export const authOptions: NextAuthOptions = {
             
             token.role = (hasAdminPerms || isEmailAdmin) ? 'admin' : 'user'
             token.adminPermissions = dbUser.adminPermissions as string[] || []
-            token.subscriptionTier = (dbUser.subscriptionTier as string)?.toLowerCase() || 'free'
+            token.subscriptionTier = dbUser.subscriptionTier.toLowerCase()
             token.subscriptionStatus = dbUser.subscriptionStatus
           }
         } catch (error) {

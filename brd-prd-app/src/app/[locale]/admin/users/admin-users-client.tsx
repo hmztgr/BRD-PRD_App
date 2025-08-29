@@ -94,13 +94,13 @@ export function AdminUsersClient() {
     
     switch (tier) {
       case 'enterprise':
-        return <Badge className="bg-purple-100 text-purple-800">Enterprise</Badge>
+        return <Badge variant="outline" className="text-purple-600 border-purple-600">Enterprise</Badge>
       case 'business':
-        return <Badge className="bg-green-100 text-green-800">Business</Badge>
+        return <Badge variant="outline" className="text-green-600 border-green-600">Business</Badge>
       case 'professional':
-        return <Badge className="bg-blue-100 text-blue-800">Professional</Badge>
+        return <Badge variant="outline" className="text-blue-600 border-blue-600">Professional</Badge>
       case 'hobby':
-        return <Badge className="bg-yellow-100 text-yellow-800">Hobby</Badge>
+        return <Badge variant="outline" className="text-yellow-600 border-yellow-600">Hobby</Badge>
       default:
         return <Badge variant="outline">Free</Badge>
     }
@@ -156,8 +156,8 @@ export function AdminUsersClient() {
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
-          <p className="text-gray-600">Manage and monitor user accounts and subscriptions</p>
+          <h1 className="text-2xl font-bold text-white">User Management</h1>
+          <p className="text-gray-300">Manage and monitor user accounts and subscriptions</p>
         </div>
         <Button>
           <Plus className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
@@ -166,7 +166,7 @@ export function AdminUsersClient() {
       </div>
 
       {/* Filters and Search */}
-      <Card className="p-6">
+      <Card className="p-6 bg-background border-border">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1">
             <div className="relative">
@@ -210,40 +210,40 @@ export function AdminUsersClient() {
       </Card>
 
       {/* Users List */}
-      <Card>
+      <Card className="bg-background border-border">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b">
+            <thead className="bg-gray-800 border-b border-gray-700">
               <tr>
-                <th className="px-6 py-3 text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left rtl:text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
                   User
                 </th>
-                <th className="px-6 py-3 text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left rtl:text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
                   Role
                 </th>
-                <th className="px-6 py-3 text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left rtl:text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
                   Subscription
                 </th>
-                <th className="px-6 py-3 text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left rtl:text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
                   Usage
                 </th>
-                <th className="px-6 py-3 text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left rtl:text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left rtl:text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
                   Joined
                 </th>
-                <th className="px-6 py-3 text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right rtl:text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-background divide-y divide-gray-700">
               {filteredUsers.map((user) => {
                 const usagePercent = getUsagePercentage(user.tokensUsed, user.tokensLimit)
                 
                 return (
-                  <tr key={user.id} className="hover:bg-gray-50">
+                  <tr key={user.id} className="hover:bg-gray-800">
                     <td className="px-6 py-4">
                       <div className="flex items-center space-x-3 rtl:space-x-reverse">
                         <div className="flex-shrink-0 h-10 w-10">
@@ -254,10 +254,10 @@ export function AdminUsersClient() {
                           </div>
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="text-sm font-medium text-gray-900 truncate">
+                          <p className="text-sm font-medium text-white truncate">
                             {user.name || 'Unnamed User'}
                           </p>
-                          <p className="text-sm text-gray-500 truncate">
+                          <p className="text-sm text-gray-400 truncate">
                             {user.email}
                           </p>
                         </div>
@@ -272,7 +272,7 @@ export function AdminUsersClient() {
                     <td className="px-6 py-4">
                       <div className="flex items-center">
                         <div className="flex-1">
-                          <div className="text-sm text-gray-900">
+                          <div className="text-sm text-white">
                             {user.tokensUsed.toLocaleString()} / {user.tokensLimit.toLocaleString()}
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
@@ -294,12 +294,12 @@ export function AdminUsersClient() {
                         ) : (
                           <XCircle className="h-4 w-4 text-red-500" />
                         )}
-                        <span className="text-sm text-gray-900">
+                        <span className="text-sm text-white">
                           {user.emailVerified ? 'Verified' : 'Unverified'}
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-500">
+                    <td className="px-6 py-4 text-sm text-gray-400">
                       {formatDate(user.createdAt)}
                     </td>
                     <td className="px-6 py-4 text-right rtl:text-left">
@@ -345,27 +345,27 @@ export function AdminUsersClient() {
 
       {/* Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="p-4">
-          <div className="text-2xl font-bold text-gray-900">{users.length}</div>
-          <div className="text-sm text-gray-500">Total Users</div>
+        <Card className="p-4 bg-background border-border">
+          <div className="text-2xl font-bold text-white">{users.length}</div>
+          <div className="text-sm text-gray-400">Total Users</div>
         </Card>
-        <Card className="p-4">
+        <Card className="p-4 bg-background border-border">
           <div className="text-2xl font-bold text-green-600">
             {users.filter(u => u.subscriptionStatus === 'active' && u.subscriptionTier !== 'free').length}
           </div>
-          <div className="text-sm text-gray-500">Paying Users</div>
+          <div className="text-sm text-gray-400">Paying Users</div>
         </Card>
-        <Card className="p-4">
+        <Card className="p-4 bg-background border-border">
           <div className="text-2xl font-bold text-blue-600">
             {users.filter(u => u.emailVerified).length}
           </div>
-          <div className="text-sm text-gray-500">Verified Users</div>
+          <div className="text-sm text-gray-400">Verified Users</div>
         </Card>
-        <Card className="p-4">
+        <Card className="p-4 bg-background border-border">
           <div className="text-2xl font-bold text-purple-600">
             {users.filter(u => u.role !== 'user').length}
           </div>
-          <div className="text-sm text-gray-500">Admin Users</div>
+          <div className="text-sm text-gray-400">Admin Users</div>
         </Card>
       </div>
     </div>

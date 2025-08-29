@@ -115,7 +115,8 @@ export function SignUpForm() {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <Button 
+        {/* Temporarily disabled due to Firebase quota issues */}
+        {/* <Button 
           variant="outline" 
           className="w-full" 
           onClick={handleGoogleSignIn}
@@ -123,7 +124,7 @@ export function SignUpForm() {
         >
           <Icons.google className="mr-2 h-4 w-4" />
           Sign up with Google
-        </Button>
+        </Button> */}
         
         <div className="relative">
           <div className="absolute inset-0 flex items-center">

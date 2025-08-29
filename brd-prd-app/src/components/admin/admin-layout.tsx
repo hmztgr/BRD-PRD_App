@@ -48,7 +48,6 @@ export function AdminLayout({ children, locale }: AdminLayoutProps) {
         {/* Sidebar header */}
         <div className="flex items-center justify-between border-b border-border px-6 py-4">
           <div className="flex items-center space-x-3 rtl:space-x-reverse">
-            <Logo className="h-8 w-8" />
             <div className="text-xl font-bold text-foreground">
               Admin Panel
             </div>

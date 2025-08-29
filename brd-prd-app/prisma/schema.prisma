@@ -11,6 +11,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserTier {
+  FREE
+  HOBBY
+  PROFESSIONAL
+  BUSINESS
+  ENTERPRISE
+
+  @@map("usertier")
+}
+
 // User management
 model User {
   id            String    @id @default(cuid())
@@ -31,7 +41,7 @@ model User {
   timezone      String?
 
   // Subscription information
-  subscriptionTier   String    @default("free") // "free", "hobby", "professional", "business", "enterprise"
+  subscriptionTier   UserTier  @default(FREE)
   subscriptionStatus String    @default("active") // "active", "canceled", "past_due"
   tokensUsed         Int       @default(0)
   tokensLimit        Int       @default(10000) // 10K tokens for free tier (updated)

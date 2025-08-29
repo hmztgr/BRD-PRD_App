@@ -22,11 +22,6 @@ export function SimpleHeader({ locale }: SimpleHeaderProps) {
   // Get the current path without locale prefix
   const pathWithoutLocale = pathname.replace(`/${locale}`, '');
   
-  // Don't render SimpleHeader on admin routes to avoid duplicate logo
-  if (pathWithoutLocale.startsWith('/admin')) {
-    return null;
-  }
-  
   // Generate the URL for the other locale
   const getLocaleUrl = (targetLocale: string) => {
     return `/${targetLocale}${pathWithoutLocale}`;

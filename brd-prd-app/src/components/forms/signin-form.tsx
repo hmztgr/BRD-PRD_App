@@ -81,7 +81,8 @@ export function SignInForm() {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
-          <Button 
+          {/* Temporarily disabled due to Firebase quota issues */}
+          {/* <Button 
             variant="outline" 
             className="w-full" 
             onClick={handleGoogleSignIn}
@@ -89,7 +90,7 @@ export function SignInForm() {
           >
             <Icons.google className="mr-2 h-4 w-4" />
             Sign in with Google
-          </Button>
+          </Button> */}
           <Button 
             variant="outline" 
             className="w-full" 

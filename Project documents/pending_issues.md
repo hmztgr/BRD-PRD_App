@@ -12,6 +12,50 @@
 
 ## 🔴 **CRITICAL ISSUES** (UNRESOLVED)
 
+### **Issue #036: Firebase/Google OAuth Quota Errors Causing App Delays**
+- **Category**: Authentication & Performance
+- **Priority**: HIGH
+- **Status**: TEMPORARILY RESOLVED (OAuth disabled)
+- **Reported**: August 29, 2025
+
+**Description:**
+Google OAuth integration causing Firebase quota exceeded errors and significant app responsiveness delays.
+
+**Error Details:**
+From browser console:
+```
+Firebase: Error (auth/quota-exceeded-for-quota-metric-'token-exchange'-and-limit-'token-exchange-per-minute'-of-service-'securetoken.googleapis.com'-for-consumer-'project-number:593863204797'.)
+```
+
+**Current Behavior:**
+- Firebase quota exceeded errors in console
+- App responsiveness severely impacted
+- Long delays on page loads and interactions
+
+**Temporary Resolution Applied:**
+- **GoogleProvider commented out** in `src/lib/auth.ts`
+- **Google sign-in buttons disabled** in signin/signup forms
+- **UI elements preserved** for future re-enabling
+
+**Files Modified:**
+- `src/lib/auth.ts` - GoogleProvider disabled
+- `src/components/forms/signin-form.tsx` - Google button commented out
+- `src/components/forms/signup-form.tsx` - Google button commented out
+
+**Next Steps:**
+1. **Review Firebase project quota limits**
+2. **Upgrade Firebase plan if needed**
+3. **Implement proper error handling for quota limits**
+4. **Re-enable Google OAuth once quota issues resolved**
+
+**Impact:**
+- ✅ App performance restored
+- ✅ Firebase errors eliminated
+- ❌ Google OAuth temporarily unavailable
+- ❌ Users must use LinkedIn OAuth or credentials
+
+---
+
 ### **Issue #035: Document Generation API Endpoint Missing**
 - **Category**: Backend API & Document Generation
 - **Priority**: CRITICAL

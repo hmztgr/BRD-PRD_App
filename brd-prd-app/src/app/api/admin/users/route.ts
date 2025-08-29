@@ -26,77 +26,64 @@ export async function GET(req: NextRequest) {
 
     const skip = (page - 1) * limit;
 
-    // Build where clause
-    const where: any = {};
+    // Build Prisma where clause
+    const whereClause: any = {};
     
     if (search) {
-      where.OR = [
+      whereClause.OR = [
         { name: { contains: search, mode: 'insensitive' } },
         { email: { contains: search, mode: 'insensitive' } },
         { companyName: { contains: search, mode: 'insensitive' } }
       ];
     }
 
-    // Skip role filtering since role column doesn't exist in Supabase setup
-    // if (role) {
-    //   where.role = role;
-    // }
-
     if (subscriptionTier) {
-      where.subscriptionTier = subscriptionTier;
+      whereClause.subscriptionTier = subscriptionTier.toUpperCase() as any;
     }
 
-    // Simple query to get all users first, then handle filtering in app
-    let query = `
-      SELECT 
-        id, name, email, "emailVerified", "adminPermissions", 
-        "subscriptionTier", "subscriptionStatus", "tokensUsed", "tokensLimit",
-        "createdAt", "updatedAt", "companyName", industry, language
-      FROM users
-    `;
-    
-    const conditions = [];
-    const params = [];
-    
-    if (search) {
-      conditions.push(`(name ILIKE $${params.length + 1} OR email ILIKE $${params.length + 2} OR "companyName" ILIKE $${params.length + 3})`);
-      params.push(`%${search}%`, `%${search}%`, `%${search}%`);
-    }
-    
-    if (subscriptionTier) {
-      conditions.push(`"subscriptionTier" = $${params.length + 1}`);
-      params.push(subscriptionTier.toUpperCase());
-    }
-    
-    if (conditions.length > 0) {
-      query += ` WHERE ${conditions.join(' AND ')}`;
-    }
-    
-    query += ` ORDER BY "${sortBy}" ${sortOrder} LIMIT ${limit} OFFSET ${skip}`;
-    
-    const [usersResult, totalCountResult] = await Promise.all([
-      prisma.$queryRawUnsafe(query, ...params),
-      prisma.$queryRaw`SELECT COUNT(*) as count FROM users`
+    // Get users and total count in parallel
+    const [users, totalCount] = await Promise.all([
+      prisma.user.findMany({
+        where: whereClause,
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          emailVerified: true,
+          adminPermissions: true,
+          subscriptionTier: true,
+          subscriptionStatus: true,
+          tokensUsed: true,
+          tokensLimit: true,
+          createdAt: true,
+          updatedAt: true,
+          companyName: true,
+          industry: true,
+          language: true,
+          _count: {
+            select: {
+              documents: true,
+              referrals: true
+            }
+          }
+        },
+        orderBy: { [sortBy]: sortOrder as 'asc' | 'desc' },
+        skip,
+        take: limit,
+      }),
+      prisma.user.count({ where: whereClause })
     ]);
-    
-    const users = usersResult as any[];
-    const totalCount = parseInt((totalCountResult as any[])[0]?.count || '0');
 
     const totalPages = Math.ceil(totalCount / limit);
 
-    // Add role and document counts (role is determined by adminPermissions or email)
-    // Also convert uppercase enum values to lowercase
+    // Add role field to users (role is determined by adminPermissions or email)
     const usersWithRole = users.map(user => ({
       ...user,
-      subscriptionTier: (user.subscriptionTier as string)?.toLowerCase() || 'free',
+      subscriptionTier: user.subscriptionTier.toLowerCase(),
       role: (user.adminPermissions && Array.isArray(user.adminPermissions) && user.adminPermissions.length > 0) 
         ? 'admin' 
-        : user.email === 'admin@smartdocs.ai' ? 'admin' : 'user',
-      _count: {
-        documents: Math.floor(Math.random() * 20), // Mock document count
-        referrals: Math.floor(Math.random() * 5) // Mock referral count
-      }
-    }))
+        : user.email === 'admin@smartdocs.ai' ? 'admin' : 'user'
+    }));
 
     await logAdminActivity(
       adminUser.id,
@@ -188,30 +175,27 @@ export async function POST(req: NextRequest) {
       enterprise: 1000000
     };
 
-    // Create user using raw query to handle enum mismatch
-    const dbSubscriptionTier = subscriptionTier.toUpperCase();
-    
-    await prisma.$executeRaw`
-      INSERT INTO users (
-        name, email, password, "subscriptionTier", "tokensLimit", 
-        "companyName", industry, language, "emailVerified", "createdAt", "updatedAt"
-      ) VALUES (
-        ${name}, ${email}, ${hashedPassword}, ${dbSubscriptionTier}::usertier, 
-        ${tokenLimits[subscriptionTier as keyof typeof tokenLimits] || 10000},
-        ${companyName}, ${industry}, ${language}, NOW(), NOW(), NOW()
-      )
-    `;
-    
-    // Get the created user
-    const userResult = await prisma.$queryRaw`
-      SELECT id, name, email, "subscriptionTier", "createdAt"
-      FROM users 
-      WHERE email = ${email}
-      ORDER BY "createdAt" DESC
-      LIMIT 1
-    `;
-    
-    const user = (userResult as any[])[0];
+    // Create user using Prisma
+    const user = await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+        subscriptionTier: subscriptionTier.toUpperCase() as any,
+        tokensLimit: tokenLimits[subscriptionTier as keyof typeof tokenLimits] || 10000,
+        companyName,
+        industry,
+        language,
+        emailVerified: new Date() // Set email as verified for admin-created users
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        subscriptionTier: true,
+        createdAt: true
+      }
+    });
 
     await logAdminActivity(
       adminUser.id,
@@ -220,12 +204,12 @@ export async function POST(req: NextRequest) {
       { email, role, subscriptionTier }
     );
 
-    // Add role field manually and convert subscriptionTier to lowercase
+    // Add role field and convert subscriptionTier to lowercase
     const userWithRole = {
       ...user,
-      subscriptionTier: (user.subscriptionTier as string)?.toLowerCase() || 'free',
+      subscriptionTier: user.subscriptionTier.toLowerCase(),
       role: role || 'user'
-    }
+    };
 
     return NextResponse.json({
       success: true,
