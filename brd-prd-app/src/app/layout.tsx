@@ -24,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <head>
         {/* Add Google Fonts for Arabic support */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
