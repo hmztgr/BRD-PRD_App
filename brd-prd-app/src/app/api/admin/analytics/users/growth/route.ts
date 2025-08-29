@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
               gte: monthStart,
               lt: monthEnd
             },
-            subscriptionTier: { not: 'free' }
+            subscriptionTier: { not: 'FREE' }
           }
         })
       ]);
@@ -94,7 +94,7 @@ export async function GET(request: NextRequest) {
       }),
       prisma.user.count({
         where: {
-          subscriptionTier: { not: 'free' }
+          subscriptionTier: { not: 'FREE' }
         }
       })
     ]);

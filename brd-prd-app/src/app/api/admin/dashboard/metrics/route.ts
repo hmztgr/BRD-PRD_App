@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     
-    if (!session?.user || !['admin', 'super_admin'].includes(session.user.role)) {
+    if (!session?.user || !session.user.role || !['admin', 'super_admin'].includes(session.user.role)) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
         where: {
           subscriptionStatus: 'active',
           subscriptionTier: {
-            not: 'free'
+            not: 'FREE'
           }
         }
       }),

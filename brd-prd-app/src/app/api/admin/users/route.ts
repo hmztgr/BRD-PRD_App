@@ -131,7 +131,7 @@ export async function POST(req: NextRequest) {
       email,
       password,
       role = 'user',
-      subscriptionTier = 'free',
+      subscriptionTier = 'FREE',
       companyName,
       industry,
       language = 'en'

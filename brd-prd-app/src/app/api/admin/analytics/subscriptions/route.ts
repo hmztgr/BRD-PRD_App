@@ -151,7 +151,7 @@ export async function GET(req: NextRequest) {
 
     // Get average revenue per user (ARPU)
     const activeSubscribersCount = subscriptionOverview
-      .filter(sub => sub.subscriptionStatus === 'active' && sub.subscriptionTier !== 'free')
+      .filter(sub => sub.subscriptionStatus === 'active' && sub.subscriptionTier !== 'FREE')
       .reduce((sum, sub) => sum + sub._count.id, 0);
 
     const arpu = activeSubscribersCount > 0 ? totalMRR / activeSubscribersCount : 0;
@@ -169,7 +169,7 @@ export async function GET(req: NextRequest) {
         MIN(EXTRACT(days FROM (COALESCE("subscriptionEndsAt", NOW()) - "createdAt"))) as min_days,
         MAX(EXTRACT(days FROM (COALESCE("subscriptionEndsAt", NOW()) - "createdAt"))) as max_days
       FROM "users"
-      WHERE "subscriptionTier" != 'free'
+      WHERE "subscriptionTier" != 'FREE'
         AND "createdAt" >= ${new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000)}
       GROUP BY "subscriptionTier"
     `;
@@ -192,7 +192,7 @@ export async function GET(req: NextRequest) {
         SELECT 
           sc.id,
           sc.signup_month,
-          CASE WHEN u."subscriptionTier" != 'free' THEN 1 ELSE 0 END as converted
+          CASE WHEN u."subscriptionTier" != 'FREE' THEN 1 ELSE 0 END as converted
         FROM signup_cohorts sc
         JOIN "users" u ON sc.id = u.id
       )

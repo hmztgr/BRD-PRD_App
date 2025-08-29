@@ -49,7 +49,7 @@ export function hasAdminPermission(
   
   // Check role-based permissions
   const rolePermissions = ADMIN_ROLES[userRole as keyof typeof ADMIN_ROLES] || []
-  if (requiredPermission && rolePermissions.includes(requiredPermission)) return true
+  if (requiredPermission && requiredPermission !== 'super_admin' && rolePermissions.includes(requiredPermission)) return true
   
   // Check explicit user permissions
   if (userPermissions && requiredPermission && userPermissions.includes(requiredPermission)) {

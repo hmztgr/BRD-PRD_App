@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
       const updatedUser = await prisma.user.update({
         where: { email },
         data: {
-          subscriptionTier: 'professional',
+          subscriptionTier: 'PROFESSIONAL',
           subscriptionStatus: 'active',
           tokensLimit: 50000, // 50K tokens for professional
           tokensUsed: 0
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
         name,
         password: hashedPassword,
         emailVerified: new Date(), // Mark as verified for testing
-        subscriptionTier: 'professional',
+        subscriptionTier: 'PROFESSIONAL',
         subscriptionStatus: 'active',
         tokensLimit: 50000, // 50K tokens for professional
         tokensUsed: 0,

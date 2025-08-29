@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
               gte: monthStart,
               lt: monthEnd
             },
-            subscriptionTier: { not: 'free' }
+            subscriptionTier: { not: 'FREE' }
           }
         }),
         prisma.user.count({
@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
       // Calculate MRR (Monthly Recurring Revenue) - approximate
       const activeSubscriptions = await prisma.user.count({
         where: {
-          subscriptionTier: { not: 'free' },
+          subscriptionTier: { not: 'FREE' },
           subscriptionStatus: 'active',
           createdAt: { lt: monthEnd }
         }
@@ -101,7 +101,7 @@ export async function GET(request: NextRequest) {
       }),
       prisma.user.count({
         where: {
-          subscriptionTier: { not: 'free' },
+          subscriptionTier: { not: 'FREE' },
           subscriptionStatus: 'active'
         }
       }),
@@ -127,7 +127,7 @@ export async function GET(request: NextRequest) {
     const subscriptionTierRevenue = await prisma.user.groupBy({
       by: ['subscriptionTier'],
       where: {
-        subscriptionTier: { not: 'free' },
+        subscriptionTier: { not: 'FREE' },
         subscriptionStatus: 'active'
       },
       _count: {

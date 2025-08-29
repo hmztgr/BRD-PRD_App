@@ -103,7 +103,7 @@ async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
     await prisma.user.update({
       where: { id: user.id },
       data: {
-        subscriptionTier: planInfo.plan,
+        subscriptionTier: planInfo.plan.toUpperCase() as any,
         subscriptionStatus: subscription.status,
         stripeSubscriptionId: subscriptionId,
         tokensLimit: tokenLimit,
@@ -152,7 +152,7 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
     await prisma.user.update({
       where: { id: user.id },
       data: {
-        subscriptionTier: planInfo.plan,
+        subscriptionTier: planInfo.plan.toUpperCase() as any,
         subscriptionStatus: subscription.status,
         tokensLimit: tokenLimit,
         billingCycle: planInfo.interval === 'year' ? 'annual' : 'monthly',
@@ -184,10 +184,10 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
     await prisma.user.update({
       where: { id: user.id },
       data: {
-        subscriptionTier: 'free',
+        subscriptionTier: 'FREE',
         subscriptionStatus: 'canceled',
         stripeSubscriptionId: null,
-        tokensLimit: getTokenLimit('free'),
+        tokensLimit: getTokenLimit('free' as any),
         billingCycle: 'monthly',
         subscriptionEndsAt: new Date(Date.now()), // TODO: Use actual subscription.canceled_at
       }

@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Check if user already has an active subscription
-    if (user.subscriptionStatus === 'active' && user.subscriptionTier !== 'free') {
+    if (user.subscriptionStatus === 'active' && user.subscriptionTier !== 'FREE') {
       return NextResponse.json(
         { error: 'User already has an active subscription' },
         { status: 400 }
