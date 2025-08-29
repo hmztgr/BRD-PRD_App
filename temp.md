@@ -564,3 +564,56 @@ cussed in our conversation context don't appear to exist in the current file str
     - i see that we are using mocking data to show the results which is great but we need to replace it with actual connections to the actual data
     - in the top left corner of the admin page i see that you placed another "Smart-Business-Docs-AI" logo under the original logo remove the new one keep the one in the top navigation bar 
     - update the @Admin feature\Admin-Current-Status-Comparison.md so we know what is done and what is not done 
+
+
+
+
+
+
+
+
+
+
+    Continue Setting Up Development Database Admin User
+
+  Context: We're fixing authentication issues on both production and development websites. The production admin user exists and works, but the
+  development database needs setup.
+
+  Current Status:
+  - ✅ Production database has admin user (admin@smartdocs.ai / admin123)
+  - ❌ Development database missing admin user and has schema issues
+  - ✅ Supabase MCP configured for development project (jmfkzfmripuzfspijndq)
+
+  Problem Found:
+  The development database users table is missing the role column and possibly other columns needed for authentication.
+
+  What needs to be done:
+
+  1. Check the development database schema using Supabase MCP:
+    - Query the users table structure
+    - Identify missing columns (role, adminPermissions, subscriptionTier, etc.)
+  2. Fix the schema by adding missing columns:
+  ALTER TABLE users ADD COLUMN IF NOT EXISTS role TEXT DEFAULT 'user';
+  ALTER TABLE users ADD COLUMN IF NOT EXISTS "adminPermissions" TEXT[];
+  ALTER TABLE users ADD COLUMN IF NOT EXISTS "subscriptionTier" TEXT DEFAULT 'FREE';
+  ALTER TABLE users ADD COLUMN IF NOT EXISTS "subscriptionStatus" TEXT DEFAULT 'inactive';
+  3. Create the admin user:
+  INSERT INTO users (email, password, name, role, "adminPermissions", "emailVerified")
+  VALUES (
+    'admin@smartdocs.ai',
+    '$2a$12$YL6L5hR0c8Y3V9tXwqvYfOxF6Kk5NqL4C6yXvR.WJg6oJ3gH.W5zy', -- password: admin123
+    'System Admin',
+    'admin',
+    ARRAY['manage_users', 'manage_content', 'view_analytics', 'manage_billing', 'manage_settings'],
+    NOW()
+  );
+  4. Test login on both sites:
+    - Production: https://smart-business-docs-ai.vercel.app/
+    - Development: https://smart-business-docs-ai-dev.vercel.app/
+    - Credentials: admin@smartdocs.ai / admin123
+
+  Files for reference:
+  - Database init script: brd-prd-app/scripts/init-dev-sql.sql
+  - Auth configuration: brd-prd-app/src/lib/auth.ts
+
+  Please use the Supabase MCP tools to check and fix the development database schema, then create the admin user.

@@ -91,7 +91,8 @@ export function SignInForm() {
             <Icons.google className="mr-2 h-4 w-4" />
             Sign in with Google
           </Button> */}
-          <Button 
+          {/* Temporarily disabled due to Firebase quota issues */}
+          {/* <Button 
             variant="outline" 
             className="w-full" 
             onClick={handleLinkedInSignIn}
@@ -99,7 +100,7 @@ export function SignInForm() {
           >
             <Icons.linkedin className="mr-2 h-4 w-4" />
             Sign in with LinkedIn
-          </Button>
+          </Button> */}
         </div>
         
         <div className="relative">
