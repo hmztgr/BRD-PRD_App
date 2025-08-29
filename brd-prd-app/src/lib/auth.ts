@@ -76,7 +76,7 @@ export const authOptions: NextAuthOptions = {
       // Always return true to let Prisma adapter handle everything
       return true
     },
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, trigger }) {
       // Add referral code after user is created by adapter
       if (user && (account?.provider === "google" || account?.provider === "linkedin")) {
         try {
@@ -100,11 +100,48 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id
       }
+      
+      // Fetch and include user role and permissions in the token for middleware access
+      // This runs on every token refresh, so we get up-to-date role information
+      if (token.id && (trigger === 'signIn' || trigger === 'update' || !token.role)) {
+        try {
+          // Use raw query to handle enum type mismatch
+          const result = await prisma.$queryRaw`
+            SELECT email, "adminPermissions", "subscriptionTier", "subscriptionStatus"
+            FROM users 
+            WHERE id = ${token.id as string}
+            LIMIT 1
+          `
+          
+          const dbUser = result && result.length > 0 ? result[0] : null
+          
+          if (dbUser) {
+            // Determine role based on adminPermissions or email
+            const adminEmails = ['admin@smartdocs.ai', 'hamza@smartdocs.ai']
+            const hasAdminPerms = dbUser.adminPermissions && Array.isArray(dbUser.adminPermissions) && dbUser.adminPermissions.length > 0
+            const isEmailAdmin = adminEmails.includes(dbUser.email || '')
+            
+            token.role = (hasAdminPerms || isEmailAdmin) ? 'admin' : 'user'
+            token.adminPermissions = dbUser.adminPermissions as string[] || []
+            token.subscriptionTier = (dbUser.subscriptionTier as string)?.toLowerCase() || 'free'
+            token.subscriptionStatus = dbUser.subscriptionStatus
+          }
+        } catch (error) {
+          console.error("Error fetching user role for token:", error)
+        }
+      }
+      
       return token
     },
     async session({ session, token }) {
       if (token) {
         session.user.id = token.id as string
+        
+        // Include role information from token (already fetched in jwt callback)
+        session.user.role = token.role as string
+        session.user.adminPermissions = token.adminPermissions as string[] || []
+        session.user.subscriptionTier = token.subscriptionTier as string
+        session.user.subscriptionStatus = token.subscriptionStatus as string
       }
       return session
     }

@@ -24,7 +24,7 @@ export async function getAdminUser(): Promise<AdminUser | null> {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) return null
 
-    // Use basic query that we know works, then check for admin status
+    // Use query with admin permissions columns (handle enum mismatch for subscriptionTier)
     const result = await prisma.$queryRaw`
       SELECT id, name, email, "adminPermissions"
       FROM users 
@@ -38,20 +38,30 @@ export async function getAdminUser(): Promise<AdminUser | null> {
 
     const user = users[0]
     
-    // Check if user has admin permissions set
+    // Check if user has admin permissions set OR is in hardcoded admin list
+    const adminEmails = ['admin@smartdocs.ai', 'hamza@smartdocs.ai']
     const adminPerms = user.adminPermissions || []
-    const isAdmin = Array.isArray(adminPerms) && adminPerms.length > 0
-
-    if (!isAdmin) {
+    const hasPermissions = Array.isArray(adminPerms) && adminPerms.length > 0
+    const isEmailAdmin = adminEmails.includes(user.email)
+    
+    if (!hasPermissions && !isEmailAdmin) {
       return null
     }
 
+    // Return admin user with permissions from DB or default permissions for email admins
     return {
       id: user.id,
       name: user.name,
       email: user.email,
-      role: 'admin', // Simplified - if they have permissions, they're admin
-      adminPermissions: adminPerms
+      role: 'admin',
+      adminPermissions: hasPermissions ? adminPerms : [
+        'manage_users',
+        'manage_feedback', 
+        'manage_content',
+        'manage_subscriptions',
+        'view_analytics',
+        'manage_system'
+      ]
     }
   } catch (error) {
     console.error('Error getting admin user:', error)
