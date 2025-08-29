@@ -7,7 +7,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -359,7 +359,7 @@ model ResearchRequest {
   sessionId     String?  // Optional planning session ID
   findings      Json?    // Research findings data
   confidence    Int?     // Overall confidence score 0-100
-  sources       String[] // Array of source references
+  sources       String?  // JSON string of source references (for SQLite compatibility)
   metadata      Json?    // Additional metadata
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
