@@ -92,7 +92,7 @@ export async function GET(req: NextRequest) {
     });
 
     // Get admin activity summary (if super_admin viewing all)
-    let adminSummary = [];
+    let adminSummary: any[] = [];
     if (canViewAllActivities && !adminId) {
       adminSummary = await prisma.adminActivity.groupBy({
         by: ['adminId'],

@@ -13,13 +13,13 @@ export const metadata: Metadata = {
 }
 
 interface AnalyticsPageProps {
-  params: {
+  params: Promise<{
     locale: string
-  }
+  }>
 }
 
 export default async function AnalyticsPage({ params }: AnalyticsPageProps) {
-  const { locale } = params
+  const { locale } = await params
   
   // Check admin authentication
   const adminUser = await getAdminUser()

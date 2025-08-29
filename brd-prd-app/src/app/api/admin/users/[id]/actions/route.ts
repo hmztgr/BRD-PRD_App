@@ -3,9 +3,9 @@ import { prisma } from '@/lib/prisma';
 import { requireAdmin, hasAdminPermission, logAdminActivity, AdminPermission } from '@/lib/admin-auth';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 // POST /api/admin/users/[id]/actions - User actions (suspend, activate, change role, etc.)
@@ -22,9 +22,10 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
 
     const body = await req.json();
     const { action, ...actionData } = body;
+    const { id } = await params;
 
     // Prevent actions on self
-    if (adminUser.id === params.id) {
+    if (adminUser.id === id) {
       return NextResponse.json(
         { error: 'Cannot perform actions on your own account' },
         { status: 400 }
@@ -32,7 +33,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     }
 
     const user = await prisma.user.findUnique({
-      where: { id: params.id },
+      where: { id: id },
       select: { id: true, email: true, role: true, subscriptionStatus: true }
     });
 
@@ -57,7 +58,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
         }
 
         result = await prisma.user.update({
-          where: { id: params.id },
+          where: { id: id },
           data: {
             subscriptionStatus: 'canceled'
           }
@@ -67,7 +68,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
 
       case 'activate':
         result = await prisma.user.update({
-          where: { id: params.id },
+          where: { id: id },
           data: {
             subscriptionStatus: 'active'
           }
@@ -93,7 +94,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
         }
 
         result = await prisma.user.update({
-          where: { id: params.id },
+          where: { id: id },
           data: {
             role: newRole
           }
@@ -131,7 +132,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
         }
 
         result = await prisma.user.update({
-          where: { id: params.id },
+          where: { id: id },
           data: {
             adminPermissions: permissions
           }
@@ -141,7 +142,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
 
       case 'reset_tokens':
         result = await prisma.user.update({
-          where: { id: params.id },
+          where: { id: id },
           data: {
             tokensUsed: 0
           }
@@ -159,7 +160,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
         }
 
         result = await prisma.user.update({
-          where: { id: params.id },
+          where: { id: id },
           data: {
             tokensLimit: parseInt(newLimit)
           }
@@ -169,7 +170,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
 
       case 'verify_email':
         result = await prisma.user.update({
-          where: { id: params.id },
+          where: { id: id },
           data: {
             emailVerified: new Date()
           }
@@ -186,7 +187,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     await logAdminActivity(
       adminUser.id,
       `user_${action}`,
-      params.id,
+      id,
       logDetails
     );
 

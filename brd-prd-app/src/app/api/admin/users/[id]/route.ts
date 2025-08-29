@@ -4,9 +4,9 @@ import { requireAdmin, hasAdminPermission, logAdminActivity } from '@/lib/admin-
 import bcrypt from 'bcryptjs';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 // GET /api/admin/users/[id] - Get user details
@@ -21,8 +21,9 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
       );
     }
 
+    const { id } = await params;
     const user = await prisma.user.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         _count: {
           select: {
@@ -68,7 +69,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
     await logAdminActivity(
       adminUser.id,
       'view_user_details',
-      params.id
+      id
     );
 
     return NextResponse.json({ user });
@@ -86,6 +87,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
 export async function PUT(req: NextRequest, { params }: RouteParams) {
   try {
     const adminUser = await requireAdmin();
+    const { id } = await params;
     
     if (!hasAdminPermission(adminUser, 'manage_users')) {
       return NextResponse.json(
@@ -109,7 +111,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
     } = body;
 
     // Prevent self-demotion from super_admin
-    if (adminUser.id === params.id && adminUser.role === 'super_admin' && role !== 'super_admin') {
+    if (adminUser.id === id && adminUser.role === 'super_admin' && role !== 'super_admin') {
       return NextResponse.json(
         { error: 'Cannot demote yourself from super_admin role' },
         { status: 400 }
@@ -139,7 +141,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
     }
 
     const user = await prisma.user.update({
-      where: { id: params.id },
+      where: { id: id },
       data: updateData,
       select: {
         id: true,
@@ -157,7 +159,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
     await logAdminActivity(
       adminUser.id,
       'update_user',
-      params.id,
+      id,
       { updatedFields: Object.keys(updateData) }
     );
 
@@ -194,6 +196,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
 export async function DELETE(req: NextRequest, { params }: RouteParams) {
   try {
     const adminUser = await requireAdmin();
+    const { id } = await params;
     
     if (!hasAdminPermission(adminUser, 'manage_users')) {
       return NextResponse.json(
@@ -203,7 +206,7 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
     }
 
     // Prevent self-deletion
-    if (adminUser.id === params.id) {
+    if (adminUser.id === id) {
       return NextResponse.json(
         { error: 'Cannot delete your own account' },
         { status: 400 }
@@ -211,7 +214,7 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
     }
 
     const user = await prisma.user.findUnique({
-      where: { id: params.id },
+      where: { id: id },
       select: { id: true, email: true, role: true }
     });
 
@@ -231,13 +234,13 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
     }
 
     await prisma.user.delete({
-      where: { id: params.id }
+      where: { id: id }
     });
 
     await logAdminActivity(
       adminUser.id,
       'delete_user',
-      params.id,
+      id,
       { email: user.email, role: user.role }
     );
 

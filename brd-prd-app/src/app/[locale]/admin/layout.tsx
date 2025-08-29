@@ -5,7 +5,7 @@ import { getAdminUser } from '@/lib/admin-auth'
 
 interface AdminLayoutWrapperProps {
   children: React.ReactNode
-  params: { locale: string }
+  params: Promise<{ locale: string }>
 }
 
 export default async function AdminLayoutWrapper({
