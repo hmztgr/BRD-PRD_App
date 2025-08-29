@@ -109,6 +109,7 @@ export const authOptions: NextAuthOptions = {
             where: { id: token.id as string },
             select: {
               email: true,
+              role: true,
               adminPermissions: true,
               subscriptionTier: true,
               subscriptionStatus: true
@@ -116,12 +117,13 @@ export const authOptions: NextAuthOptions = {
           })
           
           if (dbUser) {
-            // Determine role based on adminPermissions or email
+            // Use database role if set, otherwise determine from permissions/email
             const adminEmails = ['admin@smartdocs.ai', 'hamza@smartdocs.ai']
             const hasAdminPerms = dbUser.adminPermissions && Array.isArray(dbUser.adminPermissions) && dbUser.adminPermissions.length > 0
             const isEmailAdmin = adminEmails.includes(dbUser.email || '')
             
-            token.role = (hasAdminPerms || isEmailAdmin) ? 'admin' : 'user'
+            // Prefer database role, fallback to computed role
+            token.role = dbUser.role || ((hasAdminPerms || isEmailAdmin) ? 'admin' : 'user')
             token.adminPermissions = dbUser.adminPermissions as string[] || []
             token.subscriptionTier = dbUser.subscriptionTier.toLowerCase()
             token.subscriptionStatus = dbUser.subscriptionStatus

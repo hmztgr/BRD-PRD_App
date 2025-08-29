@@ -103,7 +103,8 @@
       "Bash(npm ci:*)",
       "Bash(git log:*)",
       "WebFetch(domain:developer.paylink.sa)",
-      "WebFetch(domain:paylink.sa)"
+      "WebFetch(domain:paylink.sa)",
+      "Bash(set DATABASE_URL=postgresql://postgres:9W94C3SF1ixO7L4C@db.nutehrmyxqyzhfppsknk.supabase.co:5432/postgres)"
     ],
     "deny": [],
     "ask": [],
