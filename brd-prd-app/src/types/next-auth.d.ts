@@ -10,4 +10,22 @@ declare module "next-auth" {
       subscriptionStatus?: string
     } & DefaultSession["user"]
   }
+  
+  interface User {
+    id: string
+    role?: string
+    adminPermissions?: string[]
+    subscriptionTier?: string
+    subscriptionStatus?: string
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    id?: string
+    role?: string
+    adminPermissions?: string[]
+    subscriptionTier?: string
+    subscriptionStatus?: string
+  }
 }

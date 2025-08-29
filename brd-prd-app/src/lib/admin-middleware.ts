@@ -16,7 +16,7 @@ export type AdminPermission =
  * Admin role hierarchy and permissions
  */
 export const ADMIN_ROLES = {
-  admin: ['manage_users', 'manage_feedback', 'manage_content', 'view_analytics'],
+  admin: ['manage_users', 'manage_feedback', 'manage_content', 'view_analytics', 'manage_settings'],
   super_admin: ['manage_users', 'manage_feedback', 'manage_content', 'view_analytics', 'manage_settings', 'super_admin']
 } as const
 
