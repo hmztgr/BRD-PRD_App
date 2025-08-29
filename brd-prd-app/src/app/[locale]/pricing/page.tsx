@@ -25,6 +25,8 @@ const translations = {
     loading: "Loading...",
     billingPeriod: "Billing Period", 
     tokensPerMonth: "tokens/month",
+    individual: "Individual",
+    teamEnterprise: "Team & Enterprise",
     faqTitle: "Frequently Asked Questions",
     faqQuestions: {
       tokens: {
@@ -50,7 +52,7 @@ const translations = {
         description: 'Perfect for getting started',
         features: [
           'Basic document templates',
-          'AI-powered generation (GPT-3.5)',
+          'AI-powered generation',
           'PDF & DOCX export',
           'English & Arabic support',
           'Email support',
@@ -83,7 +85,7 @@ const translations = {
         features: [
           'Everything in Hobby',
           '100K tokens per month',
-          'Premium AI models (GPT-4, Claude-3 Opus, Gemini Pro)',
+          'Premium AI models',
           'Advanced document analysis',
           'Custom template creation',
           'Priority processing',
@@ -143,6 +145,8 @@ const translations = {
     loading: "جاري التحميل...",
     billingPeriod: "فترة الفوترة",
     tokensPerMonth: "رمز/شهر",
+    individual: "فردي",
+    teamEnterprise: "فريق ومؤسسات",
     faqTitle: "الأسئلة الشائعة",
     faqQuestions: {
       tokens: {
@@ -168,7 +172,7 @@ const translations = {
         description: 'مثالي للبداية',
         features: [
           'قوالب المستندات الأساسية',
-          'التوليد بالذكاء الاصطناعي (GPT-3.5)',
+          'التوليد بالذكاء الاصطناعي',
           'تصدير PDF و DOCX',
           'دعم الإنجليزية والعربية',
           'دعم البريد الإلكتروني',
@@ -201,7 +205,7 @@ const translations = {
         features: [
           'كل شيء في الهواة',
           '100 ألف رمز شهرياً',
-          'نماذج ذكاء اصطناعي متميزة (GPT-4، Claude-3 Opus، Gemini Pro)',
+          'نماذج ذكاء اصطناعي متميزة',
           'تحليل المستندات المتقدم',
           'إنشاء قوالب مخصصة',
           'معالجة ذات أولوية',
@@ -259,7 +263,7 @@ const PRICING_PLANS = {
     icon: Zap,
     features: [
       'Basic document templates',
-      'AI-powered generation (GPT-3.5)',
+      'AI-powered generation',
       'PDF & DOCX export',
       'English & Arabic support',
       'Email support',
@@ -314,7 +318,7 @@ const PRICING_PLANS = {
     features: [
       'Everything in Hobby',
       '100K tokens per month',
-      'Premium AI models (GPT-4, Claude-3 Opus, Gemini Pro)',
+      'Premium AI models',
       'Advanced document analysis',
       'Custom template creation',
       'Priority processing',
@@ -408,6 +412,7 @@ function PricingPageClient({ locale, t, isRTL }: { locale: string, t: any, isRTL
   const { data: session } = useSession()
   const router = useRouter()
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly')
+  const [planCategory, setPlanCategory] = useState<'individual' | 'team'>('individual')
   const [isLoading, setIsLoading] = useState<string | null>(null)
 
   // Get dynamic CTA text based on user's current subscription
@@ -522,6 +527,15 @@ function PricingPageClient({ locale, t, isRTL }: { locale: string, t: any, isRTL
     return { amount: savings, percentage }
   }
 
+  // Filter plans based on selected category
+  const getFilteredPlans = () => {
+    const individualPlans = ['free', 'hobby', 'professional']
+    const teamPlans = ['business', 'enterprise']
+    
+    const plans = planCategory === 'individual' ? individualPlans : teamPlans
+    return Object.entries(PRICING_PLANS).filter(([key]) => plans.includes(key))
+  }
+
   return (
     <div className={`min-h-screen ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Header */}
@@ -536,8 +550,34 @@ function PricingPageClient({ locale, t, isRTL }: { locale: string, t: any, isRTL
             </p>
           </div>
 
+          {/* Plan Category Toggle */}
+          <div className="mt-6 flex justify-center">
+            <div className="bg-gray-800 rounded-lg p-1">
+              <button
+                onClick={() => setPlanCategory('individual')}
+                className={`px-6 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer ${
+                  planCategory === 'individual'
+                    ? 'bg-white text-black shadow-sm'
+                    : 'text-gray-300 hover:text-white'
+                }`}
+              >
+                {t.individual}
+              </button>
+              <button
+                onClick={() => setPlanCategory('team')}
+                className={`px-6 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer ${
+                  planCategory === 'team'
+                    ? 'bg-white text-black shadow-sm'
+                    : 'text-gray-300 hover:text-white'
+                }`}
+              >
+                {t.teamEnterprise}
+              </button>
+            </div>
+          </div>
+
           {/* Billing Toggle */}
-          <div className="mt-8 flex justify-center">
+          <div className="mt-4 flex justify-center">
             <div className="bg-gray-800 rounded-lg p-1">
               <button
                 onClick={() => setBillingCycle('monthly')}
@@ -569,8 +609,8 @@ function PricingPageClient({ locale, t, isRTL }: { locale: string, t: any, isRTL
 
       {/* Pricing Cards */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-          {Object.entries(PRICING_PLANS).map(([key, plan]) => {
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {getFilteredPlans().map(([key, plan]) => {
             const planKey = key as keyof typeof PRICING_PLANS
             const Icon = plan.icon
             const price = billingCycle === 'yearly' ? plan.yearlyPrice : plan.monthlyPrice
@@ -603,32 +643,59 @@ function PricingPageClient({ locale, t, isRTL }: { locale: string, t: any, isRTL
                 </div>
 
                 <div className="mt-6 text-center">
-                  <div className="flex items-baseline justify-center">
-                    <span className="text-4xl font-bold text-white">
-                      {formatPrice(price)}
-                    </span>
-                    {price > 0 && (
-                      <span className="ml-1 text-gray-300">
-                        {t.perMonth}
-                      </span>
-                    )}
-                  </div>
-                  
-                  {savings && billingCycle === 'yearly' && (
-                    <p className="mt-1 text-sm text-green-600">
-                      Save {formatPrice(savings.amount)} ({savings.percentage}% off)
-                    </p>
+                  {billingCycle === 'yearly' && price > 0 ? (
+                    <>
+                      <div className="flex items-baseline justify-center">
+                        <span className="text-4xl font-bold text-white">
+                          {formatPrice(price / 12)}
+                        </span>
+                        <span className="ml-1 text-gray-300">
+                          {t.perMonth}
+                        </span>
+                      </div>
+                      <div className="mt-1">
+                        <span className="text-lg text-gray-300">
+                          {formatPrice(price)}/yearly
+                        </span>
+                      </div>
+                      {savings && (
+                        <p className="mt-1 text-sm text-green-600">
+                          Save {formatPrice(savings.amount)} ({savings.percentage}% off)
+                        </p>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex items-baseline justify-center">
+                        <span className="text-4xl font-bold text-white">
+                          {formatPrice(price)}
+                        </span>
+                        {price > 0 && (
+                          <span className="ml-1 text-gray-300">
+                            {t.perMonth}
+                          </span>
+                        )}
+                      </div>
+                      {savings && billingCycle === 'yearly' && (
+                        <p className="mt-1 text-sm text-green-600">
+                          Save {formatPrice(savings.amount)} ({savings.percentage}% off)
+                        </p>
+                      )}
+                    </>
                   )}
 
                   <div className="mt-2">
                     <span className="text-lg font-medium text-blue-400">
                       {plan.tokens} {t.tokensPerMonth}
+                      {billingCycle === 'yearly' && price > 0 && (
+                        <span className="text-sm text-green-500"> +10% bonus</span>
+                      )}
+                      {t.plans[key as keyof typeof t.plans].limitations && t.plans[key as keyof typeof t.plans].limitations.length > 0 && t.plans[key as keyof typeof t.plans].limitations.some((limit: string) => limit.includes('documents per month') || limit.includes('مستند في الشهر')) && (
+                        <span className="text-sm text-gray-400">
+                          {' (' + t.plans[key as keyof typeof t.plans].limitations.find((limit: string) => limit.includes('documents per month') || limit.includes('مستند في الشهر')) + ')'}
+                        </span>
+                      )}
                     </span>
-                    {billingCycle === 'yearly' && price > 0 && (
-                      <Badge variant="secondary" className="ml-2 text-xs">
-                        +10% bonus
-                      </Badge>
-                    )}
                   </div>
                 </div>
 
@@ -651,7 +718,9 @@ function PricingPageClient({ locale, t, isRTL }: { locale: string, t: any, isRTL
                     </div>
                   ))}
                   
-                  {t.plans[key as keyof typeof t.plans].limitations.map((limitation: string, index: number) => (
+                  {t.plans[key as keyof typeof t.plans].limitations
+                    .filter((limitation: string) => !limitation.includes('documents per month') && !limitation.includes('مستند في الشهر'))
+                    .map((limitation: string, index: number) => (
                     <div key={index} className="flex items-start">
                       <X className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
                       <span className="ml-3 text-sm text-gray-400">

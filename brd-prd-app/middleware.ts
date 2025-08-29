@@ -1,6 +1,7 @@
 import createIntlMiddleware from 'next-intl/middleware';
 import { withAuth } from 'next-auth/middleware';
 import { NextRequest } from 'next/server';
+import { adminMiddleware, ADMIN_ROUTES } from '@/lib/admin-middleware';
 
 const intlMiddleware = createIntlMiddleware({
   // A list of all locales that are supported
@@ -44,7 +45,7 @@ const authMiddleware = withAuth(
   }
 );
 
-export default function middleware(req: NextRequest) {
+export default async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
   
   // Check if pathname starts with a valid locale for auth checking
@@ -55,6 +56,25 @@ export default function middleware(req: NextRequest) {
   if (hasValidLocale) {
     // Extract path without locale for route checking
     const pathWithoutLocale = pathname.replace(`/${locale}`, '');
+    
+    // Check for admin routes first
+    const isAdminRoute = pathWithoutLocale.startsWith('/admin');
+    if (isAdminRoute) {
+      // Find the specific admin route and its required permission
+      const adminRoute = Object.values(ADMIN_ROUTES).find(route => 
+        pathWithoutLocale.startsWith(route.path)
+      );
+      
+      const requiredPermission = adminRoute?.permission;
+      const adminAuthResult = await adminMiddleware(req, requiredPermission);
+      
+      if (adminAuthResult) {
+        return adminAuthResult;
+      }
+      
+      // If admin auth passes, still apply intl middleware for locale handling
+      return intlMiddleware(req);
+    }
     
     // Protected routes that require authentication
     const protectedRoutes = ['/dashboard', '/documents', '/profile', '/settings'];
