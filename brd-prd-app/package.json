@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm run env:validate && next dev",
+    "dev": "npm run env:validate && next dev --port 3000",
+    "dev:range": "node scripts/start-with-port-range.js",
+    "dev:domain": "node scripts/setup-local-domain.js && npm run dev:range",
+    "open": "node scripts/open-local-domain.js",
     "build": "npm run env:validate && next build",
     "start": "next start",
     "lint": "next lint",

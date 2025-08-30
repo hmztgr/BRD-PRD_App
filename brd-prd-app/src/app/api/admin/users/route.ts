@@ -52,7 +52,6 @@ export async function GET(req: NextRequest) {
           emailVerified: true,
           adminPermissions: true,
           subscriptionTier: true,
-          subscriptionStatus: true,
           tokensUsed: true,
           tokensLimit: true,
           createdAt: true,
@@ -63,7 +62,7 @@ export async function GET(req: NextRequest) {
           _count: {
             select: {
               documents: true,
-              referrals: true
+              referredUsers: true
             }
           }
         },
