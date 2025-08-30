@@ -181,7 +181,9 @@ export const authOptions: NextAuthOptions = {
               email: true,
               role: true,
               adminPermissions: true,
-              subscriptionTier: true
+              subscriptionTier: true,
+              subscriptionStatus: true,
+              totalReferralTokens: true
             }
           })
           
@@ -208,6 +210,8 @@ export const authOptions: NextAuthOptions = {
             }
             token.adminPermissions = permissions
             token.subscriptionTier = dbUser.subscriptionTier.toLowerCase()
+            token.subscriptionStatus = dbUser.subscriptionStatus
+            token.totalReferralTokens = dbUser.totalReferralTokens
           }
         } catch (error) {
           console.error("Error fetching user role for token:", error)
@@ -231,6 +235,8 @@ export const authOptions: NextAuthOptions = {
         session.user.role = token.role as string
         session.user.adminPermissions = token.adminPermissions as string[] || []
         session.user.subscriptionTier = token.subscriptionTier as string
+        session.user.subscriptionStatus = token.subscriptionStatus as string
+        session.user.totalReferralTokens = token.totalReferralTokens as number
         
         // Mark if this is a fallback user for debugging/monitoring
         if (token.isFallbackUser) {

@@ -17,6 +17,8 @@ model User {
   emailVerified DateTime?
   image         String?
   password      String?   // For credentials authentication
+  role          String    @default("user") // "user", "admin", "super_admin"
+  adminPermissions String? // JSON array of admin permissions
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 

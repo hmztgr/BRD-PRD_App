@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     // Hash password
     const hashedPassword = await hash('admin123', 10)
     
-    // Create admin user
+    // Create admin user for production/development database
     const admin = await prisma.user.upsert({
       where: { email: 'admin@smartdocs.ai' },
       update: {
@@ -30,9 +30,12 @@ export async function POST(req: NextRequest) {
         name: 'Admin User',
         password: hashedPassword,
         role: 'admin',
-        subscriptionTier: 'BASIC',
+        subscriptionTier: 'professional',
+        subscriptionStatus: 'active',
         tokensUsed: 0,
         tokensLimit: 50000,
+        totalReferralTokens: 0,
+        referralCode: 'ADMIN_' + Date.now(),
         emailVerified: new Date(),
         adminPermissions: JSON.stringify([
           'manage_users',
