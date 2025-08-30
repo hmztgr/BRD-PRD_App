@@ -61,7 +61,6 @@ export async function GET(req: NextRequest) {
           language: true,
           _count: {
             select: {
-              documents: true,
               referredUsers: true
             }
           }

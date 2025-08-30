@@ -27,7 +27,8 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
-        {/* Firebase Ultra-Blocker - Must load FIRST */}
+        {/* Ultra-Comprehensive Firebase Blocker - Must load FIRST */}
+        <script src="/ultra-firebase-blocker.js"></script>
         <script src="/firebase-blocker.js"></script>
         
         {/* Add Google Fonts for Arabic support */}
