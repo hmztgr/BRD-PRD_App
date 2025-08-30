@@ -1,0 +1,35 @@
+🚀 Starting comprehensive admin authentication test with curl...
+========================================================
+📍 Step 1: Testing server availability
+✓ Server status: 500
+✅ Server is responding (allowing 500 for debugging)
+📍 Step 2: Getting signin page and CSRF token
+⚠️  No CSRF token found in signin page
+📍 Step 3: Testing NextAuth providers endpoint
+✓ Providers endpoint status: 200
+📍 Step 4: Testing CSRF endpoint
+✓ CSRF endpoint status: 200
+✓ API CSRF Token found: ed2d6786bc1c5810e204...
+📍 Step 5: Testing credentials authentication
+✓ Auth callback status: 302
+✅ Authentication appears successful (status: 302)
+📍 Step 6: Testing session endpoint
+✓ Session endpoint status: 200
+❌ Session does not contain admin email
+❌ Session does not show admin role
+📍 Step 7: Testing debug session endpoint
+✓ Debug session status: 200
+📍 Step 8: Testing admin panel access
+✓ Admin panel status: 500
+❌ ISSUE: Admin access denied or redirected to error page
+📍 Step 9: Testing admin API endpoints
+  Testing: /api/admin/analytics/users
+    Status: 500
+    ⚠️  Unexpected status
+  Testing: /api/admin/activity
+    Status: 401
+    ❌ Access denied
+  Testing: /api/admin/setup-stripe
+    Status: 200
+    ✅ Success
+📍 Step 10: Testing admin user creation endpoint

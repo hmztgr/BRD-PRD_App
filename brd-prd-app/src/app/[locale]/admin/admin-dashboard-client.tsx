@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -13,7 +14,8 @@ import {
   Activity,
   Plus,
   AlertCircle,
-  CheckCircle
+  CheckCircle,
+  Shield
 } from 'lucide-react'
 
 interface DashboardMetrics {
@@ -36,6 +38,34 @@ interface DashboardMetrics {
 export function AdminDashboardClient() {
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null)
   const [loading, setLoading] = useState(true)
+  const [fallbackMode, setFallbackMode] = useState(false)
+  const { data: session } = useSession()
+
+  const getFallbackMetrics = (): DashboardMetrics => ({
+    totalUsers: 1,
+    activeSubscriptions: 1,
+    totalRevenue: 0,
+    documentsGenerated: 0,
+    newUsersToday: 0,
+    revenueGrowth: 0,
+    systemHealth: 'warning' as const,
+    recentActivities: [
+      {
+        id: '1',
+        action: 'Emergency admin mode activated',
+        user: 'System',
+        timestamp: new Date().toLocaleTimeString(),
+        type: 'system' as const
+      },
+      {
+        id: '2',
+        action: 'Fallback authentication enabled',
+        user: 'Emergency Admin',
+        timestamp: new Date().toLocaleTimeString(),
+        type: 'system' as const
+      }
+    ]
+  })
 
   useEffect(() => {
     const fetchDashboardMetrics = async () => {
@@ -44,13 +74,18 @@ export function AdminDashboardClient() {
         if (response.ok) {
           const data = await response.json()
           setMetrics(data)
+          setFallbackMode(false)
         } else {
           console.error('Failed to fetch dashboard metrics:', response.statusText)
-          // Keep loading state if API fails
+          console.log('Using fallback mode due to API failure')
+          setMetrics(getFallbackMetrics())
+          setFallbackMode(true)
         }
       } catch (error) {
         console.error('Error fetching dashboard metrics:', error)
-        // Keep loading state if API fails
+        console.log('Using fallback mode due to network error')
+        setMetrics(getFallbackMetrics())
+        setFallbackMode(true)
       } finally {
         setLoading(false)
       }
@@ -116,8 +151,27 @@ export function AdminDashboardClient() {
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Admin Dashboard</h1>
-          <p className="text-muted-foreground">Overview of your application's performance and user activity</p>
+          <div className="flex items-center space-x-3 rtl:space-x-reverse">
+            <h1 className="text-2xl font-bold text-foreground">Admin Dashboard</h1>
+            {fallbackMode && (
+              <Badge variant="outline" className="text-orange-600 border-orange-600">
+                <Shield className="h-3 w-3 mr-1" />
+                Emergency Mode
+              </Badge>
+            )}
+            {(session?.user as any)?.isFallbackUser && (
+              <Badge variant="outline" className="text-blue-600 border-blue-600">
+                <Shield className="h-3 w-3 mr-1" />
+                Fallback User
+              </Badge>
+            )}
+          </div>
+          <p className="text-muted-foreground">
+            {fallbackMode 
+              ? 'Emergency admin mode - database connectivity issues detected'
+              : 'Overview of your application\'s performance and user activity'
+            }
+          </p>
         </div>
         <div className="flex items-center space-x-3 rtl:space-x-reverse">
           {getHealthBadge(metrics.systemHealth)}

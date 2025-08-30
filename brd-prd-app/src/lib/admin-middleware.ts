@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getToken } from 'next-auth/jwt'
+import { getFallbackUserSession } from '@/lib/fallback-auth'
 
 /**
  * Admin Permission Types
@@ -79,6 +80,27 @@ export async function adminMiddleware(
       const signInUrl = new URL(`/${locale}/auth/signin`, req.url)
       signInUrl.searchParams.set('callbackUrl', req.nextUrl.pathname)
       return NextResponse.redirect(signInUrl)
+    }
+    
+    // Handle fallback users
+    if ((token as any).isFallbackUser) {
+      console.log('[AdminMiddleware] Processing fallback user:', token.email)
+      const userRole = (token as any).role
+      const userPermissions = (token as any).adminPermissions as string[]
+      
+      // Check if user is admin
+      if (!isAdmin(userRole)) {
+        return createUnauthorizedResponse(req)
+      }
+      
+      // Check specific permission if required
+      if (requiredPermission && !hasAdminPermission(userRole, userPermissions, requiredPermission)) {
+        return createForbiddenResponse(req)
+      }
+      
+      // Fallback user has required permissions, allow access
+      console.log('[AdminMiddleware] Fallback user authorized:', token.email)
+      return null
     }
     
     // We need to fetch fresh user data since JWT doesn't include role by default

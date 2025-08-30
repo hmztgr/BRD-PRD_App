@@ -1,0 +1,132 @@
+{
+  "testSuite": "Admin Authentication Validation",
+  "timestamp": "2025-08-30T12:19:33.806Z",
+  "summary": {
+    "total": 24,
+    "passed": 2,
+    "failed": 7,
+    "warnings": 5
+  },
+  "results": [
+    {
+      "timestamp": "2025-08-30T12:18:29.094Z",
+      "type": "info",
+      "message": "Starting comprehensive admin authentication validation..."
+    },
+    {
+      "timestamp": "2025-08-30T12:18:29.107Z",
+      "type": "info",
+      "message": "Testing server availability..."
+    },
+    {
+      "timestamp": "2025-08-30T12:18:29.999Z",
+      "type": "success",
+      "message": "Server is running and responsive"
+    },
+    {
+      "timestamp": "2025-08-30T12:18:29.999Z",
+      "type": "info",
+      "message": "Testing debug session endpoint..."
+    },
+    {
+      "timestamp": "2025-08-30T12:18:30.969Z",
+      "type": "error",
+      "message": "Debug endpoint failed: 0 undefined"
+    },
+    {
+      "timestamp": "2025-08-30T12:18:30.970Z",
+      "type": "info",
+      "message": "Testing admin login process..."
+    },
+    {
+      "timestamp": "2025-08-30T12:19:05.916Z",
+      "type": "error",
+      "message": "Failed to access sign-in page: 0"
+    },
+    {
+      "timestamp": "2025-08-30T12:19:05.917Z",
+      "type": "info",
+      "message": "Testing session creation after login..."
+    },
+    {
+      "timestamp": "2025-08-30T12:19:07.018Z",
+      "type": "error",
+      "message": "Session not created or invalid"
+    },
+    {
+      "timestamp": "2025-08-30T12:19:07.018Z",
+      "type": "info",
+      "message": "Testing admin panel access..."
+    },
+    {
+      "timestamp": "2025-08-30T12:19:09.799Z",
+      "type": "error",
+      "message": "Admin panel access failed: 0"
+    },
+    {
+      "timestamp": "2025-08-30T12:19:09.799Z",
+      "type": "info",
+      "message": "Testing admin API endpoints..."
+    },
+    {
+      "timestamp": "2025-08-30T12:19:10.964Z",
+      "type": "error",
+      "message": "API endpoint /api/admin/analytics/users failed: 0"
+    },
+    {
+      "timestamp": "2025-08-30T12:19:17.618Z",
+      "type": "error",
+      "message": "API endpoint /api/admin/analytics/system failed: 0"
+    },
+    {
+      "timestamp": "2025-08-30T12:19:20.780Z",
+      "type": "error",
+      "message": "API endpoint /api/admin/activity failed: 0"
+    },
+    {
+      "timestamp": "2025-08-30T12:19:20.780Z",
+      "type": "info",
+      "message": "Testing non-admin user blocking..."
+    },
+    {
+      "timestamp": "2025-08-30T12:19:25.517Z",
+      "type": "warning",
+      "message": "Non-admin user blocking may not be working properly"
+    },
+    {
+      "timestamp": "2025-08-30T12:19:25.517Z",
+      "type": "info",
+      "message": "Testing middleware security..."
+    },
+    {
+      "timestamp": "2025-08-30T12:19:28.028Z",
+      "type": "warning",
+      "message": "Endpoint /api/admin/analytics/users may not be properly secured: 0"
+    },
+    {
+      "timestamp": "2025-08-30T12:19:29.437Z",
+      "type": "warning",
+      "message": "Endpoint /api/admin/analytics/system may not be properly secured: 0"
+    },
+    {
+      "timestamp": "2025-08-30T12:19:29.437Z",
+      "type": "info",
+      "message": "Testing with curl commands..."
+    },
+    {
+      "timestamp": "2025-08-30T12:19:30.754Z",
+      "type": "success",
+      "message": "Test session endpoint: HTTP 200"
+    },
+    {
+      "timestamp": "2025-08-30T12:19:32.516Z",
+      "type": "warning",
+      "message": "Test admin panel redirect: HTTP 307"
+    },
+    {
+      "timestamp": "2025-08-30T12:19:33.805Z",
+      "type": "warning",
+      "message": "Test admin API security: HTTP 401"
+    }
+  ]
+}

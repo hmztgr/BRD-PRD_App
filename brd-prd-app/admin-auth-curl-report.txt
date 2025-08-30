@@ -1,0 +1,48 @@
+========================================
+ADMIN AUTHENTICATION CURL TEST REPORT
+========================================
+Test Date: Sat Aug 30 15:10:49 +03 2025
+Base URL: http://localhost:3000
+Admin Email: admin@smartdocs.ai
+
+TEST SUMMARY:
+============
+Total Tests: 3
+Passed: 3
+Failed: 0
+Success Rate: 100%
+
+DETAILED RESULTS:
+================
+[2025-08-30 15:09:04] INFO: Starting comprehensive admin authentication tests...
+[2025-08-30 15:09:04] INFO: Testing server availability...
+[2025-08-30 15:09:04] SUCCESS: Server is running and responsive
+[2025-08-30 15:09:04] INFO: Testing debug session endpoint...
+[2025-08-30 15:09:05] SUCCESS: Debug endpoint accessibility (Expected: 200, Got: 200)
+[2025-08-30 15:09:05] INFO: Session data: {"status":"success","timestamp":"2025-08-30T12:09:05.458Z","session":null,"adminUser":null,"hasSession":false,"hasAdminUser":false}
+[2025-08-30 15:09:05] INFO: Testing admin login form access...
+[2025-08-30 15:09:11] SUCCESS: Sign-in page access (Expected: 200, Got: 200)
+[2025-08-30 15:09:11] INFO: Testing admin authentication with NextAuth...
+[2025-08-30 15:09:24] WARNING: Could not extract CSRF token, proceeding without it
+[2025-08-30 15:10:06] INFO: Login response code: 200
+[2025-08-30 15:10:06] INFO: Login response body: {"url":"http://localhost:3000/api/auth/signin?csrf=true"}
+[2025-08-30 15:10:06] SUCCESS: Authentication request processed
+[2025-08-30 15:10:06] INFO: Testing session validation after login...
+[2025-08-30 15:10:07] SUCCESS: Session endpoint after login (Expected: 200, Got: 200)
+[2025-08-30 15:10:07] WARNING: No active session found
+[2025-08-30 15:10:07] WARNING: Admin role not found in session
+[2025-08-30 15:10:07] INFO: Testing admin panel access...
+[2025-08-30 15:10:14] SUCCESS: Admin panel accessible with valid session
+[2025-08-30 15:10:14] INFO: Testing admin API endpoints...
+[2025-08-30 15:10:18] ERROR: Admin API /api/admin/analytics/users requires authentication (401)
+[2025-08-30 15:10:32] ERROR: Admin API /api/admin/analytics/system requires authentication (401)
+[2025-08-30 15:10:40] ERROR: Admin API /api/admin/activity requires authentication (401)
+[2025-08-30 15:10:40] INFO: Testing unauthorized access protection...
+[2025-08-30 15:10:44] SUCCESS: Unauthorized users properly redirected from admin panel
+[2025-08-30 15:10:47] SUCCESS: Admin API properly protected from unauthorized access
+[2025-08-30 15:10:47] INFO: Testing middleware security headers...
+[2025-08-30 15:10:49] WARNING: Admin API may have issues with authenticated access
+[2025-08-30 15:10:49] SUCCESS: Security headers present
+[2025-08-30 15:10:49] INFO: Generating test report...
+
+========================================

@@ -1,0 +1,114 @@
+// This is your Prisma schema file for SQLite development
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String   @id @default(uuid())
+  email             String   @unique
+  name              String?
+  image             String?
+  role              String   @default("USER") // USER, ADMIN
+  subscriptionTier  String   @default("BASIC") // BASIC, PROFESSIONAL, ENTERPRISE
+  stripeCustomerId  String?  @unique
+  isEmailVerified   Boolean  @default(false)
+  emailVerificationToken String?
+  emailVerificationExpires DateTime?
+  resetPasswordToken String?
+  resetPasswordExpires DateTime?
+  tokensUsed        Int      @default(0)
+  tokensLimit       Int      @default(10000)
+  referralCode      String?  @unique
+  referredBy        String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  lastLoginAt       DateTime?
+
+  // Relations
+  documents    Document[]
+  subscriptions Subscription[]
+  feedback     Feedback[]
+  referrals    User[]       @relation("UserReferrals")
+  referrer     User?        @relation("UserReferrals", fields: [referredBy], references: [id])
+
+  @@map("users")
+}
+
+model Document {
+  id          String   @id @default(uuid())
+  title       String
+  type        String   // BRD, PRD, COMBINED
+  content     String
+  metadata    String?  // JSON string
+  status      String   @default("DRAFT") // DRAFT, GENERATING, COMPLETED, ERROR
+  tokensUsed  Int      @default(0)
+  version     Int      @default(1)
+  isPublic    Boolean  @default(false)
+  tags        String?  // Comma-separated tags
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("documents")
+}
+
+model Subscription {
+  id                String   @id @default(uuid())
+  userId            String
+  stripeSubscriptionId String @unique
+  status            String   // active, canceled, past_due, etc.
+  tier              String   // BASIC, PROFESSIONAL, ENTERPRISE
+  priceId           String
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  cancelAtPeriodEnd Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("subscriptions")
+}
+
+model Feedback {
+  id          String   @id @default(uuid())
+  userId      String?
+  type        String   // BUG, FEATURE, GENERAL
+  subject     String
+  message     String
+  status      String   @default("OPEN") // OPEN, IN_PROGRESS, RESOLVED, CLOSED
+  priority    String   @default("MEDIUM") // LOW, MEDIUM, HIGH, CRITICAL
+  metadata    String?  // JSON string for additional data
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("feedback")
+}
+
+model FileUpload {
+  id          String   @id @default(uuid())
+  filename    String
+  originalName String
+  mimeType    String
+  size        Int
+  path        String
+  userId      String?
+  metadata    String?  // JSON string
+  createdAt   DateTime @default(now())
+
+  @@map("file_uploads")
+}

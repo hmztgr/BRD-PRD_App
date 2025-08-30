@@ -1,267 +1,160 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { requireAdmin, hasAdminPermission, logAdminActivity } from '@/lib/admin-auth';
-import bcrypt from 'bcryptjs';
+import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { requireAdmin, hasAdminPermission, logAdminActivity } from '@/lib/admin-auth'
 
-interface RouteParams {
-  params: Promise<{
-    id: string;
-  }>;
-}
-
-// GET /api/admin/users/[id] - Get user details
-export async function GET(req: NextRequest, { params }: RouteParams) {
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
-    const adminUser = await requireAdmin();
+    // USE EXISTING AUTH FUNCTIONS - DO NOT CHANGE
+    const adminUser = await requireAdmin()
     
     if (!hasAdminPermission(adminUser, 'manage_users')) {
       return NextResponse.json(
         { error: 'Insufficient permissions' },
         { status: 403 }
-      );
+      )
     }
 
-    const { id } = await params;
+    const { id } = params
+
+    // Validate user exists
     const user = await prisma.user.findUnique({
-      where: { id },
-      include: {
-        _count: {
-          select: {
-            documents: true,
-            referrals: true,
-            usageHistory: true,
-            payments: true
-          }
-        },
-        usageHistory: {
-          orderBy: { date: 'desc' },
-          take: 10,
-          select: {
-            id: true,
-            date: true,
-            tokensUsed: true,
-            operation: true,
-            aiModel: true,
-            success: true
-          }
-        },
-        payments: {
-          orderBy: { createdAt: 'desc' },
-          take: 5,
-          select: {
-            id: true,
-            amount: true,
-            currency: true,
-            status: true,
-            createdAt: true
-          }
-        }
-      }
-    });
+      where: { id }
+    })
 
     if (!user) {
       return NextResponse.json(
         { error: 'User not found' },
         { status: 404 }
-      );
-    }
-
-    await logAdminActivity(
-      adminUser.id,
-      'view_user_details',
-      id
-    );
-
-    return NextResponse.json({ user });
-
-  } catch (error: any) {
-    console.error('Admin user GET error:', error);
-    return NextResponse.json(
-      { error: error.message || 'Internal server error' },
-      { status: error.message === 'Admin access required' ? 401 : 500 }
-    );
-  }
-}
-
-// PUT /api/admin/users/[id] - Update user
-export async function PUT(req: NextRequest, { params }: RouteParams) {
-  try {
-    const adminUser = await requireAdmin();
-    const { id } = await params;
-    
-    if (!hasAdminPermission(adminUser, 'manage_users')) {
-      return NextResponse.json(
-        { error: 'Insufficient permissions' },
-        { status: 403 }
-      );
-    }
-
-    const body = await req.json();
-    const {
-      name,
-      email,
-      role,
-      subscriptionTier,
-      subscriptionStatus,
-      tokensLimit,
-      companyName,
-      industry,
-      language,
-      password
-    } = body;
-
-    // Prevent self-demotion from super_admin
-    if (adminUser.id === id && adminUser.role === 'super_admin' && role !== 'super_admin') {
-      return NextResponse.json(
-        { error: 'Cannot demote yourself from super_admin role' },
-        { status: 400 }
-      );
-    }
-
-    const updateData: any = {};
-    
-    if (name !== undefined) updateData.name = name;
-    if (email !== undefined) updateData.email = email;
-    if (role !== undefined) updateData.role = role;
-    if (subscriptionTier !== undefined) updateData.subscriptionTier = subscriptionTier;
-    if (subscriptionStatus !== undefined) updateData.subscriptionStatus = subscriptionStatus;
-    if (tokensLimit !== undefined) updateData.tokensLimit = parseInt(tokensLimit);
-    if (companyName !== undefined) updateData.companyName = companyName;
-    if (industry !== undefined) updateData.industry = industry;
-    if (language !== undefined) updateData.language = language;
-
-    // Handle password update
-    if (password && password.length >= 6) {
-      updateData.password = await bcrypt.hash(password, 12);
-    } else if (password && password.length < 6) {
-      return NextResponse.json(
-        { error: 'Password must be at least 6 characters' },
-        { status: 400 }
-      );
-    }
-
-    const user = await prisma.user.update({
-      where: { id: id },
-      data: updateData,
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        subscriptionTier: true,
-        subscriptionStatus: true,
-        tokensUsed: true,
-        tokensLimit: true,
-        updatedAt: true
-      }
-    });
-
-    await logAdminActivity(
-      adminUser.id,
-      'update_user',
-      id,
-      { updatedFields: Object.keys(updateData) }
-    );
-
-    return NextResponse.json({
-      success: true,
-      user
-    });
-
-  } catch (error: any) {
-    console.error('Admin user PUT error:', error);
-    
-    if (error.code === 'P2002' && error.meta?.target?.includes('email')) {
-      return NextResponse.json(
-        { error: 'Email already exists' },
-        { status: 400 }
-      );
-    }
-    
-    if (error.code === 'P2025') {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json(
-      { error: error.message || 'Internal server error' },
-      { status: error.message === 'Admin access required' ? 401 : 500 }
-    );
-  }
-}
-
-// DELETE /api/admin/users/[id] - Delete user
-export async function DELETE(req: NextRequest, { params }: RouteParams) {
-  try {
-    const adminUser = await requireAdmin();
-    const { id } = await params;
-    
-    if (!hasAdminPermission(adminUser, 'manage_users')) {
-      return NextResponse.json(
-        { error: 'Insufficient permissions' },
-        { status: 403 }
-      );
+      )
     }
 
     // Prevent self-deletion
-    if (adminUser.id === id) {
+    if (user.id === adminUser.id) {
       return NextResponse.json(
         { error: 'Cannot delete your own account' },
         { status: 400 }
-      );
+      )
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: id },
-      select: { id: true, email: true, role: true }
-    });
-
-    if (!user) {
+    // Prevent deletion of other admins unless super admin
+    if ((user.role === 'admin' || user.role === 'super_admin') && adminUser.role !== 'super_admin') {
       return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
-    }
-
-    // Only super_admin can delete other admins
-    if (user.role !== 'user' && adminUser.role !== 'super_admin') {
-      return NextResponse.json(
-        { error: 'Only super_admin can delete admin users' },
+        { error: 'Only super admins can delete other admin accounts' },
         { status: 403 }
-      );
+      )
     }
 
+    // Delete user and all related data (cascade delete)
     await prisma.user.delete({
-      where: { id: id }
-    });
+      where: { id }
+    })
 
+    // Log admin activity
     await logAdminActivity(
       adminUser.id,
-      'delete_user',
-      id,
-      { email: user.email, role: user.role }
-    );
+      'Deleted user account',
+      user.id,
+      { 
+        deletedUser: {
+          email: user.email,
+          name: user.name,
+          role: user.role
+        }
+      }
+    )
 
     return NextResponse.json({
       success: true,
       message: 'User deleted successfully'
-    });
+    })
 
-  } catch (error: any) {
-    console.error('Admin user DELETE error:', error);
+  } catch (error) {
+    console.error('Delete user error:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    // USE EXISTING AUTH FUNCTIONS - DO NOT CHANGE
+    const adminUser = await requireAdmin()
     
-    if (error.code === 'P2025') {
+    if (!hasAdminPermission(adminUser, 'manage_users')) {
+      return NextResponse.json(
+        { error: 'Insufficient permissions' },
+        { status: 403 }
+      )
+    }
+
+    const { id } = params
+    const body = await req.json()
+    const { name, email, role, subscriptionTier, tokensLimit } = body
+
+    // Validate user exists
+    const user = await prisma.user.findUnique({
+      where: { id }
+    })
+
+    if (!user) {
       return NextResponse.json(
         { error: 'User not found' },
         { status: 404 }
-      );
+      )
     }
 
+    // Build update data
+    const updateData: any = {
+      updatedAt: new Date()
+    }
+
+    if (name !== undefined) updateData.name = name
+    if (email !== undefined) updateData.email = email
+    if (role !== undefined) {
+      // Only super admin can assign super admin role
+      if (role === 'super_admin' && adminUser.role !== 'super_admin') {
+        return NextResponse.json(
+          { error: 'Only super admins can assign super admin role' },
+          { status: 403 }
+        )
+      }
+      updateData.role = role
+    }
+    if (subscriptionTier !== undefined) updateData.subscriptionTier = subscriptionTier
+    if (tokensLimit !== undefined) updateData.tokensLimit = tokensLimit
+
+    // Update user
+    const updatedUser = await prisma.user.update({
+      where: { id },
+      data: updateData
+    })
+
+    // Log admin activity
+    await logAdminActivity(
+      adminUser.id,
+      'Updated user details',
+      user.id,
+      { changes: body }
+    )
+
+    return NextResponse.json({
+      success: true,
+      user: updatedUser
+    })
+
+  } catch (error) {
+    console.error('Update user error:', error)
     return NextResponse.json(
-      { error: error.message || 'Internal server error' },
-      { status: error.message === 'Admin access required' ? 401 : 500 }
-    );
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
   }
 }

@@ -7,7 +7,6 @@ declare module "next-auth" {
       role?: string
       adminPermissions?: string[]
       subscriptionTier?: string
-      subscriptionStatus?: string
     } & DefaultSession["user"]
   }
   
@@ -16,7 +15,6 @@ declare module "next-auth" {
     role?: string
     adminPermissions?: string[]
     subscriptionTier?: string
-    subscriptionStatus?: string
   }
 }
 
@@ -26,6 +24,5 @@ declare module "next-auth/jwt" {
     role?: string
     adminPermissions?: string[]
     subscriptionTier?: string
-    subscriptionStatus?: string
   }
 }

@@ -1,0 +1,1 @@
+{"message":"Use POST to setup Stripe products","note":"Make sure STRIPE_SECRET_KEY is set in .env.local"}
