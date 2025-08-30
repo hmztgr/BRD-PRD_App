@@ -121,7 +121,12 @@
       "mcp__vercel__get_deployment_build_logs",
       "mcp__vercel__web_fetch_vercel_url",
       "mcp__vercel__web_fetch_vercel_url",
-      "mcp__vercel__list_deployments"
+      "mcp__vercel__list_deployments",
+      "Bash(dir prismadev.db)",
+      "Bash(dir dev.db)",
+      "Bash(set DATABASE_URL=file:./prisma/dev.db)",
+      "Bash(PORT=3004 npm run dev)",
+      "Bash(del nul)"
     ],
     "deny": [],
     "ask": [],
