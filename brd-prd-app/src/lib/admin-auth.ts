@@ -22,39 +22,42 @@ export interface AdminUser {
 export async function getAdminUser(): Promise<AdminUser | null> {
   try {
     const session = await getServerSession(authOptions)
-    if (!session?.user?.id) return null
+    if (!session?.user?.id) {
+      console.log('[AdminAuth] No session found')
+      return null
+    }
 
-    // Use query with admin permissions columns (handle enum mismatch for subscriptionTier)
+    // Simple check: get user's systemRole from database
     const result = await prisma.$queryRaw`
-      SELECT id, name, email, "adminPermissions"
+      SELECT id, name, email, "systemRole", "adminPermissions"
       FROM users 
       WHERE id = ${session.user.id}
     `
 
     const users = result as any[]
     if (!users || users.length === 0) {
+      console.log('[AdminAuth] User not found in database')
       return null
     }
 
     const user = users[0]
+    console.log('[AdminAuth] User found:', { email: user.email, systemRole: user.systemRole })
     
-    // Check if user has admin permissions set OR is in hardcoded admin list
-    const adminEmails = ['admin@smartdocs.ai', 'hamza@smartdocs.ai']
-    const adminPerms = user.adminPermissions || []
-    const hasPermissions = Array.isArray(adminPerms) && adminPerms.length > 0
-    const isEmailAdmin = adminEmails.includes(user.email)
-    
-    if (!hasPermissions && !isEmailAdmin) {
+    // Simple check: allow SUPER_ADMIN and SUB_ADMIN
+    if (user.systemRole !== 'SUPER_ADMIN' && user.systemRole !== 'SUB_ADMIN') {
+      console.log('[AdminAuth] User is not admin. SystemRole:', user.systemRole)
       return null
     }
 
-    // Return admin user with permissions from DB or default permissions for email admins
+    console.log('[AdminAuth] Admin access granted for:', user.email)
+    
+    // Return admin user
     return {
       id: user.id,
       name: user.name,
       email: user.email,
-      role: 'admin',
-      adminPermissions: hasPermissions ? adminPerms : [
+      role: user.systemRole === 'SUPER_ADMIN' ? 'super_admin' : 'admin',
+      adminPermissions: user.adminPermissions || [
         'manage_users',
         'manage_feedback', 
         'manage_content',

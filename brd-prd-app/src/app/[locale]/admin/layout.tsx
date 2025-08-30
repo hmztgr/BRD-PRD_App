@@ -15,10 +15,15 @@ export default async function AdminLayoutWrapper({
   // Await params as required by Next.js
   const { locale } = await params
   
+  console.log('[AdminLayout] Checking admin access...')
+  
   // Server-side admin authentication check
   const adminUser = await getAdminUser()
   
+  console.log('[AdminLayout] Admin user result:', adminUser ? 'GRANTED' : 'DENIED')
+  
   if (!adminUser) {
+    console.log('[AdminLayout] Redirecting to signin - no admin access')
     redirect(`/${locale}/auth/signin?message=admin-access-required`)
   }
 
