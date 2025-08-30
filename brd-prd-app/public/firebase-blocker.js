@@ -3,17 +3,19 @@
 
 console.log('[Firebase Ultra-Blocker] Starting ultra-aggressive Firebase blocker...');
 
-// Block fetch API immediately
+// Block fetch API immediately - but only Firebase domains
 if (typeof window !== 'undefined' && window.fetch) {
   const originalFetch = window.fetch;
   window.fetch = function(...args) {
     const resource = args[0];
     if (typeof resource === 'string' && (
-      resource.includes('firebase') ||
+      resource.includes('firebase.googleapis.com') ||
       resource.includes('securetoken.googleapis.com') ||
-      resource.includes('identitytoolkit.googleapis.com')
+      resource.includes('identitytoolkit.googleapis.com') ||
+      resource.includes('firebaseapp.com') ||
+      resource.includes('firestore.googleapis.com')
     )) {
-      console.warn('[Firebase Ultra-Blocker] BLOCKED:', resource);
+      console.warn('[Firebase Ultra-Blocker] BLOCKED Firebase API:', resource);
       return Promise.reject(new Error('Firebase blocked to prevent quota exceeded'));
     }
     return originalFetch.apply(this, args);
@@ -28,9 +30,11 @@ if (typeof window !== 'undefined' && window.XMLHttpRequest) {
     const originalOpen = xhr.open;
     xhr.open = function(method, url, ...args) {
       if (typeof url === 'string' && (
-        url.includes('firebase') ||
+        url.includes('firebase.googleapis.com') ||
         url.includes('securetoken.googleapis.com') ||
-        url.includes('identitytoolkit.googleapis.com')
+        url.includes('identitytoolkit.googleapis.com') ||
+        url.includes('firebaseapp.com') ||
+        url.includes('firestore.googleapis.com')
       )) {
         console.warn('[Firebase Ultra-Blocker] BLOCKED XHR:', url);
         throw new Error('Firebase XHR blocked');
