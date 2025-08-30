@@ -16,20 +16,9 @@ import {
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as any,
   providers: [
-    // OAuth providers completely disabled to prevent Firebase quota issues
+    // OAuth providers COMPLETELY DISABLED to prevent Firebase/database issues
     // Only credentials-based authentication is enabled
-    ...(process.env.ENABLE_OAUTH === 'true' && process.env.GOOGLE_CLIENT_ID ? [
-      GoogleProvider({
-        clientId: process.env.GOOGLE_CLIENT_ID!,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      })
-    ] : []),
-    ...(process.env.ENABLE_OAUTH === 'true' && process.env.LINKEDIN_CLIENT_ID ? [
-      LinkedInProvider({
-        clientId: process.env.LINKEDIN_CLIENT_ID!,
-        clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,
-      })
-    ] : []),
+    // DO NOT enable OAuth providers until Firebase quota issues are resolved
     CredentialsProvider({
       name: "credentials",
       credentials: {

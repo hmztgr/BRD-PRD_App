@@ -79,12 +79,23 @@ export async function authenticateFallbackUser(
  */
 export async function isDatabaseAvailable(): Promise<boolean> {
   try {
+    console.log('[FallbackAuth] Testing database availability...')
+    console.log('[FallbackAuth] DATABASE_URL exists:', !!process.env.DATABASE_URL)
+    console.log('[FallbackAuth] DATABASE_URL preview:', process.env.DATABASE_URL?.substring(0, 20) + '...')
+    
     // Try to import and test database connection
     const { prisma } = await import('@/lib/prisma')
+    console.log('[FallbackAuth] Prisma imported successfully')
+    
     await prisma.$queryRaw`SELECT 1`
+    console.log('[FallbackAuth] Database connection test successful')
     return true
   } catch (error) {
-    console.log('[FallbackAuth] Database unavailable:', error.message)
+    console.error('[FallbackAuth] Database unavailable:', {
+      message: error.message,
+      code: error.code,
+      stack: error.stack?.substring(0, 200)
+    })
     return false
   }
 }
