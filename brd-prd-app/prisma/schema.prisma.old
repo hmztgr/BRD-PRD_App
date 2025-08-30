@@ -1,0 +1,154 @@
+// This is your Prisma schema file
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SystemRole {
+  SUPER_ADMIN
+  SUB_ADMIN
+  USER
+}
+
+enum UserTier {
+  FREE
+  HOBBY
+  PROFESSIONAL
+  BUSINESS
+  ENTERPRISE
+}
+
+model User {
+  id                        String       @id @default(cuid())
+  name                      String?
+  email                     String       @unique
+  emailVerified            DateTime?
+  image                     String?
+  password                  String?
+  createdAt                 DateTime     @default(now())
+  updatedAt                 DateTime     @updatedAt
+  companyName               String?
+  industry                  String?
+  companySize               String?
+  location                  String?
+  language                  String       @default("en")
+  timezone                  String?
+  subscriptionStatus        String       @default("active")
+  tokensUsed                Int          @default(0)
+  tokensLimit               Int          @default(10000)
+  billingCycle              String       @default("monthly")
+  subscriptionEndsAt        DateTime?
+  stripeCustomerId          String?
+  stripeSubscriptionId      String?
+  adminPermissions          Json?
+  referralCode              String       @unique @default(cuid())
+  referredBy                String?
+  totalReferralTokens       Int          @default(0)
+  systemRole                SystemRole   @default(USER)
+  teamId                    String?
+  teamRole                  String?
+  teamRoleLevel             Int?
+  subscriptionTier          UserTier     @default(FREE)
+  role                      String?
+
+  // Relations
+  accounts         Account[]
+  sessions         Session[]
+  documents        Document[]
+  conversations    Conversation[]
+  researchRequests ResearchRequest[]
+  feedback         Feedback[]
+  contactRequests  ContactRequest[]
+  supportTickets   SupportTicket[]
+  adminActivities  AdminActivity[]
+  referredUsers    User[]                  @relation("UserReferrals")
+  referrer         User?                   @relation("UserReferrals", fields: [referredBy], references: [id])
+  usageHistory     UsageHistory[]
+  payments         Payment[]
+  referralRewards  ReferralReward[]
+  emailTokens      EmailToken[]
+  team             Team?                   @relation(fields: [teamId], references: [id])
+  teamMemberships  TeamMember[]
+  createdTemplates Template[]
+  comments         Comment[]
+
+  @@map("users")
+}
+
+model Document {
+  id          String   @id @default(uuid())
+  title       String
+  type        String   // BRD, PRD, COMBINED
+  content     String
+  metadata    String?  // JSON string
+  status      String   @default("DRAFT") // DRAFT, GENERATING, COMPLETED, ERROR
+  tokensUsed  Int      @default(0)
+  version     Int      @default(1)
+  isPublic    Boolean  @default(false)
+  tags        String?  // Comma-separated tags
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("documents")
+}
+
+model Subscription {
+  id                String   @id @default(uuid())
+  userId            String
+  stripeSubscriptionId String @unique
+  status            String   // active, canceled, past_due, etc.
+  tier              String   // BASIC, PROFESSIONAL, ENTERPRISE
+  priceId           String
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  cancelAtPeriodEnd Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("subscriptions")
+}
+
+model Feedback {
+  id          String   @id @default(uuid())
+  userId      String?
+  type        String   // BUG, FEATURE, GENERAL
+  subject     String
+  message     String
+  status      String   @default("OPEN") // OPEN, IN_PROGRESS, RESOLVED, CLOSED
+  priority    String   @default("MEDIUM") // LOW, MEDIUM, HIGH, CRITICAL
+  metadata    String?  // JSON string for additional data
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("feedback")
+}
+
+model FileUpload {
+  id          String   @id @default(uuid())
+  filename    String
+  originalName String
+  mimeType    String
+  size        Int
+  path        String
+  userId      String?
+  metadata    String?  // JSON string
+  createdAt   DateTime @default(now())
+
+  @@map("file_uploads")
+}

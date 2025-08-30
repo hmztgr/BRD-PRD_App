@@ -1,4 +1,4 @@
-// This is your Prisma schema file for SQLite development
+// This is your Prisma schema file
 // Learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
@@ -6,112 +6,469 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
+enum SystemRole {
+  SUPER_ADMIN
+  SUB_ADMIN
+  USER
+}
+
+enum UserTier {
+  FREE
+  HOBBY
+  PROFESSIONAL
+  BUSINESS
+  ENTERPRISE
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? 
+  access_token      String? 
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? 
+  session_state     String?
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verificationtokens")
+}
+
 model User {
-  id                String   @id @default(uuid())
-  email             String   @unique
-  name              String?
-  password          String?  // For credentials authentication
-  image             String?
-  role              String   @default("USER") // USER, ADMIN
-  adminPermissions  String?  // JSON array of admin permissions
-  subscriptionTier  String   @default("BASIC") // BASIC, PROFESSIONAL, ENTERPRISE
-  stripeCustomerId  String?  @unique
-  emailVerified     DateTime?  // For NextAuth compatibility
-  isEmailVerified   Boolean  @default(false)
-  emailVerificationToken String?
-  emailVerificationExpires DateTime?
-  resetPasswordToken String?
-  resetPasswordExpires DateTime?
-  tokensUsed        Int      @default(0)
-  tokensLimit       Int      @default(10000)
-  referralCode      String?  @unique
-  referredBy        String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  lastLoginAt       DateTime?
+  id                        String       @id @default(cuid())
+  name                      String?
+  email                     String       @unique
+  emailVerified            DateTime?
+  image                     String?
+  password                  String?
+  createdAt                 DateTime     @default(now())
+  updatedAt                 DateTime     @updatedAt
+  companyName               String?
+  industry                  String?
+  companySize               String?
+  location                  String?
+  language                  String       @default("en")
+  timezone                  String?
+  subscriptionStatus        String       @default("active")
+  tokensUsed                Int          @default(0)
+  tokensLimit               Int          @default(10000)
+  billingCycle              String       @default("monthly")
+  subscriptionEndsAt        DateTime?
+  stripeCustomerId          String?
+  stripeSubscriptionId      String?
+  adminPermissions          Json?
+  referralCode              String       @unique @default(cuid())
+  referredBy                String?
+  totalReferralTokens       Int          @default(0)
+  systemRole                SystemRole   @default(USER)
+  teamId                    String?
+  teamRole                  String?
+  teamRoleLevel             Int?
+  subscriptionTier          UserTier     @default(FREE)
+  role                      String?
 
   // Relations
-  documents    Document[]
-  subscriptions Subscription[]
-  feedback     Feedback[]
-  referrals    User[]       @relation("UserReferrals")
-  referrer     User?        @relation("UserReferrals", fields: [referredBy], references: [id])
+  accounts         Account[]
+  sessions         Session[]
+  documents        Document[]
+  conversations    Conversation[]
+  researchRequests ResearchRequest[]
+  feedback         Feedback[]
+  contactRequests  ContactRequest[]
+  supportTickets   SupportTicket[]
+  adminActivities  AdminActivity[]
+  referredUsers    User[]                  @relation("UserReferrals")
+  referrer         User?                   @relation("UserReferrals", fields: [referredBy], references: [id])
+  usageHistory     UsageHistory[]
+  payments         Payment[]
+  referralRewards  ReferralReward[]
+  emailTokens      EmailToken[]
+  team             Team?                   @relation(fields: [teamId], references: [id])
+  teamMemberships  TeamMember[]
+  createdTemplates Template[]
+  comments         Comment[]
 
   @@map("users")
 }
 
-model Document {
-  id          String   @id @default(uuid())
-  title       String
-  type        String   // BRD, PRD, COMBINED
-  content     String
-  metadata    String?  // JSON string
-  status      String   @default("DRAFT") // DRAFT, GENERATING, COMPLETED, ERROR
-  tokensUsed  Int      @default(0)
-  version     Int      @default(1)
-  isPublic    Boolean  @default(false)
-  tags        String?  // Comma-separated tags
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+model EmailToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  type      String
+  userId    String
+  email     String
+  expires   DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("email_tokens")
+}
 
-  // Relations
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Document {
+  id              String   @id @default(cuid())
+  title           String
+  content         String
+  type            String
+  status          String   @default("draft")
+  language        String   @default("en")
+  tokensUsed      Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  aiModel         String?
+  promptUsed      String?
+  generationTime  Int?
+  userId          String
+  teamId          String?
+  metadata        Json?
+  
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team             Team?             @relation(fields: [teamId], references: [id])
+  versions         DocumentVersion[]
+  comments         Comment[]
+  shares           DocumentShare[]
 
   @@map("documents")
 }
 
-model Subscription {
-  id                String   @id @default(uuid())
-  userId            String
-  stripeSubscriptionId String @unique
-  status            String   // active, canceled, past_due, etc.
-  tier              String   // BASIC, PROFESSIONAL, ENTERPRISE
-  priceId           String
-  currentPeriodStart DateTime
-  currentPeriodEnd   DateTime
-  cancelAtPeriodEnd Boolean  @default(false)
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+model DocumentVersion {
+  id         String   @id @default(cuid())
+  version    Int
+  content    String
+  changes    String?
+  createdAt  DateTime @default(now())
+  createdBy  String
+  documentId String
+  
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  
+  @@map("document_versions")
+}
 
-  // Relations
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Comment {
+  id         String    @id @default(cuid())
+  content    String
+  position   Int?
+  resolved   Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  documentId String
+  authorId   String
+  parentId   String?
+  
+  document Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies  Comment[] @relation("CommentReplies")
+  
+  @@map("comments")
+}
 
-  @@map("subscriptions")
+model DocumentShare {
+  id         String    @id @default(cuid())
+  shareCode  String    @unique
+  permission String    @default("view")
+  expiresAt  DateTime?
+  createdAt  DateTime  @default(now())
+  documentId String
+  sharedBy   String
+  sharedWith String?
+  
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  
+  @@map("document_shares")
+}
+
+model Team {
+  id               String   @id @default(cuid())
+  name             String
+  description      String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  maxRoleLevels    Int      @default(3)
+  ownerId          String
+  subscriptionTier UserTier @default(BUSINESS)
+  
+  members   TeamMember[]
+  users     User[]
+  roles     TeamRole[]
+  documents Document[]
+  
+  @@map("teams")
+}
+
+model TeamMember {
+  id             String   @id @default(cuid())
+  joinedAt       DateTime @default(now())
+  userId         String
+  teamId         String
+  customRoleName String?
+  invitedAt      DateTime @default(now())
+  invitedBy      String?
+  roleLevel      Int
+  
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("team_members")
+}
+
+model TeamRole {
+  id          String   @id @default(cuid())
+  name        String
+  level       Int
+  description String?
+  permissions Json
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  teamId      String
+  
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  
+  @@map("team_roles")
+}
+
+model ReferralReward {
+  id          String   @id @default(cuid())
+  type        String
+  tokens      Int
+  description String
+  claimed     Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  userId      String
+  referredId  String?
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("referral_rewards")
+}
+
+model UsageHistory {
+  id           String   @id @default(cuid())
+  date         DateTime @default(now())
+  tokensUsed   Int
+  operation    String
+  documentType String?
+  aiModel      String?
+  success      Boolean  @default(true)
+  userId       String
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("usage_history")
+}
+
+model Payment {
+  id              String   @id @default(cuid())
+  stripePaymentId String   @unique
+  amount          Int
+  currency        String   @default("usd")
+  status          String
+  description     String?
+  createdAt       DateTime @default(now())
+  userId          String
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("payments")
+}
+
+model Template {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  category    String
+  industry    String?
+  language    String   @default("en")
+  prompt      String
+  structure   Json
+  isPublic    Boolean  @default(false)
+  usageCount  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdBy   String?
+  
+  creator User? @relation(fields: [createdBy], references: [id])
+  
+  @@map("templates")
+}
+
+model Conversation {
+  id        String   @id @default(cuid())
+  status    String   @default("active")
+  metadata  Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages Message[]
+  
+  @@map("conversations")
+}
+
+model Message {
+  id             String   @id @default(cuid())
+  role           String
+  content        String
+  metadata       Json?
+  createdAt      DateTime @default(now())
+  conversationId String
+  
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  
+  @@map("messages")
+}
+
+model ResearchRequest {
+  id          String    @id @default(cuid())
+  type        String
+  query       String
+  priority    String
+  status      String    @default("pending")
+  sessionId   String?
+  findings    Json?
+  confidence  Int?
+  sources     String[]
+  metadata    Json?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  completedAt DateTime?
+  userId      String
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("research_requests")
 }
 
 model Feedback {
-  id          String   @id @default(uuid())
+  id          String    @id @default(cuid())
   userId      String?
-  type        String   // BUG, FEATURE, GENERAL
-  subject     String
+  email       String?
+  name        String?
+  rating      Int
+  title       String
   message     String
-  status      String   @default("OPEN") // OPEN, IN_PROGRESS, RESOLVED, CLOSED
-  priority    String   @default("MEDIUM") // LOW, MEDIUM, HIGH, CRITICAL
-  metadata    String?  // JSON string for additional data
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  // Relations
-  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
-
+  category    String
+  status      String    @default("pending")
+  isPublic    Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  approvedAt  DateTime?
+  approvedBy  String?
+  
+  user User? @relation(fields: [userId], references: [id])
+  
   @@map("feedback")
 }
 
-model FileUpload {
-  id          String   @id @default(uuid())
-  filename    String
-  originalName String
-  mimeType    String
-  size        Int
-  path        String
+model ContactRequest {
+  id          String    @id @default(cuid())
+  name        String
+  email       String
+  subject     String
+  message     String
+  type        String    @default("general")
+  status      String    @default("open")
+  priority    String    @default("medium")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  respondedAt DateTime?
+  respondedBy String?
+  response    String?
   userId      String?
-  metadata    String?  // JSON string
-  createdAt   DateTime @default(now())
+  
+  user User? @relation(fields: [userId], references: [id])
+  
+  @@map("contact_requests")
+}
 
-  @@map("file_uploads")
+model SupportTicket {
+  id          String    @id @default(cuid())
+  title       String
+  description String
+  chatContext Json?
+  category    String
+  status      String    @default("open")
+  priority    String    @default("medium")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  resolvedAt  DateTime?
+  assignedTo  String?
+  userId      String
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("support_tickets")
+}
+
+model AdminActivity {
+  id         String   @id @default(cuid())
+  adminId    String
+  action     String
+  targetId   String?
+  details    Json?
+  createdAt  DateTime @default(now())
+  ipAddress  String?
+  targetType String?
+  userAgent  String?
+  
+  admin User @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  
+  @@map("admin_activities")
+}
+
+model AdminPermissionTemplate {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  permissions Json
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("admin_permission_templates")
+}
+
+model SystemSetting {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       Json
+  description String?
+  updatedAt   DateTime @updatedAt
+  updatedBy   String
+  
+  @@map("system_settings")
 }
