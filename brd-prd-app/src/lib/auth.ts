@@ -182,7 +182,7 @@ export const authOptions: NextAuthOptions = {
               role: true,
               adminPermissions: true,
               subscriptionTier: true,
-              subscriptionStatus: true,
+              systemRole: true,
               totalReferralTokens: true
             }
           })
@@ -192,9 +192,19 @@ export const authOptions: NextAuthOptions = {
             const adminEmails = ['admin@smartdocs.ai', 'hamza@smartdocs.ai']
             const hasAdminPerms = dbUser.adminPermissions && Array.isArray(dbUser.adminPermissions) && dbUser.adminPermissions.length > 0
             const isEmailAdmin = adminEmails.includes(dbUser.email || '')
+            const isSystemAdmin = dbUser.systemRole === 'SUPER_ADMIN' || dbUser.systemRole === 'SUB_ADMIN'
             
-            // Prefer database role, fallback to computed role
-            token.role = dbUser.role || ((hasAdminPerms || isEmailAdmin) ? 'admin' : 'user')
+            // Prefer systemRole, then database role, fallback to computed role
+            let userRole = 'user'
+            if (isSystemAdmin) {
+              userRole = dbUser.systemRole === 'SUPER_ADMIN' ? 'super_admin' : 'admin'
+            } else if (dbUser.role) {
+              userRole = dbUser.role
+            } else if (hasAdminPerms || isEmailAdmin) {
+              userRole = 'admin'
+            }
+            
+            token.role = userRole
             
             // Parse adminPermissions if it's a JSON string
             let permissions = []
@@ -209,9 +219,8 @@ export const authOptions: NextAuthOptions = {
               }
             }
             token.adminPermissions = permissions
-            token.subscriptionTier = dbUser.subscriptionTier.toLowerCase()
-            token.subscriptionStatus = dbUser.subscriptionStatus
-            token.totalReferralTokens = dbUser.totalReferralTokens
+            token.subscriptionTier = dbUser.subscriptionTier?.toLowerCase() || 'free'
+            token.totalReferralTokens = dbUser.totalReferralTokens || 0
           }
         } catch (error) {
           console.error("Error fetching user role for token:", error)
@@ -234,9 +243,8 @@ export const authOptions: NextAuthOptions = {
         // Include role information from token (already fetched in jwt callback)
         session.user.role = token.role as string
         session.user.adminPermissions = token.adminPermissions as string[] || []
-        session.user.subscriptionTier = token.subscriptionTier as string
-        session.user.subscriptionStatus = token.subscriptionStatus as string
-        session.user.totalReferralTokens = token.totalReferralTokens as number
+        session.user.subscriptionTier = token.subscriptionTier as string || 'free'
+        session.user.totalReferralTokens = token.totalReferralTokens as number || 0
         
         // Mark if this is a fallback user for debugging/monitoring
         if (token.isFallbackUser) {

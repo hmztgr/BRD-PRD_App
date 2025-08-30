@@ -126,7 +126,8 @@
       "Bash(dir dev.db)",
       "Bash(set DATABASE_URL=file:./prisma/dev.db)",
       "Bash(PORT=3004 npm run dev)",
-      "Bash(del nul)"
+      "Bash(del nul)",
+      "mcp__supabase__list_tables"
     ],
     "deny": [],
     "ask": [],
