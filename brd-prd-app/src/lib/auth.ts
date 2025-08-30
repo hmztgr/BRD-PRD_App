@@ -16,14 +16,20 @@ import {
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as any,
   providers: [
-    // GoogleProvider({
-    //   clientId: process.env.GOOGLE_CLIENT_ID!,
-    //   clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    // }),
-    // LinkedInProvider({
-    //   clientId: process.env.LINKEDIN_CLIENT_ID!,
-    //   clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,
-    // }),
+    // OAuth providers completely disabled to prevent Firebase quota issues
+    // Only credentials-based authentication is enabled
+    ...(process.env.ENABLE_OAUTH === 'true' && process.env.GOOGLE_CLIENT_ID ? [
+      GoogleProvider({
+        clientId: process.env.GOOGLE_CLIENT_ID!,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      })
+    ] : []),
+    ...(process.env.ENABLE_OAUTH === 'true' && process.env.LINKEDIN_CLIENT_ID ? [
+      LinkedInProvider({
+        clientId: process.env.LINKEDIN_CLIENT_ID!,
+        clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,
+      })
+    ] : []),
     CredentialsProvider({
       name: "credentials",
       credentials: {
