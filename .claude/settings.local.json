@@ -129,7 +129,8 @@
       "Bash(del nul)",
       "mcp__supabase__list_tables",
       "mcp__supabase__get_project_url",
-      "mcp__supabase__get_project"
+      "mcp__supabase__get_project",
+      "WebFetch(domain:localhost)"
     ],
     "deny": [],
     "ask": [],
