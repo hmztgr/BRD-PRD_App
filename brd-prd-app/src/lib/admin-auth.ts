@@ -137,7 +137,7 @@ export async function logAdminActivity(
     // Use raw query to avoid schema issues
     await prisma.$executeRaw`
       INSERT INTO admin_activities ("adminId", action, "targetId", details, "createdAt")
-      VALUES (${adminId}, ${action}, ${targetId || null}, ${details ? JSON.stringify(details) : null}, NOW())
+      VALUES (${adminId}, ${action}, ${targetId || null}, ${details ? JSON.stringify(details) : null}::jsonb, NOW())
     `
   } catch (error) {
     console.error('Error logging admin activity:', error)
