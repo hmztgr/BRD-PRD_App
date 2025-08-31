@@ -76,25 +76,31 @@ export async function authenticateFallbackUser(
 /**
  * Check if database is available
  * Used to determine when to use fallback auth
+ * Enhanced with retry logic and proper error handling
  */
 export async function isDatabaseAvailable(): Promise<boolean> {
   try {
-    console.log('[FallbackAuth] Testing database availability...')
+    console.log('[FallbackAuth] Testing database availability with retry logic...')
     console.log('[FallbackAuth] DATABASE_URL exists:', !!process.env.DATABASE_URL)
     console.log('[FallbackAuth] DATABASE_URL preview:', process.env.DATABASE_URL?.substring(0, 20) + '...')
     
-    // Try to import and test database connection
-    const { prisma } = await import('@/lib/prisma')
-    console.log('[FallbackAuth] Prisma imported successfully')
+    // Use enhanced database availability check with retry logic
+    const { checkDatabaseAvailability } = await import('@/lib/db-utils')
+    const isAvailable = await checkDatabaseAvailability(3)
     
-    await prisma.$queryRaw`SELECT 1`
-    console.log('[FallbackAuth] Database connection test successful')
-    return true
+    if (isAvailable) {
+      console.log('[FallbackAuth] Database connection test successful after retry logic')
+    } else {
+      console.error('[FallbackAuth] Database unavailable after all retry attempts')
+    }
+    
+    return isAvailable
+    
   } catch (error) {
-    console.error('[FallbackAuth] Database unavailable:', {
-      message: error.message,
-      code: error.code,
-      stack: error.stack?.substring(0, 200)
+    console.error('[FallbackAuth] Database availability check failed:', {
+      message: error instanceof Error ? error.message : String(error),
+      code: (error as any)?.code,
+      stack: error instanceof Error ? error.stack?.substring(0, 200) : undefined
     })
     return false
   }
