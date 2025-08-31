@@ -344,6 +344,16 @@ Based on the example project template structure, the system will generate:
 - **Monitoring**: Sentry for error tracking
 - **Analytics**: PostHog for user behavior
 
+### **Database Connection Configuration**
+- **Connection Pool Size**: 10-15 connections (production-ready starting point)
+- **Pool Management**: Session pooler (port 5432) for optimal Next.js compatibility
+- **Connection Limits**: Free tier supports 200 pooler connections (9% current usage)
+- **Retry Strategy**: 3 attempts with exponential backoff (1s, 2s, 4s)
+- **Timeout Configuration**: 10s pool timeout, 30s connect timeout
+- **Monitoring**: Health endpoints for connection pool metrics
+- **Scaling Path**: Monitor usage and increase pool size based on concurrent load
+- **Performance Target**: Handle 100-200 concurrent users with 10-15 connections
+
 ### **Security Requirements**
 - **Data Encryption**: AES-256 for data at rest
 - **Transport Security**: TLS 1.3 for data in transit
