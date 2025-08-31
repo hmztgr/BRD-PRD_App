@@ -204,6 +204,46 @@ export function AdminUsersClient() {
     }
   }
 
+  // Handle users export
+  const handleExportUsers = async () => {
+    try {
+      const params = new URLSearchParams({
+        ...(searchTerm && { search: searchTerm }),
+        ...(filterRole !== 'all' && { role: filterRole }),
+        ...(filterStatus !== 'all' && { subscriptionTier: filterStatus })
+      })
+
+      const response = await fetch(`/api/admin/users/export?${params}`, {
+        method: 'POST'
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to export users')
+      }
+
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `users-export-${new Date().toISOString().split('T')[0]}.csv`
+      a.click()
+      window.URL.revokeObjectURL(url)
+
+      toast({
+        title: "Success",
+        description: "Users exported successfully",
+      })
+
+    } catch (error: any) {
+      console.error('Error exporting users:', error)
+      toast({
+        title: "Error",
+        description: error.message || 'Failed to export users',
+        variant: "destructive",
+      })
+    }
+  }
+
   // SAFE Implementation - Phase 1.2: Create User Handler
   const handleCreateUser = async () => {
     try {
@@ -383,7 +423,7 @@ export function AdminUsersClient() {
               <option value="canceled">Canceled</option>
               <option value="past_due">Past Due</option>
             </select>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" onClick={handleExportUsers}>
               <Download className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
               Export
             </Button>

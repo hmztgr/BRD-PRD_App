@@ -1,0 +1,317 @@
+"TimeUTC","timestampInMs","requestPath","requestMethod","requestQueryString","responseStatusCode","requestId","requestUserAgent","level","environment","branch","vercelCache","type","function","host","deploymentDomain","deploymentId","durationMs","region","maxMemoryUsed","memorySize","message","projectId","traceId","sessionId","invocationId","instanceId","concurrency"
+"2025-08-31 04:14:48",1756613688849,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","_vercel_share=uAjGMKLzah4L20xRDhsjRk6ybPhwO3Hf",-1,"flw42-1756613683660-f10bea01cd6d","Vercel MCP Fetch","error","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_CpQnxQW3ToyCdcUrzDXkxn6VuZa9",-1,"iad1",-1,-1,"Dashboard API error: {
+  message: 'Admin access required',
+  name: 'Error',
+  stack: 'Error: Admin access required\n' +
+    '    at h (/var/task/brd-prd-app/.next/server/app/api/admin/dashboard/route.js:1:2317)\n' +
+    '    at async x (/var/task/brd-prd-app/.next/server/app/api/admin/dashboard/route.js:1:10289)\n' +
+    '    at async rN.do (/var/task/brd-prd-app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:5:21042)\n' +
+    '    at async rN.handle (/var/task/brd-prd-app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:5:25860)\n' +
+    '    at async k (/var/task/brd-prd-app/.next/server/app/api/admin/dashboard/route.js:1:14653)\n' +
+    '    at async rN.handleResponse (/var/task/brd-prd-app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:1:105630)\n' +
+    '    at async g (/var/task/brd-prd-app/.next/server/app/api/admin/dashboard/route.js:1:15656)\n' +
+    '    at async D (/var/task/brd-prd-app/.next/server/app/api/admin/dashboard/route.js:1:16778)\n' +
+    '    at async id.renderToResponseWithComponentsImpl (/var/task/brd-prd-app/node_modules/next/dist/compiled/next-server/server.runtime.prod.js:13:28532)\n' +
+    '    at async id.renderPageComponent (/var/task/brd-prd-app/node_modules/next/dist/compiled/next-server/server.runtime.prod.js:13:29363)',
+  timestamp: '2025-08-31T04:14:48.848Z'
+}","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z5BAJPAX69GD8XXA63AP9D","",-1
+"2025-08-31 04:14:48",1756613688848,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","_vercel_share=uAjGMKLzah4L20xRDhsjRk6ybPhwO3Hf",-1,"flw42-1756613683660-f10bea01cd6d","Vercel MCP Fetch","error","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_CpQnxQW3ToyCdcUrzDXkxn6VuZa9",-1,"iad1",-1,-1,"[AuthVerify] Admin bypass failed: Error [PrismaClientInitializationError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.
+    at async i (.next/server/app/api/admin/dashboard/route.js:1:2493)
+    at async h (.next/server/app/api/admin/dashboard/route.js:1:2199)
+    at async x (.next/server/app/api/admin/dashboard/route.js:1:10289)
+    at async k (.next/server/app/api/admin/dashboard/route.js:1:14653) {
+  clientVersion: '6.14.0',
+  errorCode: undefined,
+  retryable: undefined
+}","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z5BAJPAX69GD8XXA63AP9D","",-1
+"2025-08-31 04:14:48",1756613688847,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","_vercel_share=uAjGMKLzah4L20xRDhsjRk6ybPhwO3Hf",-1,"flw42-1756613683660-f10bea01cd6d","Vercel MCP Fetch","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_CpQnxQW3ToyCdcUrzDXkxn6VuZa9",-1,"iad1",-1,-1,"prisma:error 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z5BAJPAX69GD8XXA63AP9D","",-1
+"2025-08-31 04:14:43",1756613683819,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","_vercel_share=uAjGMKLzah4L20xRDhsjRk6ybPhwO3Hf",-1,"flw42-1756613683660-f10bea01cd6d","Vercel MCP Fetch","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_CpQnxQW3ToyCdcUrzDXkxn6VuZa9",-1,"iad1",-1,-1,"[AuthVerify] Available cookies: []","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z5BAJPAX69GD8XXA63AP9D","",-1
+"2025-08-31 04:14:43",1756613683819,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","_vercel_share=uAjGMKLzah4L20xRDhsjRk6ybPhwO3Hf",-1,"flw42-1756613683660-f10bea01cd6d","Vercel MCP Fetch","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_CpQnxQW3ToyCdcUrzDXkxn6VuZa9",-1,"iad1",-1,-1,"[AuthVerify] No session token found. Checked: [
+  'next-auth.session-token',
+  'next-auth.session-token.0',
+  '__Secure-next-auth.session-token',
+  '__Secure-next-auth.session-token.0'
+]","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z5BAJPAX69GD8XXA63AP9D","",-1
+"2025-08-31 04:14:43",1756613683819,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","_vercel_share=uAjGMKLzah4L20xRDhsjRk6ybPhwO3Hf",-1,"flw42-1756613683660-f10bea01cd6d","Vercel MCP Fetch","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_CpQnxQW3ToyCdcUrzDXkxn6VuZa9",-1,"iad1",-1,-1,"[Dashboard] Starting admin access check","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z5BAJPAX69GD8XXA63AP9D","",-1
+"2025-08-31 04:14:43",1756613683798,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","_vercel_share=uAjGMKLzah4L20xRDhsjRk6ybPhwO3Hf",200,"flw42-1756613683660-f10bea01cd6d","Vercel MCP Fetch","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_CpQnxQW3ToyCdcUrzDXkxn6VuZa9",5170,"iad1",172,2048,"","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z5BAJPAX69GD8XXA63AP9D","5CU9eQ1nesm6",1
+"2025-08-31 04:14:43",1756613683703,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","_vercel_share=uAjGMKLzah4L20xRDhsjRk6ybPhwO3Hf",200,"flw42-1756613683660-f10bea01cd6d","Vercel MCP Fetch","info","production","development","","edge-middleware","/src/middleware","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_CpQnxQW3ToyCdcUrzDXkxn6VuZa9",-1,"iad1",-1,-1,"","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z5BAFQRK3373WFF4P7RBBN","WqqLQjvUvLaw",-1
+"2025-08-31 04:13:03",1756613583763,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"h2w7t-1756613578478-3f4dd1b447b1","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","error","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_CpQnxQW3ToyCdcUrzDXkxn6VuZa9",-1,"iad1",-1,-1,"Dashboard API error: {
+  message: '\n' +
+    'Invalid `prisma.user.count()` invocation:\n' +
+    '\n' +
+    '\n' +
+    ""Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`\n"" +
+    '\n' +
+    'Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.',
+  name: 'PrismaClientInitializationError',
+  stack: 'PrismaClientInitializationError: \n' +
+    'Invalid `prisma.user.count()` invocation:\n' +
+    '\n' +
+    '\n' +
+    ""Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`\n"" +
+    '\n' +
+    'Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.\n' +
+    '    at ei.handleRequestError (/var/task/brd-prd-app/node_modules/@prisma/client/runtime/library.js:121:7583)\n' +
+    '    at ei.handleAndLogRequestError (/var/task/brd-prd-app/node_modules/@prisma/client/runtime/library.js:121:6608)\n' +
+    '    at ei.request (/var/task/brd-prd-app/node_modules/@prisma/client/runtime/library.js:121:6315)\n' +
+    '    at async a (/var/task/brd-prd-app/node_modules/@prisma/client/runtime/library.js:130:9551)\n' +
+    '    at async Promise.all (index 0)\n' +
+    '    at async x (/var/task/brd-prd-app/.next/server/app/api/admin/dashboard/route.js:1:10504)\n' +
+    '    at async rN.do (/var/task/brd-prd-app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:5:21042)\n' +
+    '    at async rN.handle (/var/task/brd-prd-app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:5:25860)\n' +
+    '    at async k (/var/task/brd-prd-app/.next/server/app/api/admin/dashboard/route.js:1:14653)\n' +
+    '    at async rN.handleResponse (/var/task/brd-prd-app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:1:105630)',
+  timestamp: '2025-08-31T04:13:03.762Z'
+}","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z583YW6QCBHWCBMQ3GYKQA","",-1
+"2025-08-31 04:13:03",1756613583762,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"h2w7t-1756613578478-3f4dd1b447b1","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_CpQnxQW3ToyCdcUrzDXkxn6VuZa9",-1,"iad1",-1,-1,"prisma:error 
+Invalid `prisma.user.findMany()` invocation:
+
+
+Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z583YW6QCBHWCBMQ3GYKQA","",-1
+"2025-08-31 04:13:03",1756613583762,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"h2w7t-1756613578478-3f4dd1b447b1","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_CpQnxQW3ToyCdcUrzDXkxn6VuZa9",-1,"iad1",-1,-1,"prisma:error 
+Invalid `prisma.user.count()` invocation:
+
+
+Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z583YW6QCBHWCBMQ3GYKQA","",-1
+"2025-08-31 04:13:03",1756613583762,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"h2w7t-1756613578478-3f4dd1b447b1","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_CpQnxQW3ToyCdcUrzDXkxn6VuZa9",-1,"iad1",-1,-1,"prisma:error 
+Invalid `prisma.user.count()` invocation:
+
+
+Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z583YW6QCBHWCBMQ3GYKQA","",-1
+"2025-08-31 04:13:03",1756613583762,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"h2w7t-1756613578478-3f4dd1b447b1","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_CpQnxQW3ToyCdcUrzDXkxn6VuZa9",-1,"iad1",-1,-1,"prisma:error 
+Invalid `prisma.feedback.count()` invocation:
+
+
+Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z583YW6QCBHWCBMQ3GYKQA","",-1
+"2025-08-31 04:12:58",1756613578742,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"h2w7t-1756613578478-3f4dd1b447b1","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_CpQnxQW3ToyCdcUrzDXkxn6VuZa9",-1,"iad1",-1,-1,"[Dashboard] Admin access verified, starting database queries","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z583YW6QCBHWCBMQ3GYKQA","",-1
+"2025-08-31 04:12:58",1756613578742,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"h2w7t-1756613578478-3f4dd1b447b1","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_CpQnxQW3ToyCdcUrzDXkxn6VuZa9",-1,"iad1",-1,-1,"[AuthVerify] Admin access granted for: admin@smartdocs.ai Role: super_admin IsFallback: true","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z583YW6QCBHWCBMQ3GYKQA","",-1
+"2025-08-31 04:12:58",1756613578741,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"h2w7t-1756613578478-3f4dd1b447b1","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_CpQnxQW3ToyCdcUrzDXkxn6VuZa9",-1,"iad1",-1,-1,"[AuthVerify] JWT decoded successfully: {
+  email: 'admin@smartdocs.ai',
+  role: 'super_admin',
+  isFallbackUser: true
+}","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z583YW6QCBHWCBMQ3GYKQA","",-1
+"2025-08-31 04:12:58",1756613578741,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"h2w7t-1756613578478-3f4dd1b447b1","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_CpQnxQW3ToyCdcUrzDXkxn6VuZa9",-1,"iad1",-1,-1,"[AuthVerify] Found session token with name: __Secure-next-auth.session-token","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z583YW6QCBHWCBMQ3GYKQA","",-1
+"2025-08-31 04:12:58",1756613578740,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"h2w7t-1756613578478-3f4dd1b447b1","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_CpQnxQW3ToyCdcUrzDXkxn6VuZa9",-1,"iad1",-1,-1,"[Dashboard] Starting admin access check","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z583YW6QCBHWCBMQ3GYKQA","",-1
+"2025-08-31 04:12:58",1756613578716,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",200,"h2w7t-1756613578478-3f4dd1b447b1","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_CpQnxQW3ToyCdcUrzDXkxn6VuZa9",5038,"iad1",140,2048,"","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z583YW6QCBHWCBMQ3GYKQA","5CU9eQ1nesm6",1
+"2025-08-31 04:12:58",1756613578483,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",200,"h2w7t-1756613578478-3f4dd1b447b1","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","edge-middleware","/src/middleware","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_CpQnxQW3ToyCdcUrzDXkxn6VuZa9",-1,"fra1",-1,-1,"","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z583QKNXTEYP0K3CYJFBEH","x1N9H4Rhq8KR",-1
+"2025-08-31 04:09:43",1756613383515,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"ld8rk-1756613378228-030e0d19dac7","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","error","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_6HquZXbzenAJA19diFRfvyGBPfZs",-1,"iad1",-1,-1,"Dashboard API error: {
+  message: '\n' +
+    'Invalid `prisma.user.count()` invocation:\n' +
+    '\n' +
+    '\n' +
+    ""Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`\n"" +
+    '\n' +
+    'Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.',
+  name: 'PrismaClientInitializationError',
+  stack: 'PrismaClientInitializationError: \n' +
+    'Invalid `prisma.user.count()` invocation:\n' +
+    '\n' +
+    '\n' +
+    ""Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`\n"" +
+    '\n' +
+    'Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.\n' +
+    '    at ei.handleRequestError (/var/task/brd-prd-app/node_modules/@prisma/client/runtime/library.js:121:7583)\n' +
+    '    at ei.handleAndLogRequestError (/var/task/brd-prd-app/node_modules/@prisma/client/runtime/library.js:121:6608)\n' +
+    '    at ei.request (/var/task/brd-prd-app/node_modules/@prisma/client/runtime/library.js:121:6315)\n' +
+    '    at async a (/var/task/brd-prd-app/node_modules/@prisma/client/runtime/library.js:130:9551)\n' +
+    '    at async Promise.all (index 0)\n' +
+    '    at async x (/var/task/brd-prd-app/.next/server/app/api/admin/dashboard/route.js:1:9697)\n' +
+    '    at async rN.do (/var/task/brd-prd-app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:5:21042)\n' +
+    '    at async rN.handle (/var/task/brd-prd-app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:5:25860)\n' +
+    '    at async k (/var/task/brd-prd-app/.next/server/app/api/admin/dashboard/route.js:1:13846)\n' +
+    '    at async rN.handleResponse (/var/task/brd-prd-app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:1:105630)',
+  timestamp: '2025-08-31T04:09:43.514Z'
+}","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z520CF17VKBD69AB73E6QA","",-1
+"2025-08-31 04:09:43",1756613383514,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"ld8rk-1756613378228-030e0d19dac7","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_6HquZXbzenAJA19diFRfvyGBPfZs",-1,"iad1",-1,-1,"prisma:error 
+Invalid `prisma.user.findMany()` invocation:
+
+
+Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z520CF17VKBD69AB73E6QA","",-1
+"2025-08-31 04:09:43",1756613383514,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"ld8rk-1756613378228-030e0d19dac7","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_6HquZXbzenAJA19diFRfvyGBPfZs",-1,"iad1",-1,-1,"prisma:error 
+Invalid `prisma.user.count()` invocation:
+
+
+Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z520CF17VKBD69AB73E6QA","",-1
+"2025-08-31 04:09:43",1756613383514,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"ld8rk-1756613378228-030e0d19dac7","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_6HquZXbzenAJA19diFRfvyGBPfZs",-1,"iad1",-1,-1,"prisma:error 
+Invalid `prisma.user.count()` invocation:
+
+
+Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z520CF17VKBD69AB73E6QA","",-1
+"2025-08-31 04:09:43",1756613383514,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"ld8rk-1756613378228-030e0d19dac7","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_6HquZXbzenAJA19diFRfvyGBPfZs",-1,"iad1",-1,-1,"prisma:error 
+Invalid `prisma.feedback.count()` invocation:
+
+
+Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z520CF17VKBD69AB73E6QA","",-1
+"2025-08-31 04:09:38",1756613378492,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"ld8rk-1756613378228-030e0d19dac7","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_6HquZXbzenAJA19diFRfvyGBPfZs",-1,"iad1",-1,-1,"[Dashboard] Admin access verified, starting database queries","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z520CF17VKBD69AB73E6QA","",-1
+"2025-08-31 04:09:38",1756613378492,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"ld8rk-1756613378228-030e0d19dac7","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_6HquZXbzenAJA19diFRfvyGBPfZs",-1,"iad1",-1,-1,"[AuthVerify] Admin access granted for: admin@smartdocs.ai Role: super_admin IsFallback: true","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z520CF17VKBD69AB73E6QA","",-1
+"2025-08-31 04:09:38",1756613378492,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"ld8rk-1756613378228-030e0d19dac7","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_6HquZXbzenAJA19diFRfvyGBPfZs",-1,"iad1",-1,-1,"[AuthVerify] JWT decoded successfully: {
+  email: 'admin@smartdocs.ai',
+  role: 'super_admin',
+  isFallbackUser: true
+}","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z520CF17VKBD69AB73E6QA","",-1
+"2025-08-31 04:09:38",1756613378492,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"ld8rk-1756613378228-030e0d19dac7","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_6HquZXbzenAJA19diFRfvyGBPfZs",-1,"iad1",-1,-1,"[AuthVerify] Found session token with name: __Secure-next-auth.session-token","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z520CF17VKBD69AB73E6QA","",-1
+"2025-08-31 04:09:38",1756613378492,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"ld8rk-1756613378228-030e0d19dac7","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_6HquZXbzenAJA19diFRfvyGBPfZs",-1,"iad1",-1,-1,"[Dashboard] Starting admin access check","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z520CF17VKBD69AB73E6QA","",-1
+"2025-08-31 04:09:38",1756613378447,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",200,"ld8rk-1756613378228-030e0d19dac7","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_6HquZXbzenAJA19diFRfvyGBPfZs",5059,"iad1",151,2048,"","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z520CF17VKBD69AB73E6QA","R10mMbNsdfwu",1
+"2025-08-31 04:09:38",1756613378239,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",200,"ld8rk-1756613378228-030e0d19dac7","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","edge-middleware","/src/middleware","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_6HquZXbzenAJA19diFRfvyGBPfZs",-1,"fra1",-1,-1,"","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z5205ZYPZRPFD6H5XZN255","ir4ZwjfztFc8",-1
+"2025-08-31 03:58:50",1756612730386,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"8874x-1756612725261-ae2731025cd7","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","error","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_4qZXt8bH9urqjK4WbgX79RiSLjoN",-1,"iad1",-1,-1,"Dashboard API error: {
+  message: '\n' +
+    'Invalid `prisma.user.count()` invocation:\n' +
+    '\n' +
+    '\n' +
+    ""Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`\n"" +
+    '\n' +
+    'Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.',
+  name: 'PrismaClientInitializationError',
+  stack: 'PrismaClientInitializationError: \n' +
+    'Invalid `prisma.user.count()` invocation:\n' +
+    '\n' +
+    '\n' +
+    ""Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`\n"" +
+    '\n' +
+    'Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.\n' +
+    '    at ei.handleRequestError (/var/task/brd-prd-app/node_modules/@prisma/client/runtime/library.js:121:7583)\n' +
+    '    at ei.handleAndLogRequestError (/var/task/brd-prd-app/node_modules/@prisma/client/runtime/library.js:121:6608)\n' +
+    '    at ei.request (/var/task/brd-prd-app/node_modules/@prisma/client/runtime/library.js:121:6315)\n' +
+    '    at async a (/var/task/brd-prd-app/node_modules/@prisma/client/runtime/library.js:130:9551)\n' +
+    '    at async Promise.all (index 0)\n' +
+    '    at async x (/var/task/brd-prd-app/.next/server/app/api/admin/dashboard/route.js:1:9697)\n' +
+    '    at async rN.do (/var/task/brd-prd-app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:5:21042)\n' +
+    '    at async rN.handle (/var/task/brd-prd-app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:5:25860)\n' +
+    '    at async k (/var/task/brd-prd-app/.next/server/app/api/admin/dashboard/route.js:1:13846)\n' +
+    '    at async rN.handleResponse (/var/task/brd-prd-app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:1:105630)',
+  timestamp: '2025-08-31T03:58:50.384Z'
+}","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z4E2JYEMNZXTPS2AKPCFH6","",-1
+"2025-08-31 03:58:50",1756612730386,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"8874x-1756612725261-ae2731025cd7","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_4qZXt8bH9urqjK4WbgX79RiSLjoN",-1,"iad1",-1,-1,"prisma:error 
+Invalid `prisma.user.findMany()` invocation:
+
+
+Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z4E2JYEMNZXTPS2AKPCFH6","",-1
+"2025-08-31 03:58:50",1756612730386,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"8874x-1756612725261-ae2731025cd7","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_4qZXt8bH9urqjK4WbgX79RiSLjoN",-1,"iad1",-1,-1,"prisma:error 
+Invalid `prisma.user.count()` invocation:
+
+
+Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z4E2JYEMNZXTPS2AKPCFH6","",-1
+"2025-08-31 03:58:50",1756612730386,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"8874x-1756612725261-ae2731025cd7","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_4qZXt8bH9urqjK4WbgX79RiSLjoN",-1,"iad1",-1,-1,"prisma:error 
+Invalid `prisma.user.count()` invocation:
+
+
+Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z4E2JYEMNZXTPS2AKPCFH6","",-1
+"2025-08-31 03:58:50",1756612730383,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"8874x-1756612725261-ae2731025cd7","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_4qZXt8bH9urqjK4WbgX79RiSLjoN",-1,"iad1",-1,-1,"prisma:error 
+Invalid `prisma.feedback.count()` invocation:
+
+
+Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z4E2JYEMNZXTPS2AKPCFH6","",-1
+"2025-08-31 03:58:45",1756612725361,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"8874x-1756612725261-ae2731025cd7","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_4qZXt8bH9urqjK4WbgX79RiSLjoN",-1,"iad1",-1,-1,"[Dashboard] Admin access verified, starting database queries","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z4E2JYEMNZXTPS2AKPCFH6","",-1
+"2025-08-31 03:58:45",1756612725361,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"8874x-1756612725261-ae2731025cd7","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_4qZXt8bH9urqjK4WbgX79RiSLjoN",-1,"iad1",-1,-1,"[AuthVerify] Admin access granted for: admin@smartdocs.ai Role: super_admin IsFallback: true","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z4E2JYEMNZXTPS2AKPCFH6","",-1
+"2025-08-31 03:58:45",1756612725361,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"8874x-1756612725261-ae2731025cd7","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_4qZXt8bH9urqjK4WbgX79RiSLjoN",-1,"iad1",-1,-1,"[AuthVerify] JWT decoded successfully: {
+  email: 'admin@smartdocs.ai',
+  role: 'super_admin',
+  isFallbackUser: true
+}","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z4E2JYEMNZXTPS2AKPCFH6","",-1
+"2025-08-31 03:58:45",1756612725360,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"8874x-1756612725261-ae2731025cd7","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_4qZXt8bH9urqjK4WbgX79RiSLjoN",-1,"iad1",-1,-1,"[AuthVerify] Found session token with name: next-auth.session-token","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z4E2JYEMNZXTPS2AKPCFH6","",-1
+"2025-08-31 03:58:45",1756612725359,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"8874x-1756612725261-ae2731025cd7","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_4qZXt8bH9urqjK4WbgX79RiSLjoN",-1,"iad1",-1,-1,"[Dashboard] Starting admin access check","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z4E2JYEMNZXTPS2AKPCFH6","",-1
+"2025-08-31 03:58:45",1756612725342,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",200,"8874x-1756612725261-ae2731025cd7","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_4qZXt8bH9urqjK4WbgX79RiSLjoN",5032,"iad1",147,2048,"","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z4E2JYEMNZXTPS2AKPCFH6","js2yqlPXHdrZ",1
+"2025-08-31 03:58:45",1756612725267,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",200,"8874x-1756612725261-ae2731025cd7","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","edge-middleware","/src/middleware","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_4qZXt8bH9urqjK4WbgX79RiSLjoN",-1,"fra1",-1,-1,"","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z4E2GKRW6ZR5PN1HSEB29N","5cqRt56IxfvL",-1
+"2025-08-31 03:57:32",1756612652560,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"zb9tq-1756612647298-7798643ac59a","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","error","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_4qZXt8bH9urqjK4WbgX79RiSLjoN",-1,"iad1",-1,-1,"Dashboard API error: {
+  message: '\n' +
+    'Invalid `prisma.user.count()` invocation:\n' +
+    '\n' +
+    '\n' +
+    ""Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`\n"" +
+    '\n' +
+    'Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.',
+  name: 'PrismaClientInitializationError',
+  stack: 'PrismaClientInitializationError: \n' +
+    'Invalid `prisma.user.count()` invocation:\n' +
+    '\n' +
+    '\n' +
+    ""Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`\n"" +
+    '\n' +
+    'Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.\n' +
+    '    at ei.handleRequestError (/var/task/brd-prd-app/node_modules/@prisma/client/runtime/library.js:121:7583)\n' +
+    '    at ei.handleAndLogRequestError (/var/task/brd-prd-app/node_modules/@prisma/client/runtime/library.js:121:6608)\n' +
+    '    at ei.request (/var/task/brd-prd-app/node_modules/@prisma/client/runtime/library.js:121:6315)\n' +
+    '    at async a (/var/task/brd-prd-app/node_modules/@prisma/client/runtime/library.js:130:9551)\n' +
+    '    at async Promise.all (index 0)\n' +
+    '    at async x (/var/task/brd-prd-app/.next/server/app/api/admin/dashboard/route.js:1:9697)\n' +
+    '    at async rN.do (/var/task/brd-prd-app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:5:21042)\n' +
+    '    at async rN.handle (/var/task/brd-prd-app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:5:25860)\n' +
+    '    at async k (/var/task/brd-prd-app/.next/server/app/api/admin/dashboard/route.js:1:13846)\n' +
+    '    at async rN.handleResponse (/var/task/brd-prd-app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:1:105630)',
+  timestamp: '2025-08-31T03:57:32.560Z'
+}","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z4BPJ83YR7MB8K3QE57TVQ","",-1
+"2025-08-31 03:57:32",1756612652559,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"zb9tq-1756612647298-7798643ac59a","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_4qZXt8bH9urqjK4WbgX79RiSLjoN",-1,"iad1",-1,-1,"prisma:error 
+Invalid `prisma.user.findMany()` invocation:
+
+
+Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z4BPJ83YR7MB8K3QE57TVQ","",-1
+"2025-08-31 03:57:32",1756612652559,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"zb9tq-1756612647298-7798643ac59a","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_4qZXt8bH9urqjK4WbgX79RiSLjoN",-1,"iad1",-1,-1,"prisma:error 
+Invalid `prisma.user.count()` invocation:
+
+
+Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z4BPJ83YR7MB8K3QE57TVQ","",-1
+"2025-08-31 03:57:32",1756612652559,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"zb9tq-1756612647298-7798643ac59a","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_4qZXt8bH9urqjK4WbgX79RiSLjoN",-1,"iad1",-1,-1,"prisma:error 
+Invalid `prisma.user.count()` invocation:
+
+
+Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z4BPJ83YR7MB8K3QE57TVQ","",-1
+"2025-08-31 03:57:32",1756612652559,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"zb9tq-1756612647298-7798643ac59a","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_4qZXt8bH9urqjK4WbgX79RiSLjoN",-1,"iad1",-1,-1,"prisma:error 
+Invalid `prisma.feedback.count()` invocation:
+
+
+Can't reach database server at `aws-1-eu-central-1.pooler.supabase.com:5432`
+
+Please make sure your database server is running at `aws-1-eu-central-1.pooler.supabase.com:5432`.","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z4BPJ83YR7MB8K3QE57TVQ","",-1
+"2025-08-31 03:57:27",1756612647537,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"zb9tq-1756612647298-7798643ac59a","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_4qZXt8bH9urqjK4WbgX79RiSLjoN",-1,"iad1",-1,-1,"[Dashboard] Admin access verified, starting database queries","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z4BPJ83YR7MB8K3QE57TVQ","",-1
+"2025-08-31 03:57:27",1756612647537,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"zb9tq-1756612647298-7798643ac59a","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_4qZXt8bH9urqjK4WbgX79RiSLjoN",-1,"iad1",-1,-1,"[AuthVerify] Admin access granted for: admin@smartdocs.ai Role: super_admin IsFallback: true","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z4BPJ83YR7MB8K3QE57TVQ","",-1
+"2025-08-31 03:57:27",1756612647537,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"zb9tq-1756612647298-7798643ac59a","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_4qZXt8bH9urqjK4WbgX79RiSLjoN",-1,"iad1",-1,-1,"[AuthVerify] JWT decoded successfully: {
+  email: 'admin@smartdocs.ai',
+  role: 'super_admin',
+  isFallbackUser: true
+}","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z4BPJ83YR7MB8K3QE57TVQ","",-1
+"2025-08-31 03:57:27",1756612647536,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"zb9tq-1756612647298-7798643ac59a","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_4qZXt8bH9urqjK4WbgX79RiSLjoN",-1,"iad1",-1,-1,"[AuthVerify] Found session token with name: next-auth.session-token","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z4BPJ83YR7MB8K3QE57TVQ","",-1
+"2025-08-31 03:57:27",1756612647536,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",-1,"zb9tq-1756612647298-7798643ac59a","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_4qZXt8bH9urqjK4WbgX79RiSLjoN",-1,"iad1",-1,-1,"[Dashboard] Starting admin access check","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z4BPJ83YR7MB8K3QE57TVQ","",-1
+"2025-08-31 03:57:27",1756612647496,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",200,"zb9tq-1756612647298-7798643ac59a","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","lambda","/api/admin/dashboard","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_4qZXt8bH9urqjK4WbgX79RiSLjoN",5054,"iad1",147,2048,"","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z4BPJ83YR7MB8K3QE57TVQ","js2yqlPXHdrZ",1
+"2025-08-31 03:57:27",1756612647304,"smart-business-docs-ai-dev.vercel.app/api/admin/dashboard","GET","",200,"zb9tq-1756612647298-7798643ac59a","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","info","production","development","","edge-middleware","/src/middleware","smart-business-docs-ai-dev.vercel.app","smart-business-docs-ai-dev.vercel.app","dpl_4qZXt8bH9urqjK4WbgX79RiSLjoN",-1,"fra1",-1,-1,"","prj_hvQeIBf6CH5RiunUsKTT4QaCJdDd","","","01K3Z4BPC8P5NG7GSRR7QJKTSX","5cqRt56IxfvL",-1
