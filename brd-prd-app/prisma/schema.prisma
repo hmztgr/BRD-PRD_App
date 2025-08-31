@@ -13,6 +13,7 @@ datasource db {
 enum SystemRole {
   SUPER_ADMIN
   SUB_ADMIN
+  ACCOUNT_MANAGER
   USER
 }
 

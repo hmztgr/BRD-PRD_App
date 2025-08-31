@@ -214,23 +214,24 @@ export function SubscriptionsManagementClient({ locale }: SubscriptionsManagemen
 
   const getTierColor = (tier: string) => {
     const colors: { [key: string]: string } = {
-      FREE: 'bg-gray-100 text-gray-800',
-      HOBBY: 'bg-blue-100 text-blue-800',
-      PROFESSIONAL: 'bg-green-100 text-green-800',
-      BUSINESS: 'bg-purple-100 text-purple-800',
-      ENTERPRISE: 'bg-orange-100 text-orange-800'
+      FREE: 'text-gray-600 border-gray-600',
+      HOBBY: 'text-yellow-600 border-yellow-600',
+      PROFESSIONAL: 'text-blue-600 border-blue-600',
+      BUSINESS: 'text-green-600 border-green-600',
+      ENTERPRISE: 'text-purple-600 border-purple-600'
     }
-    return colors[tier] || 'bg-gray-100 text-gray-800'
+    return colors[tier] || 'text-gray-600 border-gray-600'
   }
 
   const getStatusColor = (status: string) => {
     const colors: { [key: string]: string } = {
-      active: 'bg-green-100 text-green-800',
-      canceled: 'bg-red-100 text-red-800',
-      past_due: 'bg-yellow-100 text-yellow-800',
-      trialing: 'bg-blue-100 text-blue-800'
+      active: 'text-green-600 border-green-600',
+      suspended: 'text-red-600 border-red-600',
+      canceled: 'text-red-600 border-red-600',
+      past_due: 'text-yellow-600 border-yellow-600',
+      trialing: 'text-blue-600 border-blue-600'
     }
-    return colors[status] || 'bg-gray-100 text-gray-800'
+    return colors[status] || 'text-gray-600 border-gray-600'
   }
 
   const getStatusIcon = (status: string) => {
@@ -331,11 +332,19 @@ export function SubscriptionsManagementClient({ locale }: SubscriptionsManagemen
           <p className="text-gray-300">Monitor and manage user subscriptions and billing</p>
         </div>
         <div className="flex space-x-2">
-          <Button variant="outline" onClick={handleExport}>
+          <Button 
+            variant="outline" 
+            onClick={handleExport}
+            title="Export subscriptions data"
+          >
             <Download className="h-4 w-4 mr-2" />
             Export
           </Button>
-          <Button variant="outline" onClick={fetchSubscriptions}>
+          <Button 
+            variant="outline" 
+            onClick={fetchSubscriptions}
+            title="Refresh subscriptions data"
+          >
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh
           </Button>
@@ -405,7 +414,7 @@ export function SubscriptionsManagementClient({ locale }: SubscriptionsManagemen
             {Object.entries(stats.tierDistribution).map(([tier, count]) => (
               <div key={tier} className="text-center">
                 <div className="text-2xl font-bold text-white">{count}</div>
-                <Badge className={getTierColor(tier)} variant="secondary">
+                <Badge variant="outline" className={getTierColor(tier)}>
                   {tier}
                 </Badge>
               </div>
@@ -484,14 +493,14 @@ export function SubscriptionsManagementClient({ locale }: SubscriptionsManagemen
                       </div>
                     </td>
                     <td className="py-4 px-4">
-                      <Badge className={getTierColor(subscription.tier)}>
+                      <Badge variant="outline" className={getTierColor(subscription.tier)}>
                         {subscription.tier}
                       </Badge>
                     </td>
                     <td className="py-4 px-4">
                       <div className="flex items-center space-x-2">
                         {getStatusIcon(subscription.status)}
-                        <Badge className={getStatusColor(subscription.status)}>
+                        <Badge variant="outline" className={getStatusColor(subscription.status)}>
                           {subscription.status}
                         </Badge>
                       </div>
@@ -529,12 +538,16 @@ export function SubscriptionsManagementClient({ locale }: SubscriptionsManagemen
                           size="sm"
                           variant="ghost"
                           onClick={() => handleViewDetails(subscription)}
+                          title="View subscription details"
                         >
                           <Eye className="h-4 w-4" />
                         </Button>
                         <Button
                           size="sm"
                           variant="ghost"
+                          title="Edit subscription (coming soon)"
+                          disabled
+                          className="opacity-50 cursor-not-allowed"
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
@@ -586,7 +599,7 @@ export function SubscriptionsManagementClient({ locale }: SubscriptionsManagemen
                   <div>
                     <label className="text-sm font-medium text-gray-400">Subscription Tier</label>
                     <div className="mt-1">
-                      <Badge className={getTierColor(selectedSubscription.tier)}>
+                      <Badge variant="outline" className={getTierColor(selectedSubscription.tier)}>
                         {selectedSubscription.tier}
                       </Badge>
                     </div>
@@ -598,7 +611,7 @@ export function SubscriptionsManagementClient({ locale }: SubscriptionsManagemen
                     <label className="text-sm font-medium text-gray-400">Status</label>
                     <div className="mt-1 flex items-center space-x-2">
                       {getStatusIcon(selectedSubscription.status)}
-                      <Badge className={getStatusColor(selectedSubscription.status)}>
+                      <Badge variant="outline" className={getStatusColor(selectedSubscription.status)}>
                         {selectedSubscription.status}
                       </Badge>
                     </div>
@@ -663,7 +676,11 @@ export function SubscriptionsManagementClient({ locale }: SubscriptionsManagemen
                 <Button variant="outline" onClick={() => setShowDetails(false)}>
                   Close
                 </Button>
-                <Button>
+                <Button 
+                  disabled
+                  className="opacity-50 cursor-not-allowed"
+                  title="Edit subscription feature coming soon"
+                >
                   <Edit className="h-4 w-4 mr-2" />
                   Edit Subscription
                 </Button>

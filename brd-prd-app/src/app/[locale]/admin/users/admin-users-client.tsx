@@ -139,6 +139,27 @@ export function AdminUsersClient() {
     })
   }
 
+  // Handle sending email to user
+  const handleSendEmail = async (user: User) => {
+    try {
+      // For now, open email client with pre-filled recipient
+      // In production, this would open a modal or use an email API
+      window.location.href = `mailto:${user.email}?subject=Message from Admin&body=Hello ${user.name || 'User'},`;
+      
+      toast({
+        title: "Email Client Opened",
+        description: `Opening email client for ${user.email}`,
+      })
+    } catch (error: any) {
+      console.error('Error opening email client:', error)
+      toast({
+        title: "Error",
+        description: "Failed to open email client",
+        variant: "destructive",
+      })
+    }
+  }
+
   // Handle user suspension/activation
   const handleSuspendUser = async (userId: string, currentStatus: string) => {
     const action = currentStatus === 'suspended' ? 'activate' : 'suspend'
@@ -304,12 +325,26 @@ export function AdminUsersClient() {
         return <Badge variant="outline" className="text-red-600 border-red-600">Super Admin</Badge>
       case 'admin':
         return <Badge variant="outline" className="text-orange-600 border-orange-600">Admin</Badge>
+      case 'account_manager':
+        return <Badge variant="outline" className="text-purple-600 border-purple-600">Account Manager</Badge>
       default:
         return <Badge variant="outline" className="text-blue-600 border-blue-600">User</Badge>
     }
   }
 
   const getTierBadge = (tier: string, status: string) => {
+    // Show suspended status prominently
+    if (status === 'suspended') {
+      return (
+        <div className="flex flex-col gap-1">
+          <Badge variant="destructive" className="bg-red-600 text-white">SUSPENDED</Badge>
+          <Badge variant="outline" className="text-gray-400 border-gray-400 text-xs">
+            {tier.charAt(0).toUpperCase() + tier.slice(1).toLowerCase()}
+          </Badge>
+        </div>
+      )
+    }
+    
     if (status !== 'active') {
       return <Badge variant="outline" className="text-gray-500 border-gray-500">Inactive</Badge>
     }
@@ -465,7 +500,7 @@ export function AdminUsersClient() {
                 const usagePercent = getUsagePercentage(user.tokensUsed, user.tokensLimit)
                 
                 return (
-                  <tr key={user.id} className="hover:bg-gray-800">
+                  <tr key={user.id} className={`hover:bg-gray-800 ${user.subscriptionStatus === 'suspended' ? 'bg-red-900/10 border-l-4 border-red-600' : ''}`}>
                     <td className="px-6 py-4">
                       <div className="flex items-center space-x-3 rtl:space-x-reverse">
                         <div className="flex-shrink-0 h-10 w-10">
@@ -530,10 +565,16 @@ export function AdminUsersClient() {
                           variant="ghost" 
                           size="sm"
                           onClick={() => startEditUser(user)}
+                          title="Edit user"
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm">
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => handleSendEmail(user)}
+                          title="Send email"
+                        >
                           <Mail className="h-4 w-4" />
                         </Button>
                         <Button 
@@ -627,6 +668,7 @@ export function AdminUsersClient() {
                     className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   >
                     <option value="user">User</option>
+                    <option value="account_manager">Account Manager</option>
                     <option value="admin">Admin</option>
                     <option value="super_admin">Super Admin</option>
                   </select>
@@ -737,6 +779,7 @@ export function AdminUsersClient() {
                     className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   >
                     <option value="user">User</option>
+                    <option value="account_manager">Account Manager</option>
                     <option value="admin">Admin</option>
                     <option value="super_admin">Super Admin</option>
                   </select>

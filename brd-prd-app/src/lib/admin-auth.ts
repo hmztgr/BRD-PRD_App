@@ -10,12 +10,16 @@ export type AdminPermission =
   | 'manage_subscriptions'
   | 'view_analytics'
   | 'manage_system'
+  | 'manage_team_users'
+  | 'manage_team_subscriptions'
+  | 'view_team_analytics'
 
 export interface AdminUser {
   id: string
   name: string | null
   email: string
   role: string
+  teamId?: string | null
   adminPermissions: AdminPermission[]
 }
 
@@ -51,20 +55,53 @@ export async function getAdminUser(): Promise<AdminUser | null> {
 
     console.log('[AdminAuth] Admin access granted for:', user.email)
     
-    // Return admin user
+    // Return admin user with proper role mapping
+    let role = 'user'
+    let permissions = []
+    
+    switch(user.systemRole) {
+      case 'SUPER_ADMIN':
+        role = 'super_admin'
+        permissions = [
+          'manage_users',
+          'manage_feedback', 
+          'manage_content',
+          'manage_subscriptions',
+          'view_analytics',
+          'manage_system'
+        ]
+        break
+      case 'SUB_ADMIN':
+        role = 'admin'
+        permissions = [
+          'manage_users',
+          'manage_feedback', 
+          'manage_content',
+          'manage_subscriptions',
+          'view_analytics'
+        ]
+        break
+      case 'ACCOUNT_MANAGER':
+        role = 'account_manager'
+        // Account managers only manage their team's users and subscriptions
+        permissions = [
+          'manage_team_users',
+          'manage_team_subscriptions',
+          'view_team_analytics'
+        ]
+        break
+      default:
+        role = 'user'
+        permissions = []
+    }
+    
     return {
       id: user.id,
       name: user.name,
       email: user.email,
-      role: user.systemRole === 'SUPER_ADMIN' ? 'super_admin' : 'admin',
-      adminPermissions: user.adminPermissions || [
-        'manage_users',
-        'manage_feedback', 
-        'manage_content',
-        'manage_subscriptions',
-        'view_analytics',
-        'manage_system'
-      ]
+      role,
+      teamId: user.teamId,
+      adminPermissions: user.adminPermissions || permissions
     }
   } catch (error) {
     console.error('Error getting admin user:', error)
