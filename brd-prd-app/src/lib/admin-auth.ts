@@ -31,77 +31,87 @@ export async function getAdminUser(): Promise<AdminUser | null> {
       return null
     }
 
-    // Simple check: get user's systemRole from database
-    const result = await prisma.$queryRaw`
-      SELECT id, name, email, "systemRole", "adminPermissions"
-      FROM users 
-      WHERE id = ${session.user.id}
-    `
+    // Get user's systemRole from database with better error handling
+    try {
+      const result = await prisma.$queryRaw`
+        SELECT id, name, email, "systemRole", "adminPermissions", "teamId"
+        FROM users 
+        WHERE id = ${session.user.id}
+      `
 
-    const users = result as any[]
-    if (!users || users.length === 0) {
-      console.log('[AdminAuth] User not found in database')
+      const users = result as any[]
+      if (!users || users.length === 0) {
+        console.log('[AdminAuth] User not found in database')
+        return null
+      }
+      
+      const user = users[0]
+      console.log('[AdminAuth] User found:', { 
+        email: user.email, 
+        systemRole: user.systemRole,
+        id: user.id 
+      })
+      
+      // Check for admin roles: SUPER_ADMIN, SUB_ADMIN, and ACCOUNT_MANAGER
+      if (user.systemRole !== 'SUPER_ADMIN' && user.systemRole !== 'SUB_ADMIN' && user.systemRole !== 'ACCOUNT_MANAGER') {
+        console.log('[AdminAuth] User is not admin. SystemRole:', user.systemRole)
+        return null
+      }
+
+      console.log('[AdminAuth] Admin access granted for:', user.email)
+      
+      // Return admin user with proper role mapping
+      let role = 'user'
+      let permissions = []
+      
+      switch(user.systemRole) {
+        case 'SUPER_ADMIN':
+          role = 'super_admin'
+          permissions = [
+            'manage_users',
+            'manage_feedback', 
+            'manage_content',
+            'manage_subscriptions',
+            'view_analytics',
+            'manage_system'
+          ]
+          break
+        case 'SUB_ADMIN':
+          role = 'admin'
+          permissions = [
+            'manage_users',
+            'manage_feedback', 
+            'manage_content',
+            'manage_subscriptions',
+            'view_analytics'
+          ]
+          break
+        case 'ACCOUNT_MANAGER':
+          role = 'account_manager'
+          // Account managers only manage their team's users and subscriptions
+          permissions = [
+            'manage_team_users',
+            'manage_team_subscriptions',
+            'view_team_analytics'
+          ]
+          break
+        default:
+          role = 'user'
+          permissions = []
+      }
+      
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role,
+        teamId: user.teamId,
+        adminPermissions: user.adminPermissions || permissions
+      }
+
+    } catch (dbError) {
+      console.error('[AdminAuth] Database error:', dbError)
       return null
-    }
-
-    const user = users[0]
-    console.log('[AdminAuth] User found:', { email: user.email, systemRole: user.systemRole })
-    
-    // Simple check: allow SUPER_ADMIN and SUB_ADMIN
-    if (user.systemRole !== 'SUPER_ADMIN' && user.systemRole !== 'SUB_ADMIN') {
-      console.log('[AdminAuth] User is not admin. SystemRole:', user.systemRole)
-      return null
-    }
-
-    console.log('[AdminAuth] Admin access granted for:', user.email)
-    
-    // Return admin user with proper role mapping
-    let role = 'user'
-    let permissions = []
-    
-    switch(user.systemRole) {
-      case 'SUPER_ADMIN':
-        role = 'super_admin'
-        permissions = [
-          'manage_users',
-          'manage_feedback', 
-          'manage_content',
-          'manage_subscriptions',
-          'view_analytics',
-          'manage_system'
-        ]
-        break
-      case 'SUB_ADMIN':
-        role = 'admin'
-        permissions = [
-          'manage_users',
-          'manage_feedback', 
-          'manage_content',
-          'manage_subscriptions',
-          'view_analytics'
-        ]
-        break
-      case 'ACCOUNT_MANAGER':
-        role = 'account_manager'
-        // Account managers only manage their team's users and subscriptions
-        permissions = [
-          'manage_team_users',
-          'manage_team_subscriptions',
-          'view_team_analytics'
-        ]
-        break
-      default:
-        role = 'user'
-        permissions = []
-    }
-    
-    return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role,
-      teamId: user.teamId,
-      adminPermissions: user.adminPermissions || permissions
     }
   } catch (error) {
     console.error('Error getting admin user:', error)

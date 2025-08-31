@@ -442,7 +442,7 @@ export function SubscriptionsManagementClient({ locale }: SubscriptionsManagemen
             <select
               value={tierFilter}
               onChange={(e) => setTierFilter(e.target.value as TierFilter)}
-              className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-background"
+              className="px-3 py-2 border border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-800 text-white"
             >
               <option value="ALL">All Tiers</option>
               <option value="FREE">Free</option>
@@ -454,7 +454,7 @@ export function SubscriptionsManagementClient({ locale }: SubscriptionsManagemen
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
-              className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-background"
+              className="px-3 py-2 border border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-800 text-white"
             >
               <option value="ALL">All Status</option>
               <option value="active">Active</option>

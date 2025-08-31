@@ -51,6 +51,12 @@ export function AdminUsersClient() {
     subscriptionTier: 'FREE',
     tokensLimit: 10000
   })
+  const [showEmailModal, setShowEmailModal] = useState(false)
+  const [emailUser, setEmailUser] = useState<User | null>(null)
+  const [emailData, setEmailData] = useState({
+    subject: '',
+    message: ''
+  })
 
   useEffect(() => {
     fetchUsers()
@@ -141,22 +147,62 @@ export function AdminUsersClient() {
 
   // Handle sending email to user
   const handleSendEmail = async (user: User) => {
-    try {
-      // For now, open email client with pre-filled recipient
-      // In production, this would open a modal or use an email API
-      window.location.href = `mailto:${user.email}?subject=Message from Admin&body=Hello ${user.name || 'User'},`;
-      
-      toast({
-        title: "Email Client Opened",
-        description: `Opening email client for ${user.email}`,
-      })
-    } catch (error: any) {
-      console.error('Error opening email client:', error)
+    setEmailUser(user)
+    setEmailData({
+      subject: `Message from ${process.env.NEXT_PUBLIC_APP_NAME || 'Smart Business Docs'} Admin`,
+      message: `Hello ${user.name || 'User'},\n\n`
+    })
+    setShowEmailModal(true)
+  }
+
+  // Send email via API
+  const sendEmail = async () => {
+    if (!emailUser || !emailData.subject || !emailData.message) {
       toast({
         title: "Error",
-        description: "Failed to open email client",
+        description: "Please fill in all fields",
+        variant: "destructive"
+      })
+      return
+    }
+
+    try {
+      setIsSubmitting(true)
+      
+      const response = await fetch('/api/admin/users/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userEmail: emailUser.email,
+          userName: emailUser.name,
+          subject: emailData.subject,
+          message: emailData.message
+        })
+      })
+      
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to send email')
+      }
+      
+      toast({
+        title: "Success",
+        description: `Email sent successfully to ${emailUser.email}`,
+      })
+      
+      setShowEmailModal(false)
+      setEmailUser(null)
+      setEmailData({ subject: '', message: '' })
+      
+    } catch (error: any) {
+      console.error('Error sending email:', error)
+      toast({
+        title: "Error",
+        description: error.message || 'Failed to send email',
         variant: "destructive",
       })
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -441,7 +487,7 @@ export function AdminUsersClient() {
             <select
               value={filterRole}
               onChange={(e) => setFilterRole(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="px-3 py-2 border border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-800 text-white"
             >
               <option value="all">All Roles</option>
               <option value="user">Users</option>
@@ -451,7 +497,7 @@ export function AdminUsersClient() {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="px-3 py-2 border border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-800 text-white"
             >
               <option value="all">All Status</option>
               <option value="active">Active</option>
@@ -665,7 +711,7 @@ export function AdminUsersClient() {
                   <select
                     value={editFormData.role || 'user'}
                     onChange={(e) => setEditFormData({...editFormData, role: e.target.value})}
-                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="mt-1 w-full px-3 py-2 border border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-800 text-white"
                   >
                     <option value="user">User</option>
                     <option value="account_manager">Account Manager</option>
@@ -679,7 +725,7 @@ export function AdminUsersClient() {
                   <select
                     value={editFormData.subscriptionTier || 'FREE'}
                     onChange={(e) => setEditFormData({...editFormData, subscriptionTier: e.target.value})}
-                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="mt-1 w-full px-3 py-2 border border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-800 text-white"
                   >
                     <option value="FREE">Free</option>
                     <option value="HOBBY">Hobby</option>
@@ -776,7 +822,7 @@ export function AdminUsersClient() {
                   <select
                     value={createFormData.role || 'user'}
                     onChange={(e) => setCreateFormData({...createFormData, role: e.target.value})}
-                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="mt-1 w-full px-3 py-2 border border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-800 text-white"
                   >
                     <option value="user">User</option>
                     <option value="account_manager">Account Manager</option>
@@ -790,7 +836,7 @@ export function AdminUsersClient() {
                   <select
                     value={createFormData.subscriptionTier || 'FREE'}
                     onChange={(e) => setCreateFormData({...createFormData, subscriptionTier: e.target.value})}
-                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="mt-1 w-full px-3 py-2 border border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-800 text-white"
                   >
                     <option value="FREE">Free</option>
                     <option value="HOBBY">Hobby</option>
@@ -837,6 +883,80 @@ export function AdminUsersClient() {
                   disabled={isSubmitting || !createFormData.email}
                 >
                   {isSubmitting ? 'Creating...' : 'Create User'}
+                </Button>
+              </div>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Email Modal */}
+      {showEmailModal && emailUser && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+          <Card className="w-full max-w-md p-6 bg-background border-border">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold text-white">Send Email</h2>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => {
+                    setShowEmailModal(false)
+                    setEmailUser(null)
+                    setEmailData({ subject: '', message: '' })
+                  }}
+                >
+                  ✕
+                </Button>
+              </div>
+              
+              <div className="space-y-3">
+                <div>
+                  <label className="text-sm font-medium text-gray-400">To</label>
+                  <div className="mt-1 px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-sm text-gray-300">
+                    {emailUser.name} ({emailUser.email})
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium text-gray-400">Subject</label>
+                  <Input
+                    value={emailData.subject}
+                    onChange={(e) => setEmailData({...emailData, subject: e.target.value})}
+                    placeholder="Email subject"
+                    className="mt-1"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium text-gray-400">Message</label>
+                  <textarea
+                    value={emailData.message}
+                    onChange={(e) => setEmailData({...emailData, message: e.target.value})}
+                    placeholder="Email message"
+                    rows={6}
+                    className="mt-1 w-full px-3 py-2 border border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-800 text-white"
+                  />
+                </div>
+              </div>
+              
+              <div className="flex justify-end space-x-2">
+                <Button 
+                  variant="outline"
+                  onClick={() => {
+                    setShowEmailModal(false)
+                    setEmailUser(null)
+                    setEmailData({ subject: '', message: '' })
+                  }}
+                  disabled={isSubmitting}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  onClick={sendEmail}
+                  disabled={isSubmitting || !emailData.subject || !emailData.message}
+                >
+                  {isSubmitting ? 'Sending...' : 'Send Email'}
                 </Button>
               </div>
             </div>
