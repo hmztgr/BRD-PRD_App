@@ -19,7 +19,7 @@ export default async function SignUpPage({ params }: SignUpPageProps) {
       <div className="flex items-center justify-center p-6">
         <Link href={`/${locale}`} className="flex items-center space-x-2">
           <FileText className="h-8 w-8 text-primary" />
-          <span className="text-2xl font-bold">BRD/PRD Generator</span>
+          <span className="text-2xl font-bold">Smart Business Docs AI</span>
         </Link>
       </div>
       
@@ -32,7 +32,7 @@ export default async function SignUpPage({ params }: SignUpPageProps) {
       </div>
       
       <footer className="py-6 text-center text-sm text-muted-foreground">
-        © 2025 BRD/PRD Generator. All rights reserved.
+        © 2025 Smart Business Docs AI. All rights reserved.
       </footer>
     </div>
   )

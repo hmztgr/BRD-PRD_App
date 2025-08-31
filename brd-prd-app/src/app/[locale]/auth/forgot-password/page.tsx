@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { ForgotPasswordForm } from '@/components/forms/forgot-password-form'
 
 export const metadata: Metadata = {
-  title: 'Forgot Password - BRD-PRD App',
+  title: 'Forgot Password - Smart Business Docs AI',
   description: 'Reset your password',
 }
 

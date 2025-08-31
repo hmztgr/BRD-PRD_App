@@ -23,7 +23,7 @@ export async function generateMetadata({
   const { locale } = await params;
   
   return {
-    title: locale === 'ar' ? 'منشئ متطلبات المشاريع - إنشاء مستندات الأعمال باستخدام الذكاء الاصطناعي' : 'BRD/PRD Generator - AI-Powered Business Document Creation',
+    title: locale === 'ar' ? 'منشئ متطلبات المشاريع - إنشاء مستندات الأعمال باستخدام الذكاء الاصطناعي' : 'Smart Business Docs AI - AI-Powered Business Document Creation',
     description: locale === 'ar' ? 'إنشاء مستندات الأعمال باستخدام الذكاء الاصطناعي' : 'Create professional Business Requirements Documents (BRDs) and Product Requirements Documents (PRDs) with AI assistance. Supports Arabic and English with cultural awareness.'
   };
 }

@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { ResetPasswordForm } from '@/components/forms/reset-password-form'
 
 export const metadata: Metadata = {
-  title: 'Reset Password - BRD-PRD App',
+  title: 'Reset Password - Smart Business Docs AI',
   description: 'Set your new password',
 }
 
