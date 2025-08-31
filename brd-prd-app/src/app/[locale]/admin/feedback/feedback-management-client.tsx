@@ -123,7 +123,7 @@ export function FeedbackManagementClient() {
       const response = await fetch('/api/admin/feedback/stats')
       if (response.ok) {
         const data = await response.json()
-        setStats(data)
+        setStats(data.success ? data.stats : data)
       } else {
         setStats({
           total: 24,
@@ -286,10 +286,10 @@ export function FeedbackManagementClient() {
   }
 
   const filteredFeedback = feedback.filter(item => {
-    const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         item.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         item.user.email.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesType = filterType === 'all' || item.type === filterType
+    const matchesSearch = (item.title?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+                         (item.message?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+                         (item.email?.toLowerCase() || '').includes(searchTerm.toLowerCase())
+    const matchesType = filterType === 'all' || item.category === filterType
     const matchesStatus = filterStatus === 'all' || item.status === filterStatus
     const matchesPriority = filterPriority === 'all' || item.priority === filterPriority
     
@@ -367,7 +367,7 @@ export function FeedbackManagementClient() {
             <div className="flex items-center space-x-2">
               <Star className="h-5 w-5 text-purple-500" />
               <div>
-                <div className="text-2xl font-bold text-white">{stats.averageRating.toFixed(1)}</div>
+                <div className="text-2xl font-bold text-white">{stats.averageRating?.toFixed(1) || '0.0'}</div>
                 <div className="text-sm text-gray-400">Avg Rating</div>
               </div>
             </div>
@@ -435,7 +435,7 @@ export function FeedbackManagementClient() {
                   {getTypeIcon(item.type)}
                   <div className="min-w-0 flex-1">
                     <h3 className="font-semibold text-white truncate">{item.title}</h3>
-                    <p className="text-sm text-gray-400 mt-1">{item.content}</p>
+                    <p className="text-sm text-gray-400 mt-1">{item.message}</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2 ml-4">
@@ -454,9 +454,9 @@ export function FeedbackManagementClient() {
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center space-x-1">
                     <User className="h-4 w-4" />
-                    <span>{item.user.name || item.user.email}</span>
+                    <span>{item.name || item.email || 'Anonymous'}</span>
                     <Badge variant="outline" className="text-xs">
-                      {item.user.subscriptionTier}
+                      {item.category || 'general'}
                     </Badge>
                   </div>
                   <div className="flex items-center space-x-1">
@@ -564,12 +564,12 @@ export function FeedbackManagementClient() {
               <div className="space-y-3">
                 <div>
                   <h3 className="font-medium text-white">{selectedFeedback.title}</h3>
-                  <p className="text-sm text-gray-400 mt-1">{selectedFeedback.content}</p>
+                  <p className="text-sm text-gray-400 mt-1">{selectedFeedback.message}</p>
                 </div>
                 
                 <div className="flex items-center space-x-2 text-sm text-gray-400">
-                  <span>From: {selectedFeedback.user.name || selectedFeedback.user.email}</span>
-                  <Badge variant="outline">{selectedFeedback.user.subscriptionTier}</Badge>
+                  <span>From: {selectedFeedback.name || selectedFeedback.email}</span>
+                  <Badge variant="outline">{selectedFeedback.category}</Badge>
                 </div>
                 
                 <div>

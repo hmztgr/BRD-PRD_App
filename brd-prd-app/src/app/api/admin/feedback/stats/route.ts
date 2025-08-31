@@ -1,17 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAdmin, hasAdminPermission } from '@/lib/admin-auth'
-import { prisma } from '@/lib/prisma'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
+import prisma from '@/lib/prisma'
 
 export async function GET(request: NextRequest) {
   try {
     // Verify admin access
-    const adminUser = await requireAdmin()
-    if (!adminUser) {
+    const session = await getServerSession(authOptions)
+    
+    if (!session?.user || !session.user.adminPermissions?.includes('manage_feedback')) {
       return NextResponse.json({ error: 'Admin access required' }, { status: 401 })
-    }
-
-    if (!hasAdminPermission(adminUser, 'manage_feedback') && !hasAdminPermission(adminUser, 'view_analytics')) {
-      return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 })
     }
 
     try {
@@ -42,15 +40,25 @@ export async function GET(request: NextRequest) {
         })
       ])
 
+      // Transform to match frontend expectations
+      const statusCounts = feedbackByStatus.reduce((acc, item) => {
+        acc[item.status] = item._count.status
+        return acc
+      }, {} as Record<string, number>)
+
       const stats = {
-        totalFeedback,
+        total: totalFeedback,
+        pending: statusCounts.pending || 0,
+        approved: statusCounts.approved || 0,
+        rejected: statusCounts.rejected || 0,
+        in_review: statusCounts.in_review || 0,
+        implemented: statusCounts.implemented || 0,
         averageRating: avgRating._avg.rating ? parseFloat(avgRating._avg.rating.toFixed(1)) : 0,
-        statusDistribution: feedbackByStatus.reduce((acc, item) => {
-          acc[item.status] = item._count.status
-          return acc
-        }, {} as Record<string, number>),
+        statusDistribution: statusCounts,
         ratingDistribution: feedbackByRating.reduce((acc, item) => {
-          acc[item.rating.toString()] = item._count.rating
+          if (item.rating) {
+            acc[item.rating.toString()] = item._count.rating
+          }
           return acc
         }, {} as Record<string, number>)
       }
@@ -65,19 +73,22 @@ export async function GET(request: NextRequest) {
       
       // Mock stats fallback
       const mockStats = {
-        totalFeedback: 156,
-        averageRating: 4.2,
+        total: 1,
+        pending: 1,
+        approved: 0,
+        rejected: 0,
+        in_review: 0,
+        implemented: 0,
+        averageRating: 5.0,
         statusDistribution: {
-          pending: 23,
-          reviewed: 89,
-          resolved: 44
+          pending: 1,
+          approved: 0,
+          rejected: 0,
+          in_review: 0,
+          implemented: 0
         },
         ratingDistribution: {
-          '1': 2,
-          '2': 8,
-          '3': 21,
-          '4': 56,
-          '5': 69
+          '5': 1
         }
       }
 
