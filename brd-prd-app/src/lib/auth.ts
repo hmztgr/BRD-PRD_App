@@ -33,13 +33,14 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
-        // Check if database is available
-        const dbAvailable = await isDatabaseAvailable()
-        
-        if (!dbAvailable) {
-          console.log('[Auth] Database unavailable, attempting fallback authentication')
-          return await authenticateFallbackUser(credentials.email, credentials.password)
-        }
+        // Temporarily disable fallback authentication to prevent emergency admin issue
+        // TODO: Fix database credentials and re-enable fallback auth
+        // const dbAvailable = await isDatabaseAvailable()
+        // 
+        // if (!dbAvailable) {
+        //   console.log('[Auth] Database unavailable, attempting fallback authentication')
+        //   return await authenticateFallbackUser(credentials.email, credentials.password)
+        // }
 
         try {
           const user = await prisma.user.findUnique({
@@ -49,8 +50,8 @@ export const authOptions: NextAuthOptions = {
           })
 
           if (!user) {
-            console.log('[Auth] User not found in database, trying fallback:', credentials.email)
-            return await authenticateFallbackUser(credentials.email, credentials.password)
+            console.log('[Auth] User not found in database:', credentials.email)
+            return null
           }
 
           console.log('[Auth] User found:', user.email, 'Role:', user.role)
@@ -80,8 +81,8 @@ export const authOptions: NextAuthOptions = {
             image: user.image,
           }
         } catch (error) {
-          console.error('[Auth] Database error, falling back to emergency auth:', error)
-          return await authenticateFallbackUser(credentials.email, credentials.password)
+          console.error('[Auth] Database error:', error)
+          return null
         }
       }
     })
@@ -155,20 +156,14 @@ export const authOptions: NextAuthOptions = {
       // This runs on every token refresh, so we get up-to-date role information
       if (token.id && (trigger === 'signIn' || trigger === 'update' || !token.role)) {
         try {
-          // Check if database is available
-          const dbAvailable = await isDatabaseAvailable()
-          
-          if (!dbAvailable) {
-            console.log('[Auth] Database unavailable, using fallback session data')
-            // If database is down, use fallback data if available
-            if (token.email === 'admin@smartdocs.ai') {
-              const fallbackData = getFallbackUserSession(token.email as string)
-              if (fallbackData) {
-                Object.assign(token, fallbackData)
-              }
-            }
-            return token
-          }
+          // Temporarily disable fallback logic - direct database access only
+          // TODO: Fix database credentials and re-enable fallback logic
+          // const dbAvailable = await isDatabaseAvailable()
+          // 
+          // if (!dbAvailable) {
+          //   console.log('[Auth] Database unavailable, using fallback session data')
+          //   return token
+          // }
           
           const dbUser = await prisma.user.findUnique({
             where: { id: token.id as string },
@@ -219,13 +214,7 @@ export const authOptions: NextAuthOptions = {
           }
         } catch (error) {
           console.error("Error fetching user role for token:", error)
-          // If error and this is the admin email, use fallback
-          if (token.email === 'admin@smartdocs.ai') {
-            const fallbackData = getFallbackUserSession(token.email as string)
-            if (fallbackData) {
-              Object.assign(token, fallbackData)
-            }
-          }
+          // Temporarily disable fallback - just continue with existing token data
         }
       }
       

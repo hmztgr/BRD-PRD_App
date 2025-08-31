@@ -52,8 +52,8 @@ export async function getAdminUser(): Promise<AdminUser | null> {
         id: user.id 
       })
       
-      // Check for admin roles: SUPER_ADMIN, SUB_ADMIN, and ACCOUNT_MANAGER
-      if (user.systemRole !== 'SUPER_ADMIN' && user.systemRole !== 'SUB_ADMIN' && user.systemRole !== 'ACCOUNT_MANAGER') {
+      // Check for admin roles: SUPER_ADMIN and SUB_ADMIN only (ACCOUNT_MANAGER has separate interface)
+      if (user.systemRole !== 'SUPER_ADMIN' && user.systemRole !== 'SUB_ADMIN') {
         console.log('[AdminAuth] User is not admin. SystemRole:', user.systemRole)
         return null
       }
@@ -84,15 +84,6 @@ export async function getAdminUser(): Promise<AdminUser | null> {
             'manage_content',
             'manage_subscriptions',
             'view_analytics'
-          ]
-          break
-        case 'ACCOUNT_MANAGER':
-          role = 'account_manager'
-          // Account managers only manage their team's users and subscriptions
-          permissions = [
-            'manage_team_users',
-            'manage_team_subscriptions',
-            'view_team_analytics'
           ]
           break
         default:

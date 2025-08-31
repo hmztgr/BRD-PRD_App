@@ -12,6 +12,34 @@
 
 ## 🔴 **CRITICAL ISSUES** (UNRESOLVED)
 
+### **Issue #037: ACCOUNT_MANAGER Separate Interface Required**
+- **Category**: Admin Interface & Authorization
+- **Priority**: MEDIUM
+- **Status**: PENDING
+- **Reported**: August 31, 2025
+
+**Description:**
+ACCOUNT_MANAGER users should have a completely separate interface from the main admin panel. They should NOT have access to the /admin pages but should have their own dedicated account management interface.
+
+**Current Behavior:**
+- ACCOUNT_MANAGER users currently have access to main admin interface
+- This provides more access than intended for their role
+
+**Required Changes:**
+1. **Create separate page/interface for ACCOUNT_MANAGER role**
+2. **Remove ACCOUNT_MANAGER access from main admin interface**
+3. **Design appropriate permissions and functionality for account management tasks**
+4. **Implement dedicated routing for account management features**
+
+**Files to Modify:**
+- `src/lib/admin-auth.ts` - Remove admin access for ACCOUNT_MANAGER
+- Create new account management interface components
+- Add new routing for account management pages
+
+---
+
+## 🔴 **CRITICAL ISSUES** (UNRESOLVED)
+
 ### **Issue #036: Firebase/Google OAuth Quota Errors Causing App Delays**
 - **Category**: Authentication & Performance
 - **Priority**: HIGH
