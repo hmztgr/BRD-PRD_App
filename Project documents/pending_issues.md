@@ -12,6 +12,77 @@
 
 ## 🔴 **CRITICAL ISSUES** (UNRESOLVED)
 
+### **Issue #038: Database Connection Pool Exhaustion Causing Mock Data Fallback**
+- **Category**: Database Performance & Infrastructure
+- **Priority**: CRITICAL
+- **Status**: PARTIALLY MITIGATED (Connection pool optimized, frontend fix needed)
+- **Reported**: August 31, 2025
+
+**Description:**
+Admin dashboard and other API endpoints are experiencing severe database connection pool exhaustion, causing database queries to fail and fallback to mock data. The issue causes extremely slow page loads (15-20+ seconds) and unreliable data display.
+
+**Root Cause Analysis:**
+- Frontend making multiple concurrent requests (6+ times) to same API endpoints
+- Each API request executes 4 database queries via Promise.all()
+- Results in 24+ simultaneous database connections being requested
+- Connection pool exhaustion occurs even with 20 connections configured
+- Failed queries trigger mock data fallback in API routes
+
+**Current Behavior:**
+1. User navigates to admin dashboard
+2. Frontend makes 6+ concurrent requests to `/api/admin/dashboard`
+3. Each request attempts 4 database queries simultaneously
+4. Connection pool gets exhausted (even at 20 connections)
+5. Database queries timeout and fail
+6. API falls back to mock data instead of real metrics
+7. Page load times: 15-20+ seconds on localhost, 1-2+ minutes on production
+
+**Expected Behavior:**
+- Single API request per page load
+- Real database data displayed
+- Page loads in <2 seconds
+- Reliable database connectivity
+
+**Technical Details:**
+- **Connection Pool Settings Tested:**
+  - Initial: 5 connections, 5s timeouts → Failed with timeout errors
+  - Attempt 1: 10 connections, 10s timeouts → Still failed
+  - Attempt 2: 20 connections, 15s timeouts → Made performance WORSE (20+ sec loads)
+  - Current: 15 connections, 8s timeouts → Balanced compromise
+- **Database**: Supabase PostgreSQL with session pooler
+- **Connection String**: Using aws-1-eu-central-1.pooler.supabase.com
+- **Query Pattern**: Promise.all() with 4 concurrent queries per request
+
+**Files Affected:**
+- `brd-prd-app/.env.local` - Database connection configuration
+- `src/app/api/admin/dashboard/route.ts` - API endpoint with mock fallback
+- `src/lib/admin-auth.ts` - Database query implementations
+- Frontend admin pages (making duplicate requests)
+
+**Immediate Impact:**
+- Admin dashboard shows incorrect mock data
+- User authentication delays and failures
+- Poor user experience with extremely slow page loads
+- Unreliable application performance
+- Production deployment affected with 1-2+ minute load times
+
+**Temporary Mitigation Applied:**
+```env
+DATABASE_URL="postgresql://postgres.jmfkzfmripuzfspijndq:Kx9KWdGOlh7WgEuT@aws-1-eu-central-1.pooler.supabase.com:5432/postgres?connection_limit=15&pool_timeout=8&connect_timeout=8&statement_timeout=6000"
+```
+
+**Required Long-term Solution:**
+1. **Frontend Optimization**: Prevent duplicate API calls on same page
+2. **API Request Deduplication**: Implement request caching/deduplication
+3. **Connection Pool Monitoring**: Add logging for connection usage
+4. **Query Optimization**: Review and optimize database queries
+5. **Error Handling**: Improve fallback strategies beyond mock data
+
+**Priority Justification:**
+CRITICAL - Application is essentially unusable for admin functions, showing fake data instead of real business metrics, and taking 15-20+ seconds per page load.
+
+---
+
 ### **Issue #037: ACCOUNT_MANAGER Separate Interface Required**
 - **Category**: Admin Interface & Authorization
 - **Priority**: MEDIUM

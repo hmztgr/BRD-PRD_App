@@ -1,0 +1,14 @@
+{
+  "id": "feedback_1756680222541_cd8t6bcpe",
+  "type": "suggestion",
+  "message": "hi",
+  "email": "test@me.com",
+  "url": "http://localhost:3003/en/admin/feedback",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+  "timestamp": "2025-08-31T22:43:39.925Z",
+  "includeConsoleLog": false,
+  "screenshot": null,
+  "attachments": [],
+  "submittedAt": "2025-08-31T22:43:42.541Z",
+  "ipAddress": "::1"
+}
