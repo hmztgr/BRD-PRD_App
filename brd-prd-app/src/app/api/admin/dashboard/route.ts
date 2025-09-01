@@ -10,21 +10,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 })
     }
 
-    // Get real metrics from database
-    const [
-      totalUsers,
-      totalDocuments,
-      recentUsers,
-      recentActivities
-    ] = await Promise.all([
+    // Get real metrics from database - reduce concurrent connections
+    // Critical metrics first (parallel)
+    const [totalUsers, recentUsers] = await Promise.all([
       // Total users count
       prisma.user.count(),
-      
-      // Total documents generated - fallback to 0 if documents table doesn't exist
-      prisma.$queryRaw`SELECT COALESCE((SELECT COUNT(*) FROM documents), 0) as count`
-        .then((result: any) => [{ count: BigInt(0) }])
-        .catch(() => [{ count: BigInt(0) }]),
-      
       // New users today
       prisma.user.count({
         where: {
@@ -32,21 +22,29 @@ export async function GET(request: NextRequest) {
             gte: new Date(new Date().setHours(0, 0, 0, 0))
           }
         }
-      }),
-      
-      // Recent user activities (last 10 users created)
-      prisma.user.findMany({
-        select: {
-          email: true,
-          name: true,
-          createdAt: true
-        },
-        orderBy: {
-          createdAt: 'desc'
-        },
-        take: 10
       })
     ])
+
+    // Non-critical metrics (sequential to reduce connection pressure)
+    let totalDocuments: any[] = [{ count: BigInt(0) }]
+    try {
+      totalDocuments = await prisma.$queryRaw`SELECT COALESCE((SELECT COUNT(*) FROM documents), 0) as count`
+    } catch {
+      totalDocuments = [{ count: BigInt(0) }]
+    }
+
+    // Recent activities (least critical, done last)
+    const recentActivities = await prisma.user.findMany({
+      select: {
+        email: true,
+        name: true,
+        createdAt: true
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      take: 10
+    })
 
     // Calculate subscription metrics (mock for now, replace with real Stripe data)
     const activeSubscriptions = Math.floor(totalUsers * 0.25) // Assume 25% conversion

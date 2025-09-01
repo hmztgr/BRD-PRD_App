@@ -53,22 +53,32 @@ export function AdminDashboardClient({ locale, adminUser }: AdminDashboardProps)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    fetchDashboardMetrics()
-  }, [])
-
-  const fetchDashboardMetrics = async () => {
-    try {
-      setLoading(true)
-      const response = await fetch('/api/admin/dashboard/metrics')
-      if (!response.ok) throw new Error('Failed to fetch metrics')
-      const data = await response.json()
-      setMetrics(data)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load dashboard')
-    } finally {
-      setLoading(false)
+    const controller = new AbortController()
+    
+    const fetchDashboardMetrics = async (signal: AbortSignal) => {
+      try {
+        setLoading(true)
+        const response = await fetch('/api/admin/dashboard/metrics', { signal })
+        if (!response.ok) throw new Error('Failed to fetch metrics')
+        const data = await response.json()
+        setMetrics(data)
+      } catch (err) {
+        if (!controller.signal.aborted) {
+          setError(err instanceof Error ? err.message : 'Failed to load dashboard')
+        }
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoading(false)
+        }
+      }
     }
-  }
+
+    fetchDashboardMetrics(controller.signal)
+    
+    return () => {
+      controller.abort()
+    }
+  }, [])
 
   const getHealthColor = (health: string) => {
     switch (health) {

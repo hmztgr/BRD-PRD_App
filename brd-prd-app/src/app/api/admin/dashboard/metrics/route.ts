@@ -15,17 +15,9 @@ export async function GET(request: NextRequest) {
     const today = startOfDay(new Date());
     const thirtyDaysAgo = subDays(today, 30);
 
-    // Fetch dashboard metrics in parallel
-    const [
-      totalUsers,
-      newUsersToday,
-      totalRevenue,
-      lastMonthRevenue,
-      activeSubscriptions,
-      pendingFeedback,
-      recentActivities,
-      systemHealth
-    ] = await Promise.all([
+    // Fetch dashboard metrics - optimized to reduce concurrent connections
+    // Critical user metrics first (parallel)
+    const [totalUsers, newUsersToday, activeSubscriptions] = await Promise.all([
       // Total users
       prisma.user.count(),
       
@@ -38,6 +30,19 @@ export async function GET(request: NextRequest) {
         }
       }),
       
+      // Active subscriptions
+      prisma.user.count({
+        where: {
+          subscriptionStatus: 'active',
+          subscriptionTier: {
+            not: 'FREE'
+          }
+        }
+      })
+    ])
+
+    // Revenue metrics (sequential to reduce connections)
+    const [totalRevenue, lastMonthRevenue] = await Promise.all([
       // Total revenue (all time)
       prisma.payment.aggregate({
         _sum: {
@@ -60,25 +65,18 @@ export async function GET(request: NextRequest) {
             lt: thirtyDaysAgo
           }
         }
-      }).then(result => (result._sum.amount || 0) / 100),
-      
-      // Active subscriptions
-      prisma.user.count({
-        where: {
-          subscriptionStatus: 'active',
-          subscriptionTier: {
-            not: 'FREE'
-          }
-        }
-      }),
-      
-      // Pending feedback
-      prisma.feedback.count({
-        where: {
-          status: 'pending'
-        }
-      }),
-      
+      }).then(result => (result._sum.amount || 0) / 100)
+    ])
+
+    // Secondary metrics (sequential)
+    const pendingFeedback = await prisma.feedback.count({
+      where: {
+        status: 'pending'
+      }
+    })
+
+    // Less critical data (done last)
+    const [recentActivities, systemHealth] = await Promise.all([
       // Recent activities (last 10)
       prisma.adminActivity.findMany({
         take: 10,

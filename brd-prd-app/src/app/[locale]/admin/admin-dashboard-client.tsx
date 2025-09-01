@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { useApiRequest } from '@/hooks/useApiRequest'
 import { 
   Users, 
   CreditCard, 
@@ -36,10 +37,9 @@ interface DashboardMetrics {
 }
 
 export function AdminDashboardClient() {
-  const [metrics, setMetrics] = useState<DashboardMetrics | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [fallbackMode, setFallbackMode] = useState(false)
   const { data: session } = useSession()
+  const { data: metrics, loading, error } = useApiRequest<DashboardMetrics>('/api/admin/dashboard')
+  const [fallbackMode, setFallbackMode] = useState(false)
 
   const getFallbackMetrics = (): DashboardMetrics => ({
     totalUsers: 1,
@@ -67,34 +67,21 @@ export function AdminDashboardClient() {
     ]
   })
 
+  // Handle error case with fallback mode
   useEffect(() => {
-    const fetchDashboardMetrics = async () => {
-      try {
-        const response = await fetch('/api/admin/dashboard')
-        if (response.ok) {
-          const data = await response.json()
-          setMetrics(data)
-          setFallbackMode(false)
-        } else {
-          console.error('Failed to fetch dashboard metrics:', response.statusText)
-          console.log('Using fallback mode due to API failure')
-          setMetrics(getFallbackMetrics())
-          setFallbackMode(true)
-        }
-      } catch (error) {
-        console.error('Error fetching dashboard metrics:', error)
-        console.log('Using fallback mode due to network error')
-        setMetrics(getFallbackMetrics())
-        setFallbackMode(true)
-      } finally {
-        setLoading(false)
-      }
+    if (error) {
+      console.error('Dashboard metrics error:', error)
+      console.log('Using fallback mode due to API error')
+      setFallbackMode(true)
+    } else if (metrics) {
+      setFallbackMode(false)
     }
+  }, [error, metrics])
 
-    fetchDashboardMetrics()
-  }, [])
+  // Use fallback metrics if there's an error
+  const displayMetrics = fallbackMode ? getFallbackMetrics() : metrics
 
-  if (loading || !metrics) {
+  if (loading || !displayMetrics) {
     return (
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -174,7 +161,7 @@ export function AdminDashboardClient() {
           </p>
         </div>
         <div className="flex items-center space-x-3 rtl:space-x-reverse">
-          {getHealthBadge(metrics.systemHealth)}
+          {getHealthBadge(displayMetrics.systemHealth)}
           <Button>
             <Plus className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
             Quick Action
@@ -188,9 +175,9 @@ export function AdminDashboardClient() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-muted-foreground">Total Users</p>
-              <p className="text-3xl font-bold text-foreground">{metrics.totalUsers.toLocaleString()}</p>
+              <p className="text-3xl font-bold text-foreground">{displayMetrics.totalUsers.toLocaleString()}</p>
               <p className="text-sm text-green-600 mt-1">
-                +{metrics.newUsersToday} today
+                +{displayMetrics.newUsersToday} today
               </p>
             </div>
             <Users className="h-8 w-8 text-blue-500" />
@@ -201,9 +188,9 @@ export function AdminDashboardClient() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Active Subscriptions</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">{metrics.activeSubscriptions.toLocaleString()}</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white">{displayMetrics.activeSubscriptions.toLocaleString()}</p>
               <p className="text-sm text-muted-foreground mt-1">
-                {Math.round((metrics.activeSubscriptions / metrics.totalUsers) * 100)}% conversion
+                {Math.round((displayMetrics.activeSubscriptions / displayMetrics.totalUsers) * 100)}% conversion
               </p>
             </div>
             <CreditCard className="h-8 w-8 text-green-500" />
@@ -214,10 +201,10 @@ export function AdminDashboardClient() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Revenue</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">${metrics.totalRevenue.toLocaleString()}</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white">${displayMetrics.totalRevenue.toLocaleString()}</p>
               <p className="text-sm text-green-600 mt-1 flex items-center">
                 <TrendingUp className="h-3 w-3 mr-1" />
-                +{metrics.revenueGrowth}% this month
+                +{displayMetrics.revenueGrowth}% this month
               </p>
             </div>
             <DollarSign className="h-8 w-8 text-purple-500" />
@@ -228,9 +215,9 @@ export function AdminDashboardClient() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Documents Generated</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">{metrics.documentsGenerated.toLocaleString()}</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white">{displayMetrics.documentsGenerated.toLocaleString()}</p>
               <p className="text-sm text-muted-foreground mt-1">
-                {Math.round(metrics.documentsGenerated / metrics.totalUsers)} avg per user
+                {Math.round(displayMetrics.documentsGenerated / displayMetrics.totalUsers)} avg per user
               </p>
             </div>
             <FileText className="h-8 w-8 text-orange-500" />
@@ -248,7 +235,7 @@ export function AdminDashboardClient() {
             </Button>
           </div>
           <div className="space-y-4">
-            {metrics.recentActivities.map((activity) => (
+            {displayMetrics.recentActivities.map((activity) => (
               <div key={activity.id} className="flex items-center space-x-3 rtl:space-x-reverse">
                 {getActivityIcon(activity.type)}
                 <div className="flex-1 min-w-0">
