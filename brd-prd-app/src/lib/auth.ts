@@ -53,7 +53,6 @@ export const authOptions: NextAuthOptions = {
               name: true,
               password: true,
               role: true,
-              systemRole: true,
               adminPermissions: true,
               // Get subscriptionTier as raw string to avoid enum conversion error
               subscriptionTier: false
@@ -102,7 +101,6 @@ export const authOptions: NextAuthOptions = {
             name: user.name,
             image: null, // user.image not selected to avoid enum issues
             role: user.role,
-            systemRole: user.systemRole,
             adminPermissions: user.adminPermissions,
             subscriptionTier: subscriptionTier
           }
@@ -198,7 +196,6 @@ export const authOptions: NextAuthOptions = {
               role: true,
               adminPermissions: true,
               subscriptionTier: false, // Avoid enum issue
-              systemRole: true,
               totalReferralTokens: true
             }
           })
@@ -219,13 +216,10 @@ export const authOptions: NextAuthOptions = {
             const adminEmails = ['admin@smartdocs.ai', 'hamza@smartdocs.ai']
             const hasAdminPerms = dbUser.adminPermissions && Array.isArray(dbUser.adminPermissions) && dbUser.adminPermissions.length > 0
             const isEmailAdmin = adminEmails.includes(dbUser.email || '')
-            const isSystemAdmin = dbUser.systemRole === 'SUPER_ADMIN' || dbUser.systemRole === 'SUB_ADMIN'
             
-            // Prefer systemRole, then database role, fallback to computed role
+            // Prefer database role, fallback to computed role
             let userRole = 'user'
-            if (isSystemAdmin) {
-              userRole = dbUser.systemRole === 'SUPER_ADMIN' ? 'super_admin' : 'admin'
-            } else if (dbUser.role) {
+            if (dbUser.role) {
               userRole = dbUser.role
             } else if (hasAdminPerms || isEmailAdmin) {
               userRole = 'admin'
