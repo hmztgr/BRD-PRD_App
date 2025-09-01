@@ -46,8 +46,30 @@ export const authOptions: NextAuthOptions = {
           const user = await prisma.user.findUnique({
             where: {
               email: credentials.email
+            },
+            select: {
+              id: true,
+              email: true,
+              name: true,
+              password: true,
+              role: true,
+              systemRole: true,
+              adminPermissions: true,
+              // Get subscriptionTier as raw string to avoid enum conversion error
+              subscriptionTier: false
             }
           })
+
+          // Get subscriptionTier separately using raw query to avoid enum issues
+          let subscriptionTier = 'FREE'
+          if (user) {
+            const tierResult = await prisma.$queryRaw<Array<{subscriptionTier: string}>>`
+              SELECT "subscriptionTier" FROM users WHERE email = ${credentials.email} LIMIT 1
+            `
+            if (tierResult.length > 0) {
+              subscriptionTier = tierResult[0].subscriptionTier
+            }
+          }
 
           if (!user) {
             console.log('[Auth] User not found in database:', credentials.email)
@@ -78,7 +100,11 @@ export const authOptions: NextAuthOptions = {
             id: user.id,
             email: user.email,
             name: user.name,
-            image: user.image,
+            image: null, // user.image not selected to avoid enum issues
+            role: user.role,
+            systemRole: user.systemRole,
+            adminPermissions: user.adminPermissions,
+            subscriptionTier: subscriptionTier
           }
         } catch (error) {
           console.error('[Auth] Database error:', error)
@@ -171,11 +197,22 @@ export const authOptions: NextAuthOptions = {
               email: true,
               role: true,
               adminPermissions: true,
-              subscriptionTier: true,
+              subscriptionTier: false, // Avoid enum issue
               systemRole: true,
               totalReferralTokens: true
             }
           })
+
+          // Get subscriptionTier separately using raw query to avoid enum issues
+          let userSubscriptionTier = 'FREE'
+          if (dbUser) {
+            const tierResult = await prisma.$queryRaw<Array<{subscriptionTier: string}>>`
+              SELECT "subscriptionTier" FROM users WHERE id = ${token.id as string} LIMIT 1
+            `
+            if (tierResult.length > 0) {
+              userSubscriptionTier = tierResult[0].subscriptionTier
+            }
+          }
           
           if (dbUser) {
             // Use database role if set, otherwise determine from permissions/email
@@ -209,7 +246,7 @@ export const authOptions: NextAuthOptions = {
               }
             }
             token.adminPermissions = permissions
-            token.subscriptionTier = dbUser.subscriptionTier?.toLowerCase() || 'free'
+            token.subscriptionTier = userSubscriptionTier?.toLowerCase() || 'free'
             token.totalReferralTokens = dbUser.totalReferralTokens || 0
           }
         } catch (error) {
