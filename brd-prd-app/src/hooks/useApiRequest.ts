@@ -36,29 +36,46 @@ export function useApiRequest<T>(
   const abortControllerRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
+    // Prevent duplicate requests in React StrictMode
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort()
+    }
+    
     const controller = new AbortController()
     abortControllerRef.current = controller
 
     const fetchData = async () => {
-      try {
-        setLoading(true)
-        setError(null)
+      // Return early if component is already unmounted
+      if (controller.signal.aborted) {
+        return
+      }
 
+      try {
         // Check cache first
         const cachedEntry = requestCache.get(url)
         if (cachedEntry && Date.now() - cachedEntry.timestamp < cacheTime) {
-          console.log(`[API Cache] Using cached data for ${url}`)
-          setData(cachedEntry.data)
-          setLoading(false)
+          if (!controller.signal.aborted) {
+            console.log(`[API Cache] Using cached data for ${url}`)
+            setData(cachedEntry.data)
+            setLoading(false)
+          }
           return
+        }
+
+        // Set loading state
+        if (!controller.signal.aborted) {
+          setLoading(true)
+          setError(null)
         }
 
         // Check if request is already pending
         if (pendingRequests.has(url)) {
           console.log(`[API Dedup] Reusing pending request for ${url}`)
           const result = await pendingRequests.get(url)
-          setData(result)
-          setLoading(false)
+          if (!controller.signal.aborted) {
+            setData(result)
+            setLoading(false)
+          }
           return
         }
 
@@ -88,16 +105,21 @@ export function useApiRequest<T>(
         
         if (!controller.signal.aborted) {
           const errorMessage = err instanceof Error ? err.message : 'Request failed'
-          console.error(`[API Error] ${url}:`, errorMessage)
+          // Only log actual errors, not aborted requests
+          if (errorMessage !== 'Request aborted') {
+            console.error(`[API Error] ${url}:`, errorMessage)
+          }
           setError(errorMessage)
           setLoading(false)
         }
       }
     }
 
-    fetchData()
+    // Small delay to avoid race conditions in React StrictMode
+    const timeoutId = setTimeout(fetchData, 10)
 
     return () => {
+      clearTimeout(timeoutId)
       controller.abort()
     }
   }, [url, cacheTime, retryAttempts, retryDelay])

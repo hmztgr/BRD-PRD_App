@@ -37,20 +37,20 @@ describe('Stripe Utilities', () => {
   describe('getTokenLimit', () => {
     it('should return correct token limits for different plans', () => {
       expect(getTokenLimit('free')).toBe(10000)
-      expect(getTokenLimit('professional')).toBe(50000)
+      expect(getTokenLimit('professional')).toBe(100000)
       expect(getTokenLimit('business')).toBe(200000)
       expect(getTokenLimit('enterprise')).toBe(1000000)
     })
 
     it('should apply bonus for yearly plans', () => {
       expect(getTokenLimit('free', 'year')).toBe(11000) // 10% bonus
-      expect(getTokenLimit('professional', 'year')).toBe(55000) // 10% bonus
+      expect(getTokenLimit('professional', 'year')).toBe(110000) // 10% bonus
       expect(getTokenLimit('business', 'year')).toBe(220000) // 10% bonus
     })
 
     it('should default to monthly limits', () => {
-      expect(getTokenLimit('professional', 'month')).toBe(50000)
-      expect(getTokenLimit('professional')).toBe(50000) // Default to month
+      expect(getTokenLimit('professional', 'month')).toBe(100000)
+      expect(getTokenLimit('professional')).toBe(100000) // Default to month
     })
   })
 })

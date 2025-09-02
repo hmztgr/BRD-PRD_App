@@ -23,12 +23,22 @@ export interface AdminUser {
   adminPermissions: AdminPermission[]
 }
 
+// Simple cache to prevent duplicate admin user queries
+const adminUserCache = new Map<string, { user: AdminUser | null, timestamp: number }>()
+const CACHE_DURATION = 5000 // 5 seconds
+
 export async function getAdminUser(): Promise<AdminUser | null> {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) {
       console.log('[AdminAuth] No session found')
       return null
+    }
+
+    // Check cache first
+    const cached = adminUserCache.get(session.user.id)
+    if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+      return cached.user
     }
 
     // Get user's systemRole from database with better error handling
@@ -55,6 +65,8 @@ export async function getAdminUser(): Promise<AdminUser | null> {
       // Check for admin roles: SUPER_ADMIN and SUB_ADMIN only (ACCOUNT_MANAGER has separate interface)
       if (user.systemRole !== 'SUPER_ADMIN' && user.systemRole !== 'SUB_ADMIN') {
         console.log('[AdminAuth] User is not admin. SystemRole:', user.systemRole)
+        // Cache the null result for non-admin users
+        adminUserCache.set(session.user.id, { user: null, timestamp: Date.now() })
         return null
       }
 
@@ -91,7 +103,7 @@ export async function getAdminUser(): Promise<AdminUser | null> {
           permissions = []
       }
       
-      return {
+      const adminUser = {
         id: user.id,
         name: user.name,
         email: user.email,
@@ -99,6 +111,11 @@ export async function getAdminUser(): Promise<AdminUser | null> {
         teamId: user.teamId,
         adminPermissions: user.adminPermissions || permissions
       }
+
+      // Cache the result
+      adminUserCache.set(session.user.id, { user: adminUser, timestamp: Date.now() })
+      
+      return adminUser
 
     } catch (dbError) {
       console.error('[AdminAuth] Database error:', dbError)
@@ -134,10 +151,12 @@ export async function logAdminActivity(
   details?: any
 ) {
   try {
-    // Use raw query to avoid schema issues
+    // Generate a unique ID for the admin activity
+    const activityId = `admin_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    
     await prisma.$executeRaw`
-      INSERT INTO admin_activities ("adminId", action, "targetId", details, "createdAt")
-      VALUES (${adminId}, ${action}, ${targetId || null}, ${details ? JSON.stringify(details) : null}::jsonb, NOW())
+      INSERT INTO admin_activities (id, "adminId", action, "targetId", details, "createdAt")
+      VALUES (${activityId}, ${adminId}, ${action}, ${targetId || null}, ${details ? JSON.stringify(details) : null}::jsonb, NOW())
     `
   } catch (error) {
     console.error('Error logging admin activity:', error)

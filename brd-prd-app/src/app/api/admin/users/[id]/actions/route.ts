@@ -4,7 +4,7 @@ import { requireAdmin, hasAdminPermission, logAdminActivity } from '@/lib/admin-
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // USE EXISTING AUTH FUNCTIONS - DO NOT CHANGE
@@ -17,7 +17,7 @@ export async function POST(
       )
     }
 
-    const { id } = params
+    const { id } = await params
     const body = await req.json()
     const { action } = body
 

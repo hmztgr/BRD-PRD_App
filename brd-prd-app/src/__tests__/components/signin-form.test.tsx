@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { SignInForm } from '@/components/forms/signin-form'
 import { signIn } from 'next-auth/react'
@@ -34,8 +34,10 @@ describe('SignInForm', () => {
     expect(screen.getByText('Enter your email and password to sign in to your account')).toBeInTheDocument()
     expect(screen.getByLabelText('Email')).toBeInTheDocument()
     expect(screen.getByLabelText('Password')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /sign in with google/i })).toBeInTheDocument()
+    // Google sign-in button is temporarily disabled, so we don't test for it
     expect(screen.getByRole('button', { name: 'Sign in' })).toBeInTheDocument()
+    expect(screen.getByText("Don't have an account?")).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Sign up' })).toBeInTheDocument()
   })
 
   it('should handle successful credentials signin', async () => {
@@ -83,7 +85,8 @@ describe('SignInForm', () => {
     })
   })
 
-  it('should handle Google signin', async () => {
+  // Google sign-in is temporarily disabled, so we skip this test
+  it.skip('should handle Google signin', async () => {
     mockSignIn.mockResolvedValue({ ok: true } as any)
 
     render(<SignInForm />)
@@ -106,13 +109,18 @@ describe('SignInForm', () => {
 
     await user.type(emailInput, 'test@example.com')
     await user.type(passwordInput, 'password123')
-    await user.click(submitButton)
+    
+    await act(async () => {
+      await user.click(submitButton)
+    })
 
     // Should show loading state
     expect(submitButton).toBeDisabled()
     
     // Resolve the promise
-    resolvePromise({ ok: true } as any)
+    await act(async () => {
+      resolvePromise({ ok: true } as any)
+    })
   })
 
   it('should require email and password', async () => {

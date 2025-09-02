@@ -5,7 +5,7 @@ import prisma from '@/lib/prisma'
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -18,7 +18,7 @@ export async function PUT(
     }
 
     const { status, adminResponse } = await request.json()
-    const { id } = params
+    const { id } = await params
 
     // Validate status
     const validStatuses = ['pending', 'in_review', 'approved', 'rejected', 'implemented']

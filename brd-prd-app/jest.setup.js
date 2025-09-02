@@ -1,4 +1,16 @@
-import '@testing-library/jest-dom'
+// Enhanced error handling for jest setup
+const originalConsoleError = console.error
+console.error = (...args) => {
+  // Log all console errors to help debug
+  originalConsoleError('[JEST SETUP]', ...args)
+}
+
+try {
+  require('@testing-library/jest-dom')
+} catch (error) {
+  console.error('Failed to import @testing-library/jest-dom:', error)
+  throw error
+}
 
 // Mock Next.js modules
 jest.mock('next/navigation', () => ({
