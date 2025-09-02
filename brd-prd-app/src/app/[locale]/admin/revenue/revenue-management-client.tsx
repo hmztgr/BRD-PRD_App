@@ -13,7 +13,8 @@ import {
   Users,
   CreditCard,
   ArrowUpRight,
-  ArrowDownRight
+  ArrowDownRight,
+  RefreshCw
 } from 'lucide-react'
 import {
   LineChart,
@@ -30,87 +31,47 @@ import {
   Pie,
   Cell
 } from 'recharts'
+import { useApiRequest } from '@/hooks/useApiRequest'
 
-// Mock data types
 interface RevenueData {
-  totalRevenue: number
-  monthlyRevenue: number
-  yearlyRevenue: number
-  growth: number
-  transactions: number
-  averageOrderValue: number
-  conversionRate: number
-  recurringRevenue: number
-  oneTimeRevenue: number
-  refunds: number
-  chargebacks: number
+  revenueData: Array<{
+    month: string
+    revenue: number
+    newSubscriptions: number
+    canceledSubscriptions: number
+    activeSubscriptions: number
+    mrr: number
+    churnRate: number
+  }>
+  currentMetrics: {
+    currentMonthRevenue: number
+    totalActiveSubscriptions: number
+    totalLifetimeRevenue: number
+    avgRevenuePerUser: number
+    revenueGrowth: number
+    subscriptionGrowth: number
+  }
+  subscriptionTiers: Array<{
+    tier: string
+    count: number
+    estimatedMRR: number
+  }>
+  paymentTrends: {
+    totalPayments: number
+    averagePayment: number
+    currencyBreakdown: Record<string, number>
+  }
 }
-
-interface ChartData {
-  month: string
-  revenue: number
-  transactions: number
-  growth: number
-}
-
-interface TierRevenue {
-  tier: string
-  revenue: number
-  users: number
-  percentage: number
-}
-
-// Mock data
-const mockRevenueData: RevenueData = {
-  totalRevenue: 458325.50,
-  monthlyRevenue: 12485.50,
-  yearlyRevenue: 149826.00,
-  growth: 18.5,
-  transactions: 847,
-  averageOrderValue: 14.75,
-  conversionRate: 3.8,
-  recurringRevenue: 11236.80,
-  oneTimeRevenue: 1248.70,
-  refunds: 326.40,
-  chargebacks: 89.00
-}
-
-const mockChartData: ChartData[] = [
-  { month: 'Jan', revenue: 8234, transactions: 523, growth: 12.3 },
-  { month: 'Feb', revenue: 9456, transactions: 598, growth: 14.8 },
-  { month: 'Mar', revenue: 10234, transactions: 645, growth: 8.2 },
-  { month: 'Apr', revenue: 9876, transactions: 612, growth: -3.5 },
-  { month: 'May', revenue: 11234, transactions: 687, growth: 13.7 },
-  { month: 'Jun', revenue: 10987, transactions: 698, growth: -2.2 },
-  { month: 'Jul', revenue: 12456, transactions: 745, growth: 13.4 },
-  { month: 'Aug', revenue: 11890, transactions: 723, growth: -4.5 },
-  { month: 'Sep', revenue: 13245, transactions: 798, growth: 11.4 },
-  { month: 'Oct', revenue: 12987, transactions: 812, growth: -1.9 },
-  { month: 'Nov', revenue: 14325, transactions: 845, growth: 10.3 },
-  { month: 'Dec', revenue: 12485, transactions: 847, growth: -12.8 }
-]
-
-const mockTierRevenue: TierRevenue[] = [
-  { tier: 'Enterprise', revenue: 5970, users: 30, percentage: 47.8 },
-  { tier: 'Business', revenue: 2688, users: 160, percentage: 21.5 },
-  { tier: 'Professional', revenue: 2376, users: 120, percentage: 19.0 },
-  { tier: 'Hobby', revenue: 1451, users: 382, percentage: 11.6 },
-  { tier: 'Free', revenue: 0, users: 523, percentage: 0 }
-]
 
 const COLORS = ['#8b5cf6', '#6366f1', '#3b82f6', '#06b6d4', '#10b981']
 
 export function RevenueManagementClient() {
-  const [loading, setLoading] = useState(true)
-  const [revenueData, setRevenueData] = useState<RevenueData>(mockRevenueData)
-  const [chartData, setChartData] = useState<ChartData[]>(mockChartData)
-  const [tierRevenue, setTierRevenue] = useState<TierRevenue[]>(mockTierRevenue)
-  const [dateRange, setDateRange] = useState('month')
-
-  useEffect(() => {
-    // Simulate loading
-    setTimeout(() => setLoading(false), 500)
-  }, [])
+  const [dateRange, setDateRange] = useState('12') // months
+  const [refreshing, setRefreshing] = useState(false)
+  
+  const { data: revenueData, loading, error, refetch } = useApiRequest<RevenueData>(
+    `/api/admin/analytics/revenue/overview?months=${dateRange}`
+  )
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -124,14 +85,24 @@ export function RevenueManagementClient() {
     return `${value > 0 ? '+' : ''}${value.toFixed(1)}%`
   }
 
+  const handleRefresh = async () => {
+    setRefreshing(true)
+    await refetch()
+    setRefreshing(false)
+  }
+
+  const handleDateRangeChange = (newRange: string) => {
+    setDateRange(newRange)
+  }
+
   if (loading) {
     return (
       <div className="container mx-auto px-6 py-8">
         <div className="animate-pulse">
-          <div className="h-8 bg-gray-700 rounded w-1/4 mb-8"></div>
+          <div className="h-8 bg-gray-200 rounded w-1/4 mb-8"></div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {[1, 2, 3, 4].map(i => (
-              <div key={i} className="h-32 bg-gray-700 rounded"></div>
+              <div key={i} className="h-32 bg-gray-200 rounded"></div>
             ))}
           </div>
         </div>
@@ -139,24 +110,45 @@ export function RevenueManagementClient() {
     )
   }
 
+  if (error) {
+    return (
+      <div className="container mx-auto px-6 py-8">
+        <Card className="p-6">
+          <div className="text-center">
+            <p className="text-red-500 mb-4">Error loading revenue data: {error}</p>
+            <Button onClick={handleRefresh} disabled={refreshing}>
+              {refreshing ? <RefreshCw className="h-4 w-4 mr-2 animate-spin" /> : <RefreshCw className="h-4 w-4 mr-2" />}
+              Retry
+            </Button>
+          </div>
+        </Card>
+      </div>
+    )
+  }
+
+  if (!revenueData) return null
+
   return (
     <div className="container mx-auto px-6 py-8">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-white">Revenue Management</h1>
+        <div>
+          <h1 className="text-3xl font-bold">Revenue Management</h1>
+          <p className="text-muted-foreground">Track revenue, subscriptions, and financial performance</p>
+        </div>
         <div className="flex gap-2">
           <select 
             value={dateRange}
-            onChange={(e) => setDateRange(e.target.value)}
+            onChange={(e) => handleDateRangeChange(e.target.value)}
             className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-background"
           >
-            <option value="week">Last 7 Days</option>
-            <option value="month">Last 30 Days</option>
-            <option value="quarter">Last Quarter</option>
-            <option value="year">Last Year</option>
+            <option value="3">Last 3 Months</option>
+            <option value="6">Last 6 Months</option>
+            <option value="12">Last 12 Months</option>
+            <option value="24">Last 24 Months</option>
           </select>
-          <Button variant="outline" size="sm">
-            <Filter className="h-4 w-4 mr-2" />
-            Filters
+          <Button variant="outline" size="sm" onClick={handleRefresh} disabled={refreshing}>
+            {refreshing ? <RefreshCw className="h-4 w-4 mr-2 animate-spin" /> : <RefreshCw className="h-4 w-4 mr-2" />}
+            Refresh
           </Button>
           <Button variant="outline" size="sm">
             <Download className="h-4 w-4 mr-2" />
@@ -167,66 +159,70 @@ export function RevenueManagementClient() {
 
       {/* Revenue Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <Card className="p-6 bg-background border-border">
+        <Card className="p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="p-2 bg-green-500/10 rounded-lg">
               <DollarSign className="h-5 w-5 text-green-500" />
             </div>
-            <span className={`text-sm flex items-center ${revenueData.growth > 0 ? 'text-green-500' : 'text-red-500'}`}>
-              {revenueData.growth > 0 ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}
-              {formatPercentage(revenueData.growth)}
+            <span className={`text-sm flex items-center ${
+              revenueData.currentMetrics.revenueGrowth > 0 ? 'text-green-500' : 'text-red-500'
+            }`}>
+              {revenueData.currentMetrics.revenueGrowth > 0 ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}
+              {formatPercentage(revenueData.currentMetrics.revenueGrowth)}
             </span>
           </div>
-          <div className="text-2xl font-bold text-white">{formatCurrency(revenueData.monthlyRevenue)}</div>
-          <p className="text-sm text-gray-400">Monthly Revenue</p>
+          <div className="text-2xl font-bold">{formatCurrency(revenueData.currentMetrics.currentMonthRevenue)}</div>
+          <p className="text-sm text-muted-foreground">Current Month Revenue</p>
         </Card>
 
-        <Card className="p-6 bg-background border-border">
+        <Card className="p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="p-2 bg-blue-500/10 rounded-lg">
               <TrendingUp className="h-5 w-5 text-blue-500" />
             </div>
-            <span className="text-sm text-gray-400">YTD</span>
+            <span className="text-sm text-muted-foreground">Total</span>
           </div>
-          <div className="text-2xl font-bold text-white">{formatCurrency(revenueData.yearlyRevenue)}</div>
-          <p className="text-sm text-gray-400">Yearly Revenue</p>
+          <div className="text-2xl font-bold">{formatCurrency(revenueData.currentMetrics.totalLifetimeRevenue)}</div>
+          <p className="text-sm text-muted-foreground">Lifetime Revenue</p>
         </Card>
 
-        <Card className="p-6 bg-background border-border">
+        <Card className="p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="p-2 bg-purple-500/10 rounded-lg">
-              <CreditCard className="h-5 w-5 text-purple-500" />
+              <Users className="h-5 w-5 text-purple-500" />
             </div>
-            <span className="text-sm text-green-500">+12.3%</span>
+            <span className={`text-sm flex items-center ${
+              revenueData.currentMetrics.subscriptionGrowth > 0 ? 'text-green-500' : 'text-red-500'
+            }`}>
+              {revenueData.currentMetrics.subscriptionGrowth > 0 ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}
+              {formatPercentage(revenueData.currentMetrics.subscriptionGrowth)}
+            </span>
           </div>
-          <div className="text-2xl font-bold text-white">{revenueData.transactions}</div>
-          <p className="text-sm text-gray-400">Total Transactions</p>
+          <div className="text-2xl font-bold">{revenueData.currentMetrics.totalActiveSubscriptions}</div>
+          <p className="text-sm text-muted-foreground">Active Subscriptions</p>
         </Card>
 
-        <Card className="p-6 bg-background border-border">
+        <Card className="p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="p-2 bg-yellow-500/10 rounded-lg">
-              <Users className="h-5 w-5 text-yellow-500" />
+              <CreditCard className="h-5 w-5 text-yellow-500" />
             </div>
-            <span className="text-sm text-gray-400">AOV</span>
+            <span className="text-sm text-muted-foreground">ARPU</span>
           </div>
-          <div className="text-2xl font-bold text-white">{formatCurrency(revenueData.averageOrderValue)}</div>
-          <p className="text-sm text-gray-400">Avg Order Value</p>
+          <div className="text-2xl font-bold">{formatCurrency(revenueData.currentMetrics.avgRevenuePerUser)}</div>
+          <p className="text-sm text-muted-foreground">Avg Revenue Per User</p>
         </Card>
       </div>
 
       {/* Revenue Chart */}
-      <Card className="p-6 bg-background border-border mb-8">
-        <h3 className="text-lg font-semibold text-white mb-4">Revenue Trend</h3>
+      <Card className="p-6 mb-8">
+        <h3 className="text-lg font-semibold mb-4">Revenue Trend</h3>
         <ResponsiveContainer width="100%" height={350}>
-          <LineChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-            <XAxis dataKey="month" stroke="#9ca3af" />
-            <YAxis stroke="#9ca3af" />
-            <Tooltip 
-              contentStyle={{ backgroundColor: '#1f2937', border: 'none' }}
-              labelStyle={{ color: '#9ca3af' }}
-            />
+          <LineChart data={revenueData.revenueData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="month" />
+            <YAxis />
+            <Tooltip />
             <Legend />
             <Line 
               type="monotone" 
@@ -235,36 +231,38 @@ export function RevenueManagementClient() {
               strokeWidth={2}
               dot={{ r: 4 }}
               activeDot={{ r: 6 }}
+              name="Revenue"
             />
             <Line 
               type="monotone" 
-              dataKey="transactions" 
+              dataKey="activeSubscriptions" 
               stroke="#06b6d4" 
               strokeWidth={2}
               dot={{ r: 4 }}
               activeDot={{ r: 6 }}
+              name="Active Subscriptions"
             />
           </LineChart>
         </ResponsiveContainer>
       </Card>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        {/* Revenue by Tier */}
-        <Card className="p-6 bg-background border-border">
-          <h3 className="text-lg font-semibold text-white mb-4">Revenue by Tier</h3>
+        {/* Subscription Tiers */}
+        <Card className="p-6">
+          <h3 className="text-lg font-semibold mb-4">Subscription Tiers</h3>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie
-                data={tierRevenue}
+                data={revenueData.subscriptionTiers}
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ tier, percentage }) => `${tier}: ${percentage}%`}
+                label={({ tier, count }) => `${tier}: ${count}`}
                 outerRadius={80}
                 fill="#8884d8"
-                dataKey="revenue"
+                dataKey="count"
               >
-                {tierRevenue.map((entry, index) => (
+                {revenueData.subscriptionTiers.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>

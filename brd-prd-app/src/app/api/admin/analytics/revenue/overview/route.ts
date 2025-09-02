@@ -123,17 +123,14 @@ export async function GET(request: NextRequest) {
       })
     ]);
 
-    // Get subscription tier revenue breakdown
-    const subscriptionTierRevenue = await prisma.user.groupBy({
-      by: ['subscriptionTier'],
-      where: {
-        subscriptionTier: { not: 'FREE' },
-        subscriptionStatus: 'active'
-      },
-      _count: {
-        _all: true
-      }
-    });
+    // Get subscription tier revenue breakdown using raw SQL
+    const subscriptionTierRevenue: any[] = await prisma.$queryRaw`
+      SELECT "subscriptionTier", COUNT(*) as count
+      FROM "User" 
+      WHERE "subscriptionTier" != 'FREE' 
+      AND "subscriptionStatus" = 'active'
+      GROUP BY "subscriptionTier"
+    `;
 
     // Get payment method breakdown (last 30 days)
     const recentPayments = await prisma.payment.findMany({
@@ -170,11 +167,11 @@ export async function GET(request: NextRequest) {
         revenueGrowth: Math.round(revenueGrowth * 100) / 100,
         subscriptionGrowth: Math.round(subscriptionGrowth * 100) / 100
       },
-      subscriptionTiers: subscriptionTierRevenue.map(tier => ({
+      subscriptionTiers: subscriptionTierRevenue.map((tier: any) => ({
         tier: tier.subscriptionTier,
-        count: tier._count._all,
+        count: Number(tier.count),
         // This would ideally get pricing from Stripe
-        estimatedMRR: tier._count._all * 29 // Placeholder calculation
+        estimatedMRR: Number(tier.count) * 29 // Placeholder calculation
       })),
       paymentTrends: {
         totalPayments: recentPayments.length,

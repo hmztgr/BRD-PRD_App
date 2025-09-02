@@ -11,98 +11,121 @@ import {
   Clock,
   Filter,
   Download,
-  Search
+  Search,
+  RefreshCw
 } from 'lucide-react'
+import { useApiRequest } from '@/hooks/useApiRequest'
 
-// Mock data types
 interface ActivityLog {
   id: string
-  timestamp: string
-  user: string
   action: string
-  details: string
-  type: 'info' | 'warning' | 'error' | 'success'
-  ip?: string
+  targetId?: string
+  metadata?: any
+  createdAt: string
+  admin: {
+    id: string
+    name: string
+    email: string
+    role: string
+  }
 }
 
-const mockActivityLogs: ActivityLog[] = [
-  {
-    id: '1',
-    timestamp: '2025-08-31 20:45:12',
-    user: 'admin@smartdocs.ai',
-    action: 'User Login',
-    details: 'Admin user logged in successfully',
-    type: 'success',
-    ip: '192.168.1.100'
-  },
-  {
-    id: '2',
-    timestamp: '2025-08-31 20:30:45',
-    user: 'user@example.com',
-    action: 'Document Created',
-    details: 'Created new BRD document: "E-commerce Platform"',
-    type: 'info'
-  },
-  {
-    id: '3',
-    timestamp: '2025-08-31 20:15:33',
-    user: 'admin@smartdocs.ai',
-    action: 'System Setting Changed',
-    details: 'Updated database connection parameters',
-    type: 'warning',
-    ip: '192.168.1.100'
-  },
-  {
-    id: '4',
-    timestamp: '2025-08-31 19:55:21',
-    user: 'test@example.com',
-    action: 'Failed Login Attempt',
-    details: 'Multiple failed login attempts detected',
-    type: 'error',
-    ip: '203.0.113.45'
+interface ActivityResponse {
+  activities: ActivityLog[]
+  summary: {
+    totalActivities: number
+    todayActivities: number
+    uniqueAdmins: number
+    actionTypes: Record<string, number>
   }
-]
+  pagination: {
+    page: number
+    limit: number
+    totalCount: number
+    totalPages: number
+  }
+}
 
 export function ActivityManagementClient() {
-  const [logs, setLogs] = useState<ActivityLog[]>(mockActivityLogs)
-  const [filter, setFilter] = useState<'all' | 'info' | 'warning' | 'error' | 'success'>('all')
+  const [page, setPage] = useState(1)
+  const [filter, setFilter] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
+  const [refreshing, setRefreshing] = useState(false)
+  
+  const { data: activityData, loading, error, refetch } = useApiRequest<ActivityResponse>(
+    `/api/admin/activity?page=${page}&limit=50${filter ? `&action=${filter}` : ''}${searchTerm ? `&search=${searchTerm}` : ''}`
+  )
 
-  const filteredLogs = logs.filter(log => {
-    const matchesFilter = filter === 'all' || log.type === filter
-    const matchesSearch = log.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         log.details.toLowerCase().includes(searchTerm.toLowerCase())
-    return matchesFilter && matchesSearch
-  })
-
-  const getTypeColor = (type: string) => {
-    switch (type) {
-      case 'success': return 'text-green-600 bg-green-50'
-      case 'warning': return 'text-yellow-600 bg-yellow-50'
-      case 'error': return 'text-red-600 bg-red-50'
-      default: return 'text-blue-600 bg-blue-50'
-    }
+  const handleRefresh = async () => {
+    setRefreshing(true)
+    await refetch()
+    setRefreshing(false)
   }
 
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case 'success': return Activity
-      case 'warning': return AlertTriangle
-      case 'error': return Shield
-      default: return Users
-    }
+  const getActionColor = (action: string) => {
+    if (action.includes('create') || action.includes('add')) return 'text-green-600 bg-green-50'
+    if (action.includes('delete') || action.includes('remove')) return 'text-red-600 bg-red-50'
+    if (action.includes('update') || action.includes('edit')) return 'text-blue-600 bg-blue-50'
+    if (action.includes('login') || action.includes('auth')) return 'text-purple-600 bg-purple-50'
+    return 'text-gray-600 bg-gray-50'
+  }
+
+  const getActionIcon = (action: string) => {
+    if (action.includes('user')) return Users
+    if (action.includes('system') || action.includes('setting')) return Shield
+    if (action.includes('error') || action.includes('fail')) return AlertTriangle
+    return Activity
+  }
+
+  const formatTimestamp = (timestamp: string) => {
+    return new Date(timestamp).toLocaleString()
+  }
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="h-24 bg-gray-200 rounded"></div>
+            ))}
+          </div>
+          <div className="h-96 bg-gray-200 rounded"></div>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <Card className="p-6">
+          <div className="text-center">
+            <p className="text-red-500 mb-4">Error loading activity logs: {error}</p>
+            <Button onClick={handleRefresh} disabled={refreshing}>
+              {refreshing ? <RefreshCw className="h-4 w-4 mr-2 animate-spin" /> : <RefreshCw className="h-4 w-4 mr-2" />}
+              Retry
+            </Button>
+          </div>
+        </Card>
+      </div>
+    )
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Activity Logs</h1>
-          <p className="text-gray-600 mt-1">Monitor system activity and user actions</p>
+          <h1 className="text-3xl font-bold">Activity Logs</h1>
+          <p className="text-muted-foreground mt-1">Monitor system activity and user actions</p>
         </div>
         <div className="flex gap-3">
+          <Button variant="outline" size="sm" onClick={handleRefresh} disabled={refreshing}>
+            {refreshing ? <RefreshCw className="h-4 w-4 mr-2 animate-spin" /> : <RefreshCw className="h-4 w-4 mr-2" />}
+            Refresh
+          </Button>
           <Button variant="outline" size="sm">
             <Download className="h-4 w-4 mr-2" />
             Export Logs
@@ -111,121 +134,119 @@ export function ActivityManagementClient() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card className="p-6">
-          <div className="flex items-center">
-            <div className="p-2 bg-blue-50 rounded-lg">
-              <Activity className="h-6 w-6 text-blue-600" />
+      {activityData?.summary && (
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <Card>
+            <div className="p-6">
+              <div className="flex items-center justify-between space-y-0 pb-2">
+                <p className="text-sm font-medium">Total Activities</p>
+                <Activity className="h-4 w-4 text-muted-foreground" />
+              </div>
+              <div className="text-2xl font-bold">{activityData.summary.totalActivities}</div>
+              <p className="text-xs text-muted-foreground">All recorded actions</p>
             </div>
-            <div className="ml-4">
-              <p className="text-sm text-gray-600">Total Actions</p>
-              <p className="text-2xl font-semibold">2,847</p>
-            </div>
-          </div>
-        </Card>
+          </Card>
 
-        <Card className="p-6">
-          <div className="flex items-center">
-            <div className="p-2 bg-green-50 rounded-lg">
-              <Users className="h-6 w-6 text-green-600" />
+          <Card>
+            <div className="p-6">
+              <div className="flex items-center justify-between space-y-0 pb-2">
+                <p className="text-sm font-medium">Today's Activities</p>
+                <Clock className="h-4 w-4 text-muted-foreground" />
+              </div>
+              <div className="text-2xl font-bold">{activityData.summary.todayActivities}</div>
+              <p className="text-xs text-muted-foreground">Actions today</p>
             </div>
-            <div className="ml-4">
-              <p className="text-sm text-gray-600">Active Users</p>
-              <p className="text-2xl font-semibold">156</p>
-            </div>
-          </div>
-        </Card>
+          </Card>
 
-        <Card className="p-6">
-          <div className="flex items-center">
-            <div className="p-2 bg-yellow-50 rounded-lg">
-              <AlertTriangle className="h-6 w-6 text-yellow-600" />
+          <Card>
+            <div className="p-6">
+              <div className="flex items-center justify-between space-y-0 pb-2">
+                <p className="text-sm font-medium">Active Admins</p>
+                <Users className="h-4 w-4 text-muted-foreground" />
+              </div>
+              <div className="text-2xl font-bold">{activityData.summary.uniqueAdmins}</div>
+              <p className="text-xs text-muted-foreground">Unique administrators</p>
             </div>
-            <div className="ml-4">
-              <p className="text-sm text-gray-600">Warnings</p>
-              <p className="text-2xl font-semibold">23</p>
-            </div>
-          </div>
-        </Card>
+          </Card>
 
-        <Card className="p-6">
-          <div className="flex items-center">
-            <div className="p-2 bg-red-50 rounded-lg">
-              <Shield className="h-6 w-6 text-red-600" />
+          <Card>
+            <div className="p-6">
+              <div className="flex items-center justify-between space-y-0 pb-2">
+                <p className="text-sm font-medium">Action Types</p>
+                <Shield className="h-4 w-4 text-muted-foreground" />
+              </div>
+              <div className="text-2xl font-bold">{Object.keys(activityData.summary.actionTypes || {}).length}</div>
+              <p className="text-xs text-muted-foreground">Different action types</p>
             </div>
-            <div className="ml-4">
-              <p className="text-sm text-gray-600">Errors</p>
-              <p className="text-2xl font-semibold">7</p>
-            </div>
-          </div>
-        </Card>
-      </div>
-
-      {/* Filters */}
-      <Card className="p-6">
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="flex-1">
-            <div className="relative">
-              <Search className="h-4 w-4 absolute left-3 top-3 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search logs..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-          </div>
-          <div className="flex gap-2">
-            {['all', 'info', 'success', 'warning', 'error'].map((type) => (
-              <Button
-                key={type}
-                variant={filter === type ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setFilter(type as any)}
-                className="capitalize"
-              >
-                {type}
-              </Button>
-            ))}
-          </div>
+          </Card>
         </div>
-      </Card>
+      )}
 
       {/* Activity Logs */}
-      <Card className="p-6">
-        <div className="space-y-4">
-          {filteredLogs.map((log) => {
-            const Icon = getTypeIcon(log.type)
-            return (
-              <div key={log.id} className="flex items-start space-x-4 p-4 border rounded-lg hover:bg-gray-50">
-                <div className={`p-2 rounded-lg ${getTypeColor(log.type)}`}>
-                  <Icon className="h-4 w-4" />
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-medium text-gray-900">{log.action}</h3>
-                    <span className="text-sm text-gray-500 flex items-center">
-                      <Clock className="h-3 w-3 mr-1" />
-                      {log.timestamp}
-                    </span>
+      {activityData?.activities && (
+        <Card>
+          <div className="p-6">
+            <h3 className="text-lg font-semibold mb-4">Recent Activity</h3>
+            <div className="space-y-4">
+              {activityData.activities.map((activity) => {
+                const IconComponent = getActionIcon(activity.action)
+                return (
+                  <div key={activity.id} className="flex items-start space-x-4 p-4 border rounded-lg">
+                    <div className={`p-2 rounded-lg ${getActionColor(activity.action)}`}>
+                      <IconComponent className="h-4 w-4" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm font-medium truncate">
+                          {activity.action}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {formatTimestamp(activity.createdAt)}
+                        </p>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        {activity.admin.name || activity.admin.email}
+                      </p>
+                      {activity.metadata && (
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {JSON.stringify(activity.metadata, null, 2).substring(0, 100)}...
+                        </p>
+                      )}
+                    </div>
                   </div>
-                  <p className="text-sm text-gray-600 mt-1">{log.details}</p>
-                  <div className="flex items-center mt-2 text-xs text-gray-500">
-                    <span>User: {log.user}</span>
-                    {log.ip && (
-                      <>
-                        <span className="mx-2">•</span>
-                        <span>IP: {log.ip}</span>
-                      </>
-                    )}
-                  </div>
+                )
+              })}
+            </div>
+            
+            {/* Pagination */}
+            {activityData.pagination && activityData.pagination.totalPages > 1 && (
+              <div className="flex items-center justify-between mt-6">
+                <p className="text-sm text-muted-foreground">
+                  Page {activityData.pagination.page} of {activityData.pagination.totalPages}
+                </p>
+                <div className="flex gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setPage(page - 1)}
+                    disabled={page <= 1}
+                  >
+                    Previous
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setPage(page + 1)}
+                    disabled={page >= activityData.pagination.totalPages}
+                  >
+                    Next
+                  </Button>
                 </div>
               </div>
-            )
-          })}
-        </div>
-      </Card>
+            )}
+          </div>
+        </Card>
+      )}
     </div>
   )
 }

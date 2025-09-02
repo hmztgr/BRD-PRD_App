@@ -74,13 +74,12 @@ export async function GET(request: NextRequest) {
           }
         }),
         
-        // Users by tier
-        prisma.user.groupBy({
-          by: ['subscriptionTier'],
-          _count: {
-            subscriptionTier: true
-          }
-        }),
+        // Users by tier - use raw SQL to avoid enum issues
+        prisma.$queryRaw`
+          SELECT "subscriptionTier", COUNT(*) as count
+          FROM "User" 
+          GROUP BY "subscriptionTier"
+        `,
         
         // Documents by type
         prisma.document.groupBy({
@@ -113,10 +112,10 @@ export async function GET(request: NextRequest) {
           engagementRate: totalUsers > 0 ? ((activeUsers / totalUsers) * 100).toFixed(1) : 0,
           totalTokensUsed: tokensUsage._sum.tokensUsed || 0
         },
-        userDistribution: usersByTier.map(tier => ({
+        userDistribution: Array.isArray(usersByTier) ? usersByTier.map((tier: any) => ({
           tier: tier.subscriptionTier,
-          count: tier._count.subscriptionTier
-        })),
+          count: Number(tier.count)
+        })) : [],
         documentTypes: documentsByType.map(doc => ({
           type: doc.documentType,
           count: doc._count.documentType

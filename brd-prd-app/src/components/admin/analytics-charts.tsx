@@ -138,10 +138,7 @@ export function AnalyticsCharts({ adminPermissions }: AnalyticsChartsProps) {
   }
 
   useEffect(() => {
-    // Temporarily disable analytics to prevent enum errors that cause session corruption
-    console.warn('[Analytics] Temporarily disabled due to subscriptionTier enum issues')
-    setLoading(false)
-    // fetchAnalyticsData()
+    fetchAnalyticsData()
   }, [timeRange])
 
   const exportData = async () => {

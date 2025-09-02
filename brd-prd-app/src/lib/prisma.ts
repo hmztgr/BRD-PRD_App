@@ -12,6 +12,7 @@ if (typeof window === 'undefined') {
 /**
  * Enhanced database URL configuration with connection parameters
  * Supports both development and production environments
+ * Adds connection pool limits to prevent exhaustion
  */
 const getDatabaseUrl = () => {
   const url = process.env.DATABASE_URL
@@ -20,8 +21,21 @@ const getDatabaseUrl = () => {
     throw new Error('DATABASE_URL is required but not found in environment variables')
   }
   
-  // Log connection configuration (without credentials)
+  // Parse URL and add connection pool parameters
   const urlObj = new URL(url)
+  
+  // Add connection pool parameters if not already set
+  if (!urlObj.searchParams.has('connection_limit')) {
+    urlObj.searchParams.set('connection_limit', '8') // Reduced from default 15
+  }
+  if (!urlObj.searchParams.has('pool_timeout')) {
+    urlObj.searchParams.set('pool_timeout', '8') // 8 seconds timeout
+  }
+  if (!urlObj.searchParams.has('connect_timeout')) {
+    urlObj.searchParams.set('connect_timeout', '10') // 10 seconds to connect
+  }
+  
+  // Log connection configuration (without credentials)
   console.log('[Prisma] Database configuration:', {
     host: urlObj.hostname,
     port: urlObj.port,
@@ -29,7 +43,7 @@ const getDatabaseUrl = () => {
     parameters: Object.fromEntries(urlObj.searchParams.entries())
   })
   
-  return url
+  return urlObj.toString()
 }
 
 /**
@@ -37,6 +51,7 @@ const getDatabaseUrl = () => {
  * - Connection pooling optimizations
  * - Enhanced logging for debugging
  * - Proper singleton pattern for development
+ * - Connection pool limits to prevent exhaustion
  */
 export const prisma = globalThis.__globalPrisma ?? new PrismaClient({
   datasources: {

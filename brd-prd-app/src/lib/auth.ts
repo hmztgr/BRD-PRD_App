@@ -33,14 +33,13 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
-        // Temporarily disable fallback authentication to prevent emergency admin issue
-        // TODO: Fix database credentials and re-enable fallback auth
-        // const dbAvailable = await isDatabaseAvailable()
-        // 
-        // if (!dbAvailable) {
-        //   console.log('[Auth] Database unavailable, attempting fallback authentication')
-        //   return await authenticateFallbackUser(credentials.email, credentials.password)
-        // }
+        // Check database availability and use fallback if needed
+        const dbAvailable = await isDatabaseAvailable()
+        
+        if (!dbAvailable) {
+          console.log('[Auth] Database unavailable, attempting fallback authentication')
+          return await authenticateFallbackUser(credentials.email, credentials.password)
+        }
 
         try {
           const user = await prisma.user.findUnique({
@@ -180,14 +179,13 @@ export const authOptions: NextAuthOptions = {
       // This runs on every token refresh, so we get up-to-date role information
       if (token.id && (trigger === 'signIn' || trigger === 'update' || !token.role)) {
         try {
-          // Temporarily disable fallback logic - direct database access only
-          // TODO: Fix database credentials and re-enable fallback logic
-          // const dbAvailable = await isDatabaseAvailable()
-          // 
-          // if (!dbAvailable) {
-          //   console.log('[Auth] Database unavailable, using fallback session data')
-          //   return token
-          // }
+          // Check database availability for session updates
+          const dbAvailable = await isDatabaseAvailable()
+          
+          if (!dbAvailable) {
+            console.log('[Auth] Database unavailable, using fallback session data')
+            return token
+          }
           
           const dbUser = await prisma.user.findUnique({
             where: { id: token.id as string },
