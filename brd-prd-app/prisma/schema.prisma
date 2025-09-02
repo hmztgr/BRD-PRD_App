@@ -1,29 +1,12 @@
-// This is your Prisma schema file
-// Learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-enum SystemRole {
-  SUPER_ADMIN
-  SUB_ADMIN
-  ACCOUNT_MANAGER
-  USER
-}
-
-enum UserTier {
-  FREE
-  HOBBY
-  PROFESSIONAL
-  BUSINESS
-  ENTERPRISE
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_DIRECT_URL")
 }
 
 model Account {
@@ -32,15 +15,14 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? 
-  access_token      String? 
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? 
+  id_token          String?
   session_state     String?
-  
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
@@ -51,9 +33,8 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
-  
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@map("sessions")
 }
 
@@ -67,58 +48,57 @@ model VerificationToken {
 }
 
 model User {
-  id                        String       @id @default(cuid())
-  name                      String?
-  email                     String       @unique
-  emailVerified            DateTime?
-  image                     String?
-  password                  String?
-  createdAt                 DateTime     @default(now())
-  updatedAt                 DateTime     @updatedAt
-  companyName               String?
-  industry                  String?
-  companySize               String?
-  location                  String?
-  language                  String       @default("en")
-  timezone                  String?
-  subscriptionStatus        String       @default("active")
-  tokensUsed                Int          @default(0)
-  tokensLimit               Int          @default(10000)
-  billingCycle              String       @default("monthly")
-  subscriptionEndsAt        DateTime?
-  stripeCustomerId          String?
-  stripeSubscriptionId      String?
-  adminPermissions          Json?
-  referralCode              String       @unique @default(cuid())
-  referredBy                String?
-  totalReferralTokens       Int          @default(0)
-  systemRole                SystemRole   @default(USER)
-  teamId                    String?
-  teamRole                  String?
-  teamRoleLevel             Int?
-  subscriptionTier          UserTier     @default(FREE)
-  role                      String?
-
-  // Relations
-  accounts         Account[]
-  sessions         Session[]
-  documents        Document[]
-  conversations    Conversation[]
-  researchRequests ResearchRequest[]
-  feedback         Feedback[]
-  contactRequests  ContactRequest[]
-  supportTickets   SupportTicket[]
-  adminActivities  AdminActivity[]
-  referredUsers    User[]                  @relation("UserReferrals")
-  referrer         User?                   @relation("UserReferrals", fields: [referredBy], references: [id])
-  usageHistory     UsageHistory[]
-  payments         Payment[]
-  referralRewards  ReferralReward[]
-  emailTokens      EmailToken[]
-  team             Team?                   @relation(fields: [teamId], references: [id])
-  teamMemberships  TeamMember[]
-  createdTemplates Template[]
-  comments         Comment[]
+  id                   String            @id @default(cuid())
+  name                 String?
+  email                String            @unique
+  emailVerified        DateTime?
+  image                String?
+  password             String?
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+  companyName          String?
+  industry             String?
+  companySize          String?
+  location             String?
+  language             String            @default("en")
+  timezone             String?
+  subscriptionStatus   String            @default("active")
+  tokensUsed           Int               @default(0)
+  tokensLimit          Int               @default(10000)
+  billingCycle         String            @default("monthly")
+  subscriptionEndsAt   DateTime?
+  stripeCustomerId     String?           @unique
+  stripeSubscriptionId String?           @unique
+  adminPermissions     Json?
+  referralCode         String            @unique @default(cuid())
+  referredBy           String?
+  totalReferralTokens  Int               @default(0)
+  systemRole           SystemRole        @default(USER)
+  teamId               String?
+  teamRole             String?
+  teamRoleLevel        Int?
+  subscriptionTier     UserTier          @default(FREE)
+  role                 String?
+  accounts             Account[]
+  adminActivities      AdminActivity[]
+  comments             Comment[]
+  contactRequests      ContactRequest[]
+  conversations        Conversation[]
+  documents            Document[]
+  emailTokens          EmailToken[]
+  feedback             Feedback[]
+  payments             Payment[]
+  referralRewards      ReferralReward[]
+  researchRequests     ResearchRequest[]
+  sessions             Session[]
+  supportTickets       SupportTicket[]
+  teamMemberships      TeamMember[]
+  createdTemplates     Template[]
+  usageHistory         UsageHistory[]
+  projects             Project[]
+  referrer             User?             @relation("UserReferrals", fields: [referredBy], references: [id])
+  referredUsers        User[]            @relation("UserReferrals")
+  team                 Team?             @relation(fields: [teamId], references: [id])
 
   @@map("users")
 }
@@ -132,34 +112,34 @@ model EmailToken {
   expires   DateTime
   used      Boolean  @default(false)
   createdAt DateTime @default(now())
-  
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@map("email_tokens")
 }
 
 model Document {
-  id              String   @id @default(cuid())
-  title           String
-  content         String
-  type            String
-  status          String   @default("draft")
-  language        String   @default("en")
-  tokensUsed      Int      @default(0)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  aiModel         String?
-  promptUsed      String?
-  generationTime  Int?
-  userId          String
-  teamId          String?
-  metadata        Json?
-  
-  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  team             Team?             @relation(fields: [teamId], references: [id])
-  versions         DocumentVersion[]
-  comments         Comment[]
-  shares           DocumentShare[]
+  id             String            @id @default(cuid())
+  title          String
+  content        String
+  type           String
+  status         String            @default("draft")
+  language       String            @default("en")
+  tokensUsed     Int               @default(0)
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  aiModel        String?
+  promptUsed     String?
+  generationTime Int?
+  userId         String
+  teamId         String?
+  projectId      String?
+  metadata       Json?
+  comments       Comment[]
+  shares         DocumentShare[]
+  versions       DocumentVersion[]
+  team           Team?             @relation(fields: [teamId], references: [id])
+  user           User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project        Project?          @relation("ProjectDocuments", fields: [projectId], references: [id], onDelete: SetNull)
 
   @@map("documents")
 }
@@ -172,9 +152,9 @@ model DocumentVersion {
   createdAt  DateTime @default(now())
   createdBy  String
   documentId String
-  
-  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@unique([documentId, version])
   @@map("document_versions")
 }
 
@@ -188,12 +168,11 @@ model Comment {
   documentId String
   authorId   String
   parentId   String?
-  
-  document Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
-  replies  Comment[] @relation("CommentReplies")
-  
+  author     User      @relation(fields: [authorId], references: [id])
+  document   Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  parent     Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies    Comment[] @relation("CommentReplies")
+
   @@map("comments")
 }
 
@@ -206,27 +185,25 @@ model DocumentShare {
   documentId String
   sharedBy   String
   sharedWith String?
-  
-  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  
+  document   Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
   @@map("document_shares")
 }
 
 model Team {
-  id               String   @id @default(cuid())
+  id               String       @id @default(cuid())
   name             String
   description      String?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  maxRoleLevels    Int      @default(3)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  maxRoleLevels    Int          @default(3)
   ownerId          String
-  subscriptionTier UserTier @default(BUSINESS)
-  
-  members   TeamMember[]
-  users     User[]
-  roles     TeamRole[]
-  documents Document[]
-  
+  subscriptionTier UserTier     @default(BUSINESS)
+  documents        Document[]
+  members          TeamMember[]
+  roles            TeamRole[]
+  users            User[]
+
   @@map("teams")
 }
 
@@ -239,10 +216,10 @@ model TeamMember {
   invitedAt      DateTime @default(now())
   invitedBy      String?
   roleLevel      Int
-  
-  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  team           Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, teamId])
   @@map("team_members")
 }
 
@@ -256,9 +233,10 @@ model TeamRole {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   teamId      String
-  
-  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  
+  team        Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, level])
+  @@unique([teamId, name])
   @@map("team_roles")
 }
 
@@ -271,9 +249,8 @@ model ReferralReward {
   createdAt   DateTime @default(now())
   userId      String
   referredId  String?
-  
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@map("referral_rewards")
 }
 
@@ -286,9 +263,8 @@ model UsageHistory {
   aiModel      String?
   success      Boolean  @default(true)
   userId       String
-  
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@map("usage_history")
 }
 
@@ -301,9 +277,8 @@ model Payment {
   description     String?
   createdAt       DateTime @default(now())
   userId          String
-  
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@map("payments")
 }
 
@@ -321,36 +296,35 @@ model Template {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   createdBy   String?
-  
-  creator User? @relation(fields: [createdBy], references: [id])
-  
+  creator     User?    @relation(fields: [createdBy], references: [id])
+
   @@map("templates")
 }
 
 model Conversation {
-  id        String   @id @default(cuid())
-  status    String   @default("active")
+  id        String    @id @default(cuid())
+  status    String    @default("active")
   metadata  Json?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   userId    String
-  
-  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  messages Message[]
-  
+  projectId String?
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project   Project?  @relation("ProjectConversations", fields: [projectId], references: [id], onDelete: SetNull)
+  messages  Message[]
+
   @@map("conversations")
 }
 
 model Message {
-  id             String   @id @default(cuid())
+  id             String       @id @default(cuid())
   role           String
   content        String
   metadata       Json?
-  createdAt      DateTime @default(now())
+  createdAt      DateTime     @default(now())
   conversationId String
-  
-  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
   @@map("messages")
 }
 
@@ -369,30 +343,30 @@ model ResearchRequest {
   updatedAt   DateTime  @updatedAt
   completedAt DateTime?
   userId      String
-  
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  projectId   String?
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project     Project?  @relation("ProjectResearch", fields: [projectId], references: [id], onDelete: SetNull)
+
   @@map("research_requests")
 }
 
 model Feedback {
-  id          String    @id @default(cuid())
-  userId      String?
-  email       String?
-  name        String?
-  rating      Int
-  title       String
-  message     String
-  category    String
-  status      String    @default("pending")
-  isPublic    Boolean   @default(false)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  approvedAt  DateTime?
-  approvedBy  String?
-  
-  user User? @relation(fields: [userId], references: [id])
-  
+  id         String    @id @default(cuid())
+  userId     String?
+  email      String?
+  name       String?
+  rating     Int
+  title      String
+  message    String
+  category   String
+  status     String    @default("pending")
+  isPublic   Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  approvedAt DateTime?
+  approvedBy String?
+  user       User?     @relation(fields: [userId], references: [id])
+
   @@map("feedback")
 }
 
@@ -411,9 +385,8 @@ model ContactRequest {
   respondedBy String?
   response    String?
   userId      String?
-  
-  user User? @relation(fields: [userId], references: [id])
-  
+  user        User?     @relation(fields: [userId], references: [id])
+
   @@map("contact_requests")
 }
 
@@ -430,9 +403,8 @@ model SupportTicket {
   resolvedAt  DateTime?
   assignedTo  String?
   userId      String
-  
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@map("support_tickets")
 }
 
@@ -446,21 +418,20 @@ model AdminActivity {
   ipAddress  String?
   targetType String?
   userAgent  String?
-  
-  admin User @relation(fields: [adminId], references: [id], onDelete: Cascade)
-  
+  admin      User     @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
   @@map("admin_activities")
 }
 
 model AdminPermissionTemplate {
   id          String   @id @default(cuid())
-  name        String
+  name        String   @unique
   description String
   permissions Json
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  
+
   @@map("admin_permission_templates")
 }
 
@@ -471,6 +442,103 @@ model SystemSetting {
   description String?
   updatedAt   DateTime @updatedAt
   updatedBy   String
-  
+
   @@map("system_settings")
+}
+
+enum SystemRole {
+  SUPER_ADMIN
+  SUB_ADMIN
+  USER
+}
+
+enum UserTier {
+  FREE
+  HOBBY
+  PROFESSIONAL
+  BUSINESS
+  ENTERPRISE
+}
+
+// Project Persistence System Models
+model Project {
+  id           String   @id @default(cuid())
+  name         String
+  description  String?
+  industry     String?
+  country      String?
+  status       String   @default("active") // active, paused, completed, archived
+  stage        String   @default("initial") // initial, research, planning, documentation
+  confidence   Int      @default(0) // 0-100 confidence level
+  lastActivity DateTime @default(now())
+  totalTokens  Int      @default(0)
+  metadata     Json? // UI state, preferences, etc.
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  userId       String
+
+  // Relations
+  user              User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessions          ProjectSession[]
+  documents         Document[]            @relation("ProjectDocuments")
+  researchRequests  ResearchRequest[]     @relation("ProjectResearch")  
+  files             ProjectFile[]
+  conversations     Conversation[]        @relation("ProjectConversations")
+  summaries         ConversationSummary[]
+
+  @@map("projects")
+}
+
+model ProjectSession {
+  id             String    @id @default(cuid())
+  projectId      String
+  conversationId String?
+  stage          String    @default("initial")
+  confidence     Int       @default(0)
+  tokensUsed     Int       @default(0)
+  sessionData    Json? // UI state, current step, etc.
+  startedAt      DateTime  @default(now())
+  endedAt        DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  // Relations
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, conversationId])
+  @@map("project_sessions")
+}
+
+model ConversationSummary {
+  id               String   @id @default(cuid())
+  projectId        String
+  conversationId   String
+  summary          String
+  messageRange     String // e.g., "1-50" indicating which messages were summarized
+  originalTokens   Int // Token count before summarization
+  summaryTokens    Int // Token count of the summary
+  compressionRatio Float // originalTokens / summaryTokens
+  createdAt        DateTime @default(now())
+
+  // Relations
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("conversation_summaries")
+}
+
+model ProjectFile {
+  id        String   @id @default(cuid())
+  projectId String
+  name      String
+  type      String
+  size      Int
+  url       String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("project_files")
 }

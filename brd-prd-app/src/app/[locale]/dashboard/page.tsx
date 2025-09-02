@@ -11,6 +11,7 @@ import Link from 'next/link'
 import { formatTokens } from '@/lib/utils'
 import { DashboardClient } from './dashboard-client'
 import { CreateDocumentButton } from '@/components/dashboard/create-document-button'
+import { RecentProjectsWidget } from '@/components/dashboard/recent-projects-widget'
 
 interface DashboardPageProps {
   params: Promise<{ locale: string }>;
@@ -45,7 +46,17 @@ const translations = {
     referralReward2: "• 50K tokens per paid subscription", 
     referralReward3: "• Bonus tokens for upgrades",
     referralReward4: "• Social media follow rewards",
-    viewReferralDashboard: "View Referral Dashboard"
+    viewReferralDashboard: "View Referral Dashboard",
+    recentProjects: "Recent Projects",
+    noProjectsYet: "No projects yet",
+    createFirstProject: "Create First Project",
+    viewAllProjects: "View All Projects",
+    confidence: "confidence",
+    documents: "docs",
+    conversations: "chats",
+    lastActive: "last active",
+    stage: "stage",
+    continueProject: "Continue"
   },
   ar: {
     welcomeBack: "مرحباً بعودتك، {name}!",
@@ -74,7 +85,17 @@ const translations = {
     referralReward2: "• 50 ألف رمز لكل اشتراك مدفوع",
     referralReward3: "• رموز مكافأة للترقيات",
     referralReward4: "• مكافآت متابعة وسائل التواصل الاجتماعي",
-    viewReferralDashboard: "عرض لوحة الإحالات"
+    viewReferralDashboard: "عرض لوحة الإحالات",
+    recentProjects: "المشاريع الأخيرة",
+    noProjectsYet: "لا توجد مشاريع بعد",
+    createFirstProject: "إنشاء أول مشروع",
+    viewAllProjects: "عرض جميع المشاريع",
+    confidence: "الثقة",
+    documents: "مستندات",
+    conversations: "محادثات",
+    lastActive: "آخر نشاط",
+    stage: "المرحلة",
+    continueProject: "متابعة"
   }
 }
 
@@ -151,7 +172,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
           </div>
 
           {/* Quick Actions */}
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 mb-8">
             <DashboardClient 
               locale={locale}
               t={t}
@@ -213,6 +234,22 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
                 )}
               </CardContent>
             </Card>
+
+            <RecentProjectsWidget
+              locale={locale}
+              translations={{
+                recentProjects: t.recentProjects,
+                noProjectsYet: t.noProjectsYet,
+                createFirstProject: t.createFirstProject,
+                viewAllProjects: t.viewAllProjects,
+                confidence: t.confidence,
+                documents: t.documents,
+                conversations: t.conversations,
+                lastActive: t.lastActive,
+                stage: t.stage,
+                continueProject: t.continueProject
+              }}
+            />
           </div>
 
           {/* Getting Started */}

@@ -68,12 +68,19 @@ export function NewDocumentClient({
   const [selectedFinding, setSelectedFinding] = useState<any | null>(null)
   const [showToast, setShowToast] = useState(false)
   const [toastMessage, setToastMessage] = useState('')
+  const [projectId, setProjectId] = useState<string | null>(null)
 
   // Initialize from URL params and fetch user subscription
   useEffect(() => {
     const modeFromUrl = searchParams?.get('mode') as GenerationMode
     if (modeFromUrl && (modeFromUrl === 'standard' || modeFromUrl === 'advanced')) {
       setMode(modeFromUrl)
+    }
+    
+    // Get project ID from URL if exists
+    const projectFromUrl = searchParams?.get('projectId')
+    if (projectFromUrl) {
+      setProjectId(projectFromUrl)
     }
     
     // Generate or get session ID
@@ -361,6 +368,7 @@ export function NewDocumentClient({
                     userName={userName}
                     locale={locale}
                     mode="advanced"
+                    projectId={projectId}
                   />
                 </div>
 

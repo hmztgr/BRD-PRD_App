@@ -50,10 +50,27 @@ interface PlanningSession {
   status: 'active' | 'paused' | 'completed'
 }
 
+interface Project {
+  id: string
+  name: string
+  description: string | null
+  industry: string | null
+  country: string | null
+  status: string
+  stage: string
+  confidence: number
+  lastActivity: Date
+  totalTokens: number
+  metadata: any
+  createdAt: Date
+  updatedAt: Date
+}
+
 interface EnhancedChatInterfaceProps {
   userName: string
   locale?: string
   mode: 'standard' | 'advanced'
+  projectId?: string
 }
 
 // Helper function to detect Arabic text
@@ -139,6 +156,10 @@ export function EnhancedChatInterface({
   const [conversationId, setConversationId] = useState<string | null>(null)
   const [canGenerateDocument, setCanGenerateDocument] = useState(false)
   
+  // Project state (for persistence)
+  const [currentProject, setCurrentProject] = useState<Project | null>(null)
+  const [autoSaveInterval, setAutoSaveInterval] = useState<NodeJS.Timeout | null>(null)
+  
   // Planning state (for advanced mode)
   const [planningSession, setPlanningSession] = useState<PlanningSession | null>(null)
   const [selectedCountry, setSelectedCountry] = useState<string>('saudi-arabia')
@@ -151,6 +172,131 @@ export function EnhancedChatInterface({
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
+
+  // Auto-save function for project sessions
+  const autoSaveSession = async () => {
+    if (!currentProject || !conversationId) return
+
+    try {
+      await fetch(`/api/projects/${currentProject.id}/session/save`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          conversationId,
+          stage: currentProject.stage,
+          confidence: currentProject.confidence,
+          sessionData: {
+            selectedCountry,
+            planningSession,
+            currentStep: planningSession?.currentStep
+          },
+          messages: messages.filter(m => !m.isTyping && m.id !== 'generating'),
+          currentTab,
+          uiState: {
+            canGenerateDocument,
+            selectedCountry
+          }
+        })
+      })
+    } catch (error) {
+      console.error('Auto-save failed:', error)
+    }
+  }
+
+  // Load or create project on mount
+  useEffect(() => {
+    const initializeProject = async () => {
+      if (mode === 'standard') return // Standard mode doesn't need project persistence
+
+      try {
+        if (projectId) {
+          // Load existing project
+          const response = await fetch(`/api/projects/${projectId}`)
+          if (response.ok) {
+            const project = await response.json()
+            setCurrentProject(project)
+            setSelectedCountry(project.country || 'saudi-arabia')
+            
+            // Try to resume session
+            const resumeResponse = await fetch(`/api/projects/${projectId}/session/resume`, {
+              method: 'POST'
+            })
+            if (resumeResponse.ok) {
+              const { sessionState } = await resumeResponse.json()
+              if (sessionState.conversation && sessionState.conversation.messages.length > 0) {
+                setMessages(sessionState.conversation.messages.map((msg: any) => ({
+                  id: msg.id,
+                  role: msg.role,
+                  content: msg.content,
+                  timestamp: new Date(msg.createdAt || msg.timestamp)
+                })))
+                setConversationId(sessionState.conversation.id)
+              }
+              if (sessionState.session) {
+                const sessionData = sessionState.session.sessionData as any
+                if (sessionData) {
+                  setSelectedCountry(sessionData.selectedCountry || 'saudi-arabia')
+                  setPlanningSession(sessionData.planningSession)
+                  setCurrentTab(sessionData.currentTab || 'chat')
+                  setCanGenerateDocument(sessionData.uiState?.canGenerateDocument || false)
+                }
+              }
+            }
+          }
+        } else {
+          // Create new project for advanced mode
+          const response = await fetch('/api/projects', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              name: `Business Planning Session - ${new Date().toLocaleDateString()}`,
+              description: 'Advanced business planning session',
+              industry: 'general',
+              country: selectedCountry,
+              stage: 'initial'
+            })
+          })
+          if (response.ok) {
+            const project = await response.json()
+            setCurrentProject(project)
+            // Update URL to include project ID
+            const url = new URL(window.location.href)
+            url.searchParams.set('projectId', project.id)
+            window.history.replaceState({}, '', url.toString())
+          }
+        }
+      } catch (error) {
+        console.error('Failed to initialize project:', error)
+      }
+    }
+
+    initializeProject()
+  }, [projectId, mode])
+
+  // Set up auto-save interval
+  useEffect(() => {
+    if (mode === 'advanced' && currentProject) {
+      const interval = setInterval(autoSaveSession, 30000) // Auto-save every 30 seconds
+      setAutoSaveInterval(interval)
+      return () => {
+        clearInterval(interval)
+        setAutoSaveInterval(null)
+      }
+    }
+  }, [currentProject, conversationId, messages, mode])
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (autoSaveInterval) {
+        clearInterval(autoSaveInterval)
+      }
+    }
+  }, [])
 
   useEffect(() => {
     scrollToBottom()
@@ -206,6 +352,7 @@ export function EnhancedChatInterface({
         body: JSON.stringify({
           message: userMessage.content,
           conversationId,
+          projectId: currentProject?.id,
           planningSessionId: planningSession?.id,
           country: selectedCountry,
           mode,
@@ -290,6 +437,7 @@ export function EnhancedChatInterface({
         },
         body: JSON.stringify({
           conversationId,
+          projectId: currentProject?.id,
           planningSessionId: planningSession?.id,
           country: selectedCountry,
           mode
@@ -317,9 +465,9 @@ export function EnhancedChatInterface({
       
       // Navigate to appropriate view based on mode
       if (mode === 'advanced' && data.documentSuiteId) {
-        router.push(`/documents/suite/${data.documentSuiteId}`)
+        router.push(`/${locale}/documents/suite/${data.documentSuiteId}`)
       } else if (data.documentId) {
-        router.push(`/documents/${data.documentId}`)
+        router.push(`/${locale}/documents/${data.documentId}`)
       }
 
     } catch (error) {
@@ -338,18 +486,29 @@ export function EnhancedChatInterface({
   }
 
   const saveProgress = async () => {
-    if (!planningSession) return
+    if (!currentProject) return
 
     try {
-      const response = await fetch('/api/planning/save-progress', {
+      const response = await fetch(`/api/projects/${currentProject.id}/session/save`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          sessionId: planningSession.id,
-          messages: messages.filter(m => !m.isTyping),
-          conversationId
+          conversationId,
+          stage: currentProject.stage,
+          confidence: currentProject.confidence,
+          sessionData: {
+            selectedCountry,
+            planningSession,
+            currentStep: planningSession?.currentStep
+          },
+          messages: messages.filter(m => !m.isTyping && m.id !== 'generating'),
+          currentTab,
+          uiState: {
+            canGenerateDocument,
+            selectedCountry
+          }
         })
       })
 
@@ -480,7 +639,7 @@ export function EnhancedChatInterface({
   function renderChatContent() {
     return (
       <>
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 max-h-[400px]">
           {messages.map((message) => (
             <div
               key={message.id}
