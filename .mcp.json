@@ -17,6 +17,16 @@
         "start"
       ],
       "type": "stdio"
+    },
+    "supabase": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@supabase/mcp-server-supabase@latest",
+        "--read-only",
+        "--project-ref=jmfkzfmripuzfspijndq",
+        "--access-token=sbp_42cb41f6e77ad412a68513a076df4bd943275075"
+      ]
     }
   }
 }

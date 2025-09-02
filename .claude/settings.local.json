@@ -136,7 +136,8 @@
       "Bash(start http://localhost:3005)",
       "Bash(npm:*)",
       "Read(C:\\Users\\Hamza\\AppData\\Local\\npm-cache\\_logs/**)",
-      "mcp__playwright__browser_console_messages"
+      "mcp__playwright__browser_console_messages",
+      "mcp__supabase__get_advisors"
     ],
     "deny": [],
     "ask": [],
