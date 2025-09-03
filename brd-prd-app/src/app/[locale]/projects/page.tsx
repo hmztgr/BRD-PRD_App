@@ -11,16 +11,17 @@ export const metadata: Metadata = {
 }
 
 interface ProjectsPageProps {
-  params: {
+  params: Promise<{
     locale: string
-  }
+  }>
 }
 
 export default async function ProjectsPage({ params }: ProjectsPageProps) {
+  const { locale } = await params
   const session = await getServerSession(authOptions)
 
   if (!session?.user?.id) {
-    redirect(`/${params.locale}/auth/signin`)
+    redirect(`/${locale}/auth/signin`)
   }
 
   // Get user's subscription info for project limits
@@ -33,7 +34,7 @@ export default async function ProjectsPage({ params }: ProjectsPageProps) {
   })
 
   if (!user) {
-    redirect(`/${params.locale}/auth/signin`)
+    redirect(`/${locale}/auth/signin`)
   }
 
   // Define project limits by tier
@@ -50,7 +51,7 @@ export default async function ProjectsPage({ params }: ProjectsPageProps) {
 
   return (
     <ProjectsPageClient
-      locale={params.locale}
+      locale={locale}
       userTier={user.subscriptionTier}
       projectLimits={{
         current: currentProjects,

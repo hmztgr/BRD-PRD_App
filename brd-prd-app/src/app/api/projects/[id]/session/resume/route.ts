@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma'
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -13,10 +13,12 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const { id } = await params
+
     // Verify project ownership and get full project data
     const project = await prisma.project.findFirst({
       where: {
-        id: params.id,
+        id: id,
         userId: session.user.id
       },
       include: {
@@ -30,7 +32,6 @@ export async function POST(
                 id: true,
                 role: true,
                 content: true,
-                tokenCount: true,
                 createdAt: true,
                 metadata: true
               }
@@ -118,7 +119,7 @@ export async function POST(
 
     // Update project last activity
     await prisma.project.update({
-      where: { id: params.id },
+      where: { id: id },
       data: { 
         lastActivity: new Date(),
         updatedAt: new Date()
@@ -156,7 +157,7 @@ export async function POST(
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -164,10 +165,12 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const { id } = await params
+
     // Get project session history
     const project = await prisma.project.findFirst({
       where: {
-        id: params.id,
+        id: id,
         userId: session.user.id
       },
       include: {
@@ -210,7 +213,7 @@ export async function GET(
     })
 
     return NextResponse.json({
-      projectId: params.id,
+      projectId: id,
       projectName: project.name,
       projectStage: project.stage,
       sessions: sessionHistory,

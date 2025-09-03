@@ -137,7 +137,13 @@
       "Bash(npm:*)",
       "Read(C:\\Users\\Hamza\\AppData\\Local\\npm-cache\\_logs/**)",
       "mcp__playwright__browser_console_messages",
-      "mcp__supabase__get_advisors"
+      "mcp__supabase__get_advisors",
+      "Bash(dir:*)",
+      "Bash(PORT=3001 npm run dev)",
+      "Bash(start http://localhost:3001/en/dashboard)",
+      "Bash(wsl:*)",
+      "mcp__claude-flow__sparc_mode",
+      "mcp__playwright__browser_install"
     ],
     "deny": [],
     "ask": [],
@@ -145,8 +151,10 @@
       "C:\\c\\Users"
     ]
   },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "claude-flow",
-    "ruv-swarm"
+    "ruv-swarm",
+    "supabase"
   ]
 }

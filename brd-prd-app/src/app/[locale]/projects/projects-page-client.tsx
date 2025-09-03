@@ -157,8 +157,8 @@ export default function ProjectsPageClient({
       if (response.ok) {
         setShowCreateDialog(false)
         setNewProject({ name: '', description: '', industry: '', country: 'saudi-arabia' })
-        // Redirect to the new project's advanced mode
-        router.push(`/${locale}/projects/${data.project.id}`)
+        // Redirect to Advanced Mode with the new project
+        router.push(`/${locale}/documents/new?mode=advanced&projectId=${data.project.id}`)
       } else {
         alert(data.error || 'Failed to create project')
       }

@@ -88,6 +88,7 @@ model User {
   emailTokens          EmailToken[]
   feedback             Feedback[]
   payments             Payment[]
+  projects             Project[]
   referralRewards      ReferralReward[]
   researchRequests     ResearchRequest[]
   sessions             Session[]
@@ -95,7 +96,6 @@ model User {
   teamMemberships      TeamMember[]
   createdTemplates     Template[]
   usageHistory         UsageHistory[]
-  projects             Project[]
   referrer             User?             @relation("UserReferrals", fields: [referredBy], references: [id])
   referredUsers        User[]            @relation("UserReferrals")
   team                 Team?             @relation(fields: [teamId], references: [id])
@@ -132,14 +132,14 @@ model Document {
   generationTime Int?
   userId         String
   teamId         String?
-  projectId      String?
   metadata       Json?
+  projectId      String?
   comments       Comment[]
   shares         DocumentShare[]
   versions       DocumentVersion[]
+  project        Project?          @relation("ProjectDocuments", fields: [projectId], references: [id])
   team           Team?             @relation(fields: [teamId], references: [id])
   user           User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  project        Project?          @relation("ProjectDocuments", fields: [projectId], references: [id], onDelete: SetNull)
 
   @@map("documents")
 }
@@ -309,8 +309,8 @@ model Conversation {
   updatedAt DateTime  @updatedAt
   userId    String
   projectId String?
+  project   Project?  @relation("ProjectConversations", fields: [projectId], references: [id])
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  project   Project?  @relation("ProjectConversations", fields: [projectId], references: [id], onDelete: SetNull)
   messages  Message[]
 
   @@map("conversations")
@@ -344,8 +344,8 @@ model ResearchRequest {
   completedAt DateTime?
   userId      String
   projectId   String?
+  project     Project?  @relation("ProjectResearch", fields: [projectId], references: [id])
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  project     Project?  @relation("ProjectResearch", fields: [projectId], references: [id], onDelete: SetNull)
 
   @@map("research_requests")
 }
@@ -446,45 +446,28 @@ model SystemSetting {
   @@map("system_settings")
 }
 
-enum SystemRole {
-  SUPER_ADMIN
-  SUB_ADMIN
-  USER
-}
-
-enum UserTier {
-  FREE
-  HOBBY
-  PROFESSIONAL
-  BUSINESS
-  ENTERPRISE
-}
-
-// Project Persistence System Models
 model Project {
-  id           String   @id @default(cuid())
-  name         String
-  description  String?
-  industry     String?
-  country      String?
-  status       String   @default("active") // active, paused, completed, archived
-  stage        String   @default("initial") // initial, research, planning, documentation
-  confidence   Int      @default(0) // 0-100 confidence level
-  lastActivity DateTime @default(now())
-  totalTokens  Int      @default(0)
-  metadata     Json? // UI state, preferences, etc.
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  userId       String
-
-  // Relations
-  user              User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  sessions          ProjectSession[]
-  documents         Document[]            @relation("ProjectDocuments")
-  researchRequests  ResearchRequest[]     @relation("ProjectResearch")  
-  files             ProjectFile[]
-  conversations     Conversation[]        @relation("ProjectConversations")
-  summaries         ConversationSummary[]
+  id               String                @id @default(cuid())
+  name             String
+  description      String?
+  industry         String?
+  country          String?
+  status           String                @default("active")
+  stage            String                @default("initial")
+  confidence       Int                   @default(0)
+  lastActivity     DateTime              @default(now())
+  totalTokens      Int                   @default(0)
+  metadata         Json?
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+  userId           String
+  summaries        ConversationSummary[]
+  conversations    Conversation[]        @relation("ProjectConversations")
+  documents        Document[]            @relation("ProjectDocuments")
+  files            ProjectFile[]
+  sessions         ProjectSession[]
+  user             User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  researchRequests ResearchRequest[]     @relation("ProjectResearch")
 
   @@map("projects")
 }
@@ -496,14 +479,12 @@ model ProjectSession {
   stage          String    @default("initial")
   confidence     Int       @default(0)
   tokensUsed     Int       @default(0)
-  sessionData    Json? // UI state, current step, etc.
+  sessionData    Json?
   startedAt      DateTime  @default(now())
   endedAt        DateTime?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
-
-  // Relations
-  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project        Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@unique([projectId, conversationId])
   @@map("project_sessions")
@@ -514,14 +495,12 @@ model ConversationSummary {
   projectId        String
   conversationId   String
   summary          String
-  messageRange     String // e.g., "1-50" indicating which messages were summarized
-  originalTokens   Int // Token count before summarization
-  summaryTokens    Int // Token count of the summary
-  compressionRatio Float // originalTokens / summaryTokens
+  messageRange     String
+  originalTokens   Int
+  summaryTokens    Int
+  compressionRatio Float
   createdAt        DateTime @default(now())
-
-  // Relations
-  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project          Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@map("conversation_summaries")
 }
@@ -536,9 +515,21 @@ model ProjectFile {
   metadata  Json?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  // Relations
-  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@map("project_files")
+}
+
+enum SystemRole {
+  SUPER_ADMIN
+  SUB_ADMIN
+  USER
+}
+
+enum UserTier {
+  FREE
+  HOBBY
+  PROFESSIONAL
+  BUSINESS
+  ENTERPRISE
 }

@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
             select: { id: true, type: true, createdAt: true }
           },
           files: {
-            select: { id: true, fileType: true, createdAt: true }
+            select: { id: true, type: true, createdAt: true }
           },
           researchRequests: {
             select: { id: true, status: true, createdAt: true }

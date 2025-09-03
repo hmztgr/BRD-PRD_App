@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma'
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -13,9 +13,10 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const { id } = await params
     const project = await prisma.project.findFirst({
       where: {
-        id: params.id,
+        id: id,
         userId: session.user.id
       },
       include: {
@@ -35,9 +36,9 @@ export async function GET(
           orderBy: { createdAt: 'desc' },
           select: {
             id: true,
-            fileName: true,
-            fileType: true,
-            size: true,
+            type: true,
+            url: true,
+            metadata: true,
             createdAt: true
           }
         },
@@ -52,7 +53,7 @@ export async function GET(
                 id: true,
                 role: true,
                 content: true,
-                tokenCount: true,
+                metadata: true,
                 createdAt: true
               }
             }
@@ -142,7 +143,7 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -150,6 +151,7 @@ export async function PUT(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const { id } = await params
     const body = await req.json()
     const { 
       name, 
@@ -165,7 +167,7 @@ export async function PUT(
     // Verify ownership
     const existingProject = await prisma.project.findFirst({
       where: {
-        id: params.id,
+        id: id,
         userId: session.user.id
       }
     })
@@ -225,7 +227,7 @@ export async function PUT(
     }
 
     const updatedProject = await prisma.project.update({
-      where: { id: params.id },
+      where: { id: id },
       data: updateData,
       include: {
         _count: {
@@ -269,7 +271,7 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -277,13 +279,14 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const { id } = await params
     const { searchParams } = new URL(req.url)
     const permanent = searchParams.get('permanent') === 'true'
 
     // Verify ownership
     const existingProject = await prisma.project.findFirst({
       where: {
-        id: params.id,
+        id: id,
         userId: session.user.id
       }
     })
@@ -295,7 +298,7 @@ export async function DELETE(
     if (permanent) {
       // Permanently delete the project and all related data
       await prisma.project.delete({
-        where: { id: params.id }
+        where: { id: id }
       })
 
       return NextResponse.json({ 
@@ -305,7 +308,7 @@ export async function DELETE(
     } else {
       // Soft delete - archive the project
       await prisma.project.update({
-        where: { id: params.id },
+        where: { id: id },
         data: { 
           status: 'archived',
           updatedAt: new Date()

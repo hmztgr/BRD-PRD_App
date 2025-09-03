@@ -135,7 +135,8 @@ const translations = {
 export function EnhancedChatInterface({ 
   userName, 
   locale = 'en',
-  mode = 'standard'
+  mode = 'standard',
+  projectId
 }: EnhancedChatInterfaceProps) {
   const router = useRouter()
   const searchParams = useSearchParams()

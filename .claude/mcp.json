@@ -13,6 +13,15 @@
       "env": {
         "SUPABASE_ACCESS_TOKEN": "sbp_42cb41f6e77ad412a68513a076df4bd943275075"
       }
+    },
+    "context7": {
+      "command": "npx",
+      "args": [
+        "@upstash/context7-mcp"
+      ],
+      "env": {
+        "CONTEXT7_API_KEY": "ctx7sk-3d27077d-ac39-4afb-a2a9-1e7d09c8d705"
+      }
     }
   }
 }

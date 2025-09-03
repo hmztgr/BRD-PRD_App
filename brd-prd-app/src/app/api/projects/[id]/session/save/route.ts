@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma'
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -13,6 +13,7 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const { id } = await params
     const body = await req.json()
     const { 
       conversationId, 
@@ -27,7 +28,7 @@ export async function POST(
     // Verify project ownership
     const project = await prisma.project.findFirst({
       where: {
-        id: params.id,
+        id: id,
         userId: session.user.id
       }
     })
@@ -46,7 +47,7 @@ export async function POST(
     const result = await prisma.$transaction(async (tx) => {
       // Update project metadata and activity
       const updatedProject = await tx.project.update({
-        where: { id: params.id },
+        where: { id: id },
         data: {
           stage: stage || project.stage,
           confidence: confidence !== undefined ? confidence : project.confidence,
@@ -67,14 +68,14 @@ export async function POST(
         conversation = await tx.conversation.upsert({
           where: { id: conversationId },
           update: {
-            projectId: params.id,
+            projectId: id,
             updatedAt: new Date(),
             activeTokens: sessionTokens
           },
           create: {
             id: conversationId,
             userId: session.user.id,
-            projectId: params.id,
+            projectId: id,
             activeTokens: sessionTokens,
             status: 'active'
           }
@@ -105,7 +106,7 @@ export async function POST(
       const projectSession = await tx.projectSession.upsert({
         where: {
           projectId_conversationId: {
-            projectId: params.id,
+            projectId: id,
             conversationId: conversationId || 'default'
           }
         },
@@ -122,7 +123,7 @@ export async function POST(
           }
         },
         create: {
-          projectId: params.id,
+          projectId: id,
           conversationId: conversationId || 'default',
           stage: stage || project.stage,
           confidence: confidence !== undefined ? confidence : project.confidence,
@@ -143,7 +144,7 @@ export async function POST(
       success: true,
       savedAt: new Date().toISOString(),
       sessionData: {
-        projectId: params.id,
+        projectId: id,
         conversationId,
         stage: result.updatedProject.stage,
         confidence: result.updatedProject.confidence,
