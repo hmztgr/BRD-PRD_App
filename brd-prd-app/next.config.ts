@@ -14,6 +14,10 @@ const nextConfig: NextConfig = {
   experimental: {
     // Disable worker threads that might cause jest-worker issues
     workerThreads: false,
+    // Disable jest-worker usage in Next.js to prevent conflicts
+    cpus: 1,
+    // Additional experimental flags to prevent worker conflicts
+    forceSwcTransforms: true,
   },
   // Exclude Jest and test files from Next.js processing
   webpack: (config, { dev, isServer }) => {
@@ -37,6 +41,14 @@ const nextConfig: NextConfig = {
           ? [...existingIgnored, ...jestFiles]
           : jestFiles
       };
+      
+      // Exclude Jest files from webpack processing entirely
+      config.externals = config.externals || [];
+      if (Array.isArray(config.externals)) {
+        config.externals.push(/jest\.config\.js$/);
+        config.externals.push(/jest\.debug\.js$/);
+        config.externals.push(/test-debug\.js$/);
+      }
     }
     return config;
   },

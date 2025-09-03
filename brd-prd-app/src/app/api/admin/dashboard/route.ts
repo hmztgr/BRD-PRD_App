@@ -75,42 +75,10 @@ export async function GET(request: NextRequest) {
 
   } catch (error) {
     console.error('Dashboard API error:', error)
-    
-    // Fallback to mock data if database queries fail
-    const mockMetrics = {
-      totalUsers: 1247,
-      activeSubscriptions: 342,
-      totalRevenue: 24750,
-      documentsGenerated: 8934,
-      newUsersToday: 23,
-      revenueGrowth: 12.5,
-      systemHealth: 'healthy' as const,
-      recentActivities: [
-        {
-          id: '1',
-          action: 'New user registered',
-          user: 'user@example.com',
-          timestamp: '2 minutes ago',
-          type: 'user' as const
-        },
-        {
-          id: '2',
-          action: 'Subscription upgraded',
-          user: 'premium@example.com',
-          timestamp: '5 minutes ago',
-          type: 'revenue' as const
-        },
-        {
-          id: '3',
-          action: 'Document generated',
-          user: 'client@example.com',
-          timestamp: '8 minutes ago',
-          type: 'system' as const
-        }
-      ]
-    }
-
-    return NextResponse.json(mockMetrics)
+    return NextResponse.json(
+      { error: 'Failed to fetch dashboard metrics', details: error instanceof Error ? error.message : 'Unknown error' },
+      { status: 500 }
+    )
   }
 }
 

@@ -3,7 +3,34 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { createCheckoutSession, createCustomer } from '@/lib/stripe'
+import { createMoyasarPayment } from '@/lib/moyasar'
+import { getPaymentProvider, ARABIC_COUNTRIES } from '@/lib/payment-router'
 // import { config } from '@/lib/config' // Temporarily disabled due to zod version issues
+
+// Helper function to handle Moyasar checkout
+async function handleMoyasarCheckout(user: any, priceId: string, successPath: string, cancelPath: string) {
+  try {
+    // For now, redirect to a dedicated Moyasar checkout route
+    // In production, you would create the Moyasar payment directly here
+    return NextResponse.json({
+      provider: 'moyasar',
+      url: `/api/subscription/create-moyasar-checkout`,
+      redirectData: {
+        priceId,
+        successPath,
+        cancelPath,
+        userId: user.id,
+        userEmail: user.email
+      }
+    });
+  } catch (error: any) {
+    console.error('Error creating Moyasar checkout:', error);
+    return NextResponse.json(
+      { error: 'Failed to create Moyasar checkout session' },
+      { status: 500 }
+    );
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,7 +39,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { priceId, successPath = '/dashboard?checkout=success', cancelPath = '/dashboard?checkout=canceled' } = await req.json()
+    const { 
+      priceId, 
+      successPath = '/dashboard?checkout=success', 
+      cancelPath = '/dashboard?checkout=canceled',
+      countryCode,
+      paymentProvider 
+    } = await req.json()
 
     if (!priceId) {
       return NextResponse.json({ error: 'Price ID is required' }, { status: 400 })
@@ -33,6 +66,18 @@ export async function POST(req: NextRequest) {
         { error: 'User already has an active subscription' },
         { status: 400 }
       )
+    }
+
+    // Determine payment provider based on country code
+    const detectedProvider = countryCode ? getPaymentProvider(countryCode) : getPaymentProvider();
+    const finalProvider = paymentProvider || detectedProvider.provider;
+
+    console.log(`Payment routing: Country=${countryCode}, Provider=${finalProvider}, Currency=${detectedProvider.currency}`);
+
+    // Route to appropriate payment provider
+    if (finalProvider === 'moyasar' || ARABIC_COUNTRIES.includes(countryCode?.toUpperCase() || '')) {
+      // Handle Moyasar payment for Arabic countries
+      return await handleMoyasarCheckout(user, priceId, successPath, cancelPath);
     }
 
     let customerId = user.stripeCustomerId

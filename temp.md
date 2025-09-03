@@ -734,3 +734,36 @@ my admin pages testing feedback
 
 no wait i think "ACCOUNT_MANAGER" should have totally different page we will create it later i dont want ACCOUNT_MANAGERs to have access to this admin page  add thsi to @"Project documents\pending_issues.md" and revert the access to /admin for "ACCOUNT_MANAGER" users 
 
+
+
+
+Runtime Error
+
+
+Jest worker encountered 2 child process exceptions, exceeding retry limit
+
+Call Stack
+5
+
+Hide 5 ignore-listed frame(s)
+ChildProcessWorker.initialize
+node_modules\next\dist\compiled\jest-worker\index.js (1:11580)
+ChildProcessWorker._onExit
+node_modules\next\dist\compiled\jest-worker\index.js (1:12545)
+ChildProcess.emit
+node:events (518:28)
+ChildProcess._handle.onexit
+node:internal/child_process (293:12)
+Process.callbackTrampoline
+node:internal/async_hooks (130:17)
+
+
+
+
+
+
+
+
+
+
+ok, i noticed you assumed 50% 50% distrubition between input and output from my      ││   experince input is usually way lower so lets assume about 20% input and 80% output   ││   also adjust the numbers in the @"Project documents\PRD-BRD-App.md" and               ││   @free_month_cost_analysis.md  according to this @"uploads\BRD-PRD App prices.csv"    ││   implement those changes and those changed below \                                    ││   - in business plan change "Everything in Hobby" to "Everything in Professional"\     ││   - in Enterprise plan change "24/7 premium support" to "Priority support"\            ││   - in Enterprise plan change "Unlimited tokens" to "1M tokens per month"\ 

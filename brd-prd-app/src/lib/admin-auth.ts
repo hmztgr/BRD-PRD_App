@@ -43,11 +43,20 @@ export async function getAdminUser(): Promise<AdminUser | null> {
 
     // Get user's systemRole from database with better error handling
     try {
-      const result = await prisma.$queryRaw`
-        SELECT id, name, email, "systemRole", "adminPermissions", "teamId"
-        FROM users 
-        WHERE id = ${session.user.id}
-      `
+      // Check if this is a fallback session (query by email instead of ID)
+      const isFallbackSession = session.user.email === 'admin@smartdocs.ai' && !session.user.id.startsWith('cmet')
+      
+      const result = isFallbackSession 
+        ? await prisma.$queryRaw`
+            SELECT id, name, email, "systemRole", "adminPermissions", "teamId"
+            FROM "users" 
+            WHERE email = ${session.user.email}
+          `
+        : await prisma.$queryRaw`
+            SELECT id, name, email, "systemRole", "adminPermissions", "teamId"
+            FROM "users" 
+            WHERE id = ${session.user.id}
+          `
 
       const users = result as any[]
       if (!users || users.length === 0) {
@@ -119,6 +128,27 @@ export async function getAdminUser(): Promise<AdminUser | null> {
 
     } catch (dbError) {
       console.error('[AdminAuth] Database error:', dbError)
+      
+      // Special case: Allow emergency admin user when database is unavailable
+      if (session.user.id === 'emergency-admin-fallback' && session.user.email === 'admin@smartdocs.ai') {
+        console.log('[AdminAuth] Granting emergency admin access due to database unavailability')
+        return {
+          id: 'emergency-admin-fallback',
+          name: 'Emergency Admin',
+          email: 'admin@smartdocs.ai',
+          role: 'super_admin',
+          teamId: null,
+          adminPermissions: [
+            'manage_users',
+            'manage_feedback', 
+            'manage_content',
+            'manage_subscriptions',
+            'view_analytics',
+            'manage_system'
+          ]
+        }
+      }
+      
       return null
     }
   } catch (error) {
@@ -155,7 +185,7 @@ export async function logAdminActivity(
     const activityId = `admin_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
     
     await prisma.$executeRaw`
-      INSERT INTO admin_activities (id, "adminId", action, "targetId", details, "createdAt")
+      INSERT INTO "admin_activities" (id, "adminId", action, "targetId", details, "createdAt")
       VALUES (${activityId}, ${adminId}, ${action}, ${targetId || null}, ${details ? JSON.stringify(details) : null}::jsonb, NOW())
     `
   } catch (error) {

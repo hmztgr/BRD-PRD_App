@@ -143,7 +143,15 @@
       "Bash(start http://localhost:3001/en/dashboard)",
       "Bash(wsl:*)",
       "mcp__claude-flow__sparc_mode",
-      "mcp__playwright__browser_install"
+      "mcp__playwright__browser_install",
+      "Bash(dir prisma)",
+      "Bash(PORT=3002 npm run dev)",
+      "Bash(start http://localhost:3001/en/admin)",
+      "Bash(set PORT=3001)",
+      "Bash(dir srcappapiprojects)",
+      "WebFetch(domain:platform.openai.com)",
+      "WebFetch(domain:openai.com)",
+      "WebFetch(domain:docs.moyasar.com)"
     ],
     "deny": [],
     "ask": [],

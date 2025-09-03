@@ -204,7 +204,7 @@ export function ChatInterface({ userName, locale = 'en' }: ChatInterfaceProps) {
       setMessages(prev => prev.filter(m => m.id !== 'generating').concat(successMessage))
       
       // Navigate to the document page
-      router.push(`/documents/${data.documentId}`)
+      router.push(`/${locale}/documents/${data.documentId}`)
 
     } catch (error) {
       setMessages(prev => prev.filter(m => m.id !== 'generating'))

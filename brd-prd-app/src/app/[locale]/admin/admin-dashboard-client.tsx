@@ -41,47 +41,17 @@ export function AdminDashboardClient() {
   const { data: metrics, loading, error } = useApiRequest<DashboardMetrics>('/api/admin/dashboard')
   const [fallbackMode, setFallbackMode] = useState(false)
 
-  const getFallbackMetrics = (): DashboardMetrics => ({
-    totalUsers: 1,
-    activeSubscriptions: 1,
-    totalRevenue: 0,
-    documentsGenerated: 0,
-    newUsersToday: 0,
-    revenueGrowth: 0,
-    systemHealth: 'warning' as const,
-    recentActivities: [
-      {
-        id: '1',
-        action: 'Emergency admin mode activated',
-        user: 'System',
-        timestamp: new Date().toLocaleTimeString(),
-        type: 'system' as const
-      },
-      {
-        id: '2',
-        action: 'Fallback authentication enabled',
-        user: 'Emergency Admin',
-        timestamp: new Date().toLocaleTimeString(),
-        type: 'system' as const
-      }
-    ]
-  })
-
-  // Handle error case with fallback mode
+  // Handle error case
   useEffect(() => {
     if (error) {
       console.error('Dashboard metrics error:', error)
-      console.log('Using fallback mode due to API error')
       setFallbackMode(true)
     } else if (metrics) {
       setFallbackMode(false)
     }
   }, [error, metrics])
 
-  // Use fallback metrics if there's an error
-  const displayMetrics = fallbackMode ? getFallbackMetrics() : metrics
-
-  if (loading || !displayMetrics) {
+  if (loading) {
     return (
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -94,6 +64,43 @@ export function AdminDashboardClient() {
             </Card>
           ))}
         </div>
+      </div>
+    )
+  }
+
+  if (error || fallbackMode) {
+    return (
+      <div className="space-y-6">
+        <Card className="p-6">
+          <div className="flex items-center gap-3 text-red-600 mb-4">
+            <AlertCircle className="w-5 h-5" />
+            <h2 className="text-lg font-semibold">Dashboard Unavailable</h2>
+          </div>
+          <p className="text-gray-600 mb-4">
+            Unable to load dashboard metrics. This could be due to:
+          </p>
+          <ul className="list-disc list-inside space-y-1 text-sm text-gray-600 mb-4">
+            <li>Database connection issues</li>
+            <li>Server maintenance</li>
+            <li>Network connectivity problems</li>
+          </ul>
+          <Button 
+            onClick={() => window.location.reload()} 
+            className="w-full md:w-auto"
+          >
+            Retry
+          </Button>
+        </Card>
+      </div>
+    )
+  }
+
+  if (!metrics) {
+    return (
+      <div className="space-y-6">
+        <Card className="p-6">
+          <p className="text-gray-600">No dashboard data available.</p>
+        </Card>
       </div>
     )
   }
@@ -161,7 +168,7 @@ export function AdminDashboardClient() {
           </p>
         </div>
         <div className="flex items-center space-x-3 rtl:space-x-reverse">
-          {getHealthBadge(displayMetrics.systemHealth)}
+          {getHealthBadge(metrics.systemHealth)}
           <Button>
             <Plus className="h-4 w-4 mr-2 rtl:ml-2 rtl:mr-0" />
             Quick Action
@@ -175,9 +182,9 @@ export function AdminDashboardClient() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-muted-foreground">Total Users</p>
-              <p className="text-3xl font-bold text-foreground">{displayMetrics.totalUsers.toLocaleString()}</p>
+              <p className="text-3xl font-bold text-foreground">{metrics.totalUsers.toLocaleString()}</p>
               <p className="text-sm text-green-600 mt-1">
-                +{displayMetrics.newUsersToday} today
+                +{metrics.newUsersToday} today
               </p>
             </div>
             <Users className="h-8 w-8 text-blue-500" />
@@ -188,9 +195,9 @@ export function AdminDashboardClient() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Active Subscriptions</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">{displayMetrics.activeSubscriptions.toLocaleString()}</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white">{metrics.activeSubscriptions.toLocaleString()}</p>
               <p className="text-sm text-muted-foreground mt-1">
-                {Math.round((displayMetrics.activeSubscriptions / displayMetrics.totalUsers) * 100)}% conversion
+                {Math.round((metrics.activeSubscriptions / metrics.totalUsers) * 100)}% conversion
               </p>
             </div>
             <CreditCard className="h-8 w-8 text-green-500" />
@@ -201,10 +208,10 @@ export function AdminDashboardClient() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Revenue</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">${displayMetrics.totalRevenue.toLocaleString()}</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white">${metrics.totalRevenue.toLocaleString()}</p>
               <p className="text-sm text-green-600 mt-1 flex items-center">
                 <TrendingUp className="h-3 w-3 mr-1" />
-                +{displayMetrics.revenueGrowth}% this month
+                +{metrics.revenueGrowth}% this month
               </p>
             </div>
             <DollarSign className="h-8 w-8 text-purple-500" />
@@ -215,9 +222,9 @@ export function AdminDashboardClient() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Documents Generated</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">{displayMetrics.documentsGenerated.toLocaleString()}</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white">{metrics.documentsGenerated.toLocaleString()}</p>
               <p className="text-sm text-muted-foreground mt-1">
-                {Math.round(displayMetrics.documentsGenerated / displayMetrics.totalUsers)} avg per user
+                {Math.round(metrics.documentsGenerated / metrics.totalUsers)} avg per user
               </p>
             </div>
             <FileText className="h-8 w-8 text-orange-500" />
@@ -235,7 +242,7 @@ export function AdminDashboardClient() {
             </Button>
           </div>
           <div className="space-y-4">
-            {displayMetrics.recentActivities.map((activity) => (
+            {metrics.recentActivities.map((activity) => (
               <div key={activity.id} className="flex items-center space-x-3 rtl:space-x-reverse">
                 {getActivityIcon(activity.type)}
                 <div className="flex-1 min-w-0">

@@ -69,6 +69,11 @@ model User {
   subscriptionEndsAt   DateTime?
   stripeCustomerId     String?           @unique
   stripeSubscriptionId String?           @unique
+  moyasarCustomerId    String?           @unique
+  paymentProvider      PaymentProvider   @default(STRIPE)
+  country              String?
+  subscriptionStartDate DateTime?
+  subscriptionEndDate   DateTime?
   adminPermissions     Json?
   referralCode         String            @unique @default(cuid())
   referredBy           String?
@@ -93,6 +98,7 @@ model User {
   researchRequests     ResearchRequest[]
   sessions             Session[]
   supportTickets       SupportTicket[]
+  subscriptions        Subscription[]
   teamMemberships      TeamMember[]
   createdTemplates     Template[]
   usageHistory         UsageHistory[]
@@ -532,4 +538,43 @@ enum UserTier {
   PROFESSIONAL
   BUSINESS
   ENTERPRISE
+}
+
+enum PaymentProvider {
+  STRIPE
+  MOYASAR
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+  PENDING
+}
+
+enum BillingCycle {
+  MONTHLY
+  ANNUAL
+}
+
+model Subscription {
+  id                  String             @id @default(cuid())
+  userId              String
+  tier                String
+  status              SubscriptionStatus
+  billingCycle        BillingCycle
+  amount              Float
+  currency            String
+  stripeSubscriptionId String?           @unique
+  stripePaymentId     String?
+  moyasarPaymentId    String?
+  startDate           DateTime
+  endDate             DateTime
+  tokensIncluded      Int
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+  
+  user                User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("subscriptions")
 }

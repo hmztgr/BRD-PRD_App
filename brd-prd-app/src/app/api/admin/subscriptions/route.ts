@@ -133,68 +133,10 @@ export async function GET(request: NextRequest) {
 
     } catch (dbError) {
       console.error('Database query error:', dbError)
-      
-      // Fallback to mock data if database query fails
-      const mockSubscriptions = [
-        {
-          id: '1',
-          userId: 'user1',
-          email: 'ahmed@example.com',
-          name: 'Ahmed Al-Rashid',
-          tier: 'PROFESSIONAL',
-          status: 'active',
-          stripeCustomerId: 'cus_123456789',
-          stripeSubscriptionId: 'sub_123456789',
-          currentPeriodStart: '2025-01-01T00:00:00Z',
-          currentPeriodEnd: '2025-01-31T23:59:59Z',
-          tokenUsage: 85000,
-          tokenLimit: 100000,
-          monthlyRevenue: 19.80,
-          createdAt: '2024-12-15T10:30:00Z'
-        },
-        {
-          id: '2',
-          userId: 'user2',
-          email: 'sara.tech@startup.sa',
-          name: 'Sara Abdullah',
-          tier: 'BUSINESS',
-          status: 'active',
-          stripeCustomerId: 'cus_987654321',
-          stripeSubscriptionId: 'sub_987654321',
-          currentPeriodStart: '2025-01-15T00:00:00Z',
-          currentPeriodEnd: '2025-02-14T23:59:59Z',
-          tokenUsage: 150000,
-          tokenLimit: 200000,
-          monthlyRevenue: 16.80,
-          createdAt: '2024-11-20T14:15:00Z'
-        }
-      ]
-
-      // Apply filters to mock data
-      let filteredMock = mockSubscriptions
-      if (search) {
-        filteredMock = filteredMock.filter(sub => 
-          sub.email.toLowerCase().includes(search.toLowerCase()) ||
-          sub.name.toLowerCase().includes(search.toLowerCase())
-        )
-      }
-      if (tier && tier !== 'ALL') {
-        filteredMock = filteredMock.filter(sub => sub.tier === tier)
-      }
-      if (status && status !== 'ALL') {
-        filteredMock = filteredMock.filter(sub => sub.status === status)
-      }
-
-      return NextResponse.json({
-        success: true,
-        subscriptions: filteredMock,
-        pagination: {
-          page: 1,
-          limit: 50,
-          total: filteredMock.length,
-          pages: 1
-        }
-      })
+      return NextResponse.json(
+        { error: 'Failed to fetch subscriptions', details: dbError instanceof Error ? dbError.message : 'Unknown error' },
+        { status: 500 }
+      )
     }
 
   } catch (error) {

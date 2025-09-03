@@ -72,7 +72,7 @@ export function DocumentGenerationForm({ onDocumentGenerated }: DocumentGenerati
 
       // Navigate to the generated document after a brief delay
       setTimeout(() => {
-        router.push(`/documents/${data.documentId}`)
+        router.push(`/${formData.language}/documents/${data.documentId}`)
       }, 2000)
 
     } catch (error: unknown) {

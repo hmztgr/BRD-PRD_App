@@ -82,12 +82,11 @@ export function ContentManagementClient() {
         setTemplates(data.templates)
       } else {
         console.error('Failed to fetch templates:', response.statusText)
-        // Fallback to mock data
-        setTemplates(getMockTemplates())
+        setTemplates([])
       }
     } catch (error) {
       console.error('Error fetching templates:', error)
-      setTemplates(getMockTemplates())
+      setTemplates([])
     } finally {
       setLoading(false)
     }
@@ -118,31 +117,6 @@ export function ContentManagementClient() {
       })
     }
   }
-
-  const getMockTemplates = (): Template[] => [
-    {
-      id: '1',
-      name: 'Basic PRD Template',
-      description: 'Standard product requirements document template',
-      category: 'PRD',
-      content: '# Product Requirements Document\n\n## Overview\n[Product overview content]',
-      isActive: true,
-      usageCount: 542,
-      createdAt: '2024-01-15T10:30:00Z',
-      updatedAt: '2024-08-20T14:15:00Z'
-    },
-    {
-      id: '2',
-      name: 'Technical BRD Template',
-      description: 'Business requirements document for technical projects',
-      category: 'BRD',
-      content: '# Business Requirements Document\n\n## Business Context\n[Business context content]',
-      isActive: true,
-      usageCount: 387,
-      createdAt: '2024-02-10T09:45:00Z',
-      updatedAt: '2024-08-18T11:20:00Z'
-    }
-  ]
 
   const handleCreateTemplate = async () => {
     try {

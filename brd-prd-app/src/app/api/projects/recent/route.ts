@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
           take: 3 // Show 3 most recent documents
         },
         files: {
-          select: { id: true, type: true, createdAt: true },
+          select: { id: true, name: true, createdAt: true },
           orderBy: { createdAt: 'desc' },
           take: 3 // Show 3 most recent files
         },

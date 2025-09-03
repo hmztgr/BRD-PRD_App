@@ -28,11 +28,11 @@ export const STRIPE_CONFIG = {
     },
     business: {
       name: 'Business Plan', 
-      description: 'Team collaboration with enhanced AI models and templates',
+      description: 'Everything in Professional plus team collaboration and enhanced AI models',
     },
     enterprise: {
       name: 'Enterprise Plan',
-      description: 'Custom solutions with premium AI models and dedicated support',
+      description: 'Custom solutions with premium AI models and priority support',
     },
   },
   prices: {
@@ -43,43 +43,43 @@ export const STRIPE_CONFIG = {
       productId: 'hobby',
     },
     hobby_yearly: {
-      amount: 325, // $3.25 (annually)
+      amount: 3420, // $34.20 (annually - 25% off from $45.60)
       currency: 'usd',
       interval: 'year',
       productId: 'hobby',
     },
     professional_monthly: {
-      amount: 1980, // $19.80
+      amount: 1480, // $14.80
       currency: 'usd',
       interval: 'month',
       productId: 'professional',
     },
     professional_yearly: {
-      amount: 1650, // $16.50 (annually)
+      amount: 13320, // $133.20 (annually - 25% off from $177.60)
       currency: 'usd', 
       interval: 'year',
       productId: 'professional',
     },
     business_monthly: {
-      amount: 1680, // $16.80
+      amount: 2980, // $29.80
       currency: 'usd',
       interval: 'month',
       productId: 'business',
     },
     business_yearly: {
-      amount: 1480, // $14.80 (annually)
+      amount: 26820, // $268.20 (annually - 25% off from $357.60)
       currency: 'usd',
       interval: 'year', 
       productId: 'business',
     },
     enterprise_monthly: {
-      amount: 19900, // $199.00
+      amount: 5980, // $59.80
       currency: 'usd',
       interval: 'month',
       productId: 'enterprise',
     },
     enterprise_yearly: {
-      amount: 14990, // $149.90 (annually)
+      amount: 53820, // $538.20 (annually - 25% off from $717.60)
       currency: 'usd',
       interval: 'year',
       productId: 'enterprise',
@@ -90,7 +90,7 @@ export const STRIPE_CONFIG = {
 // Token limits for each plan
 export const TOKEN_LIMITS = {
   free: 10000,        // 10K tokens/month
-  hobby: 50000,       // 50K tokens/month
+  hobby: 30000,       // 30K tokens/month (PRIMARY FREE TRIAL TIER)
   professional: 100000, // 100K tokens/month
   business: 200000,    // 200K tokens/month  
   enterprise: 1000000, // 1M tokens/month
@@ -273,8 +273,8 @@ export function getPlanFromPriceId(priceId: string): {
 
 export function getTokenLimit(plan: keyof typeof TOKEN_LIMITS, interval: 'month' | 'year' = 'month'): number {
   const baseLimit = TOKEN_LIMITS[plan];
-  // 10% bonus tokens for yearly plans
-  return interval === 'year' ? Math.floor(baseLimit * 1.1) : baseLimit;
+  // No bonus tokens (removed complexity)
+  return baseLimit;
 }
 
 // Setup products and prices in Stripe (run once during setup)

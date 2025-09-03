@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm run env:validate && next dev --port 3000",
+    "dev": "npm run env:validate && next dev",
+    "dev:3001": "npm run env:validate && next dev --port 3001",
     "dev:range": "node scripts/start-with-port-range.js",
     "dev:domain": "node scripts/setup-local-domain.js && npm run dev:range",
     "open": "node scripts/open-local-domain.js",
@@ -76,6 +77,7 @@
     "stripe": "^18.4.0",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4",
+    "tiktoken": "^1.0.22",
     "zod": "^3.23.8",
     "zustand": "^5.0.8"
   },

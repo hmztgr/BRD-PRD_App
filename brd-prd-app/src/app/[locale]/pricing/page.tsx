@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Check, X, Star, Crown, Zap, Users, Heart } from 'lucide-react'
+import { useLanguageDetection } from '@/hooks/useLanguageDetection'
+import { getPaymentProvider } from '@/lib/payment-router'
 
 // Static translations
 const translations = {
@@ -15,8 +17,9 @@ const translations = {
     subtitle: "Select the perfect plan for your document generation needs",
     monthly: "Monthly",
     yearly: "Yearly",
-    saveText: "Save 15%",
+    saveText: "Save 25%",
     perMonth: "/month",
+    perYear: "/yearly",
     popular: "MOST POPULAR",
     getStarted: "Get Started",
     startFreeTrial: "Start Free Trial",
@@ -65,10 +68,10 @@ const translations = {
       },
       hobby: {
         name: 'Hobby',
-        description: 'For hobbyists and small projects',
+        description: 'For hobbyists and small projects - PRIMARY FREE TRIAL',
         features: [
           'Everything in Free',
-          '50K tokens per month',
+          '30K tokens per month',
           'Advanced templates library',
           'Priority AI processing',
           'Document versioning',
@@ -76,7 +79,7 @@ const translations = {
           'Live chat support',
         ],
         limitations: [
-          'Up to 15-25 documents per month',
+          'Up to 10 documents per month',
         ]
       },
       professional: {
@@ -100,7 +103,7 @@ const translations = {
         name: 'Business',
         description: 'For teams and collaborative work',
         features: [
-          'Everything in Hobby',
+          'Everything in Professional',
           '200K tokens per month',
           'Team collaboration',
           'Real-time editing',
@@ -118,13 +121,13 @@ const translations = {
         description: 'Custom solutions for large organizations',
         features: [
           'Everything in Business',
-          'Unlimited tokens',
+          '1M tokens per month',
           'Custom AI model fine-tuning',
           'White-label solutions',
           'Dedicated account manager',
           'Custom integrations',
           'SLA guarantees',
-          '24/7 premium support',
+          'Priority support',
         ],
         limitations: []
       }
@@ -135,8 +138,9 @@ const translations = {
     subtitle: "اختر الخطة المثالية لاحتياجات إنشاء المستندات",
     monthly: "شهرياً",
     yearly: "سنوياً", 
-    saveText: "وفر 15%",
+    saveText: "وفر 25%",
     perMonth: "/شهر",
+    perYear: "/سنوي",
     popular: "الأكثر شعبية",
     getStarted: "ابدأ",
     startFreeTrial: "ابدأ التجربة المجانية",
@@ -185,10 +189,10 @@ const translations = {
       },
       hobby: {
         name: 'هواة',
-        description: 'للهواة والمشاريع الصغيرة',
+        description: 'للهواة والمشاريع الصغيرة - التجربة المجانية الأساسية',
         features: [
           'كل شيء في المجاني',
-          '50 ألف رمز شهرياً',
+          '30 ألف رمز شهرياً',
           'مكتبة القوالب المتقدمة',
           'معالجة ذكاء اصطناعي ذات أولوية',
           'إصدارات المستندات',
@@ -220,7 +224,7 @@ const translations = {
         name: 'الأعمال',
         description: 'للفرق والعمل التعاوني',
         features: [
-          'كل شيء في الهواة',
+          'كل شيء في الاحترافي',
           '200 ألف رمز شهرياً',
           'تعاون الفريق',
           'تحرير في الوقت الفعلي',
@@ -238,13 +242,13 @@ const translations = {
         description: 'حلول مخصصة للمؤسسات الكبيرة',
         features: [
           'كل شيء في الأعمال',
-          'رموز غير محدودة',
+          '1 مليون رمز شهرياً',
           'ضبط نموذج الذكاء الاصطناعي المخصص',
           'حلول العلامة البيضاء',
           'مدير حساب مخصص',
           'تكامل مخصص',
           'ضمانات SLA',
-          'دعم متميز على مدار 24/7',
+          'دعم ذو أولوية',
         ],
         limitations: []
       }
@@ -284,13 +288,13 @@ const PRICING_PLANS = {
     name: 'Hobby',
     price: 3.80,
     monthlyPrice: 3.80,
-    yearlyPrice: 34.20, // 15% discount + 10% token bonus
-    tokens: '50K',
-    description: 'For hobbyists and small projects',
+    yearlyPrice: 34.20, // 25% discount (was $45.60)
+    tokens: '30K',
+    description: 'For hobbyists and small projects - PRIMARY FREE TRIAL',
     icon: Heart,
     features: [
       'Everything in Free',
-      '50K tokens per month',
+      '30K tokens per month',
       'Advanced templates library',
       'Priority AI processing',
       'Document versioning',
@@ -298,7 +302,7 @@ const PRICING_PLANS = {
       'Live chat support',
     ],
     limitations: [
-      'Up to 15-25 documents per month',
+      'Up to 10 documents per month',
     ],
     popular: false,
     cta: 'Start Free Trial',
@@ -309,9 +313,9 @@ const PRICING_PLANS = {
   },
   professional: {
     name: 'Professional',
-    price: 19.80,
-    monthlyPrice: 19.80,
-    yearlyPrice: 178.20, // 15% discount + 10% token bonus
+    price: 14.80,
+    monthlyPrice: 14.80,
+    yearlyPrice: 133.20, // 25% discount (was $177.60)
     tokens: '100K',
     description: 'Premium AI models for professionals',
     icon: Star,
@@ -337,14 +341,14 @@ const PRICING_PLANS = {
   },
   business: {
     name: 'Business',
-    price: 9.80,
-    monthlyPrice: 9.80,
-    yearlyPrice: 88.20, // 15% discount + 10% token bonus
+    price: 29.80,
+    monthlyPrice: 29.80,
+    yearlyPrice: 268.20, // 25% discount (was $357.60)
     tokens: '200K',
     description: 'For teams and collaborative work',
     icon: Users,
     features: [
-      'Everything in Hobby',
+      'Everything in Professional',
       '200K tokens per month',
       'Team collaboration',
       'Real-time editing',
@@ -355,8 +359,7 @@ const PRICING_PLANS = {
       'Advanced reporting',
     ],
     limitations: [
-      'Up to 65-130 documents per month',
-      'Standard AI models (no premium)',
+      'Up to 67 documents per month',
     ],
     popular: false,
     cta: 'Start Business Trial',
@@ -367,9 +370,9 @@ const PRICING_PLANS = {
   },
   enterprise: {
     name: 'Enterprise',
-    price: 39.80,
-    monthlyPrice: 39.80,
-    yearlyPrice: 358.20, // 15% discount + 10% token bonus
+    price: 59.80,
+    monthlyPrice: 59.80,
+    yearlyPrice: 538.20, // 25% discount (was $717.60)
     tokens: '1M',
     description: 'For large organizations',
     icon: Crown,
@@ -414,6 +417,10 @@ function PricingPageClient({ locale, t, isRTL }: { locale: string, t: any, isRTL
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly')
   const [planCategory, setPlanCategory] = useState<'individual' | 'team'>('individual')
   const [isLoading, setIsLoading] = useState<string | null>(null)
+  
+  // Get user location for payment routing
+  const { userLocation, isArabicCountry } = useLanguageDetection()
+  const paymentConfig = getPaymentProvider(userLocation?.countryCode)
 
   // Get dynamic CTA text based on user's current subscription
   const getCtaText = (planKey: keyof typeof PRICING_PLANS, plan: typeof PRICING_PLANS[keyof typeof PRICING_PLANS]) => {
@@ -485,7 +492,9 @@ function PricingPageClient({ locale, t, isRTL }: { locale: string, t: any, isRTL
         body: JSON.stringify({ 
           priceId,
           successPath: `/${locale}/dashboard?checkout=success`,
-          cancelPath: `/${locale}/pricing?checkout=canceled`
+          cancelPath: `/${locale}/pricing?checkout=canceled`,
+          countryCode: userLocation?.countryCode,
+          paymentProvider: paymentConfig.provider
         }),
       })
 
@@ -494,8 +503,33 @@ function PricingPageClient({ locale, t, isRTL }: { locale: string, t: any, isRTL
         throw new Error(errorData.error || 'Failed to create checkout session')
       }
 
-      const { url } = await response.json()
-      window.location.href = url
+      const data = await response.json()
+      
+      // Handle different payment providers
+      if (data.provider === 'moyasar') {
+        // For Moyasar, we might need to handle differently
+        // This could redirect to a Moyasar-specific checkout page
+        if (data.redirectData) {
+          // Handle Moyasar checkout flow
+          const moyasarResponse = await fetch('/api/subscription/create-moyasar-checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data.redirectData),
+          });
+          
+          if (moyasarResponse.ok) {
+            const moyasarData = await moyasarResponse.json()
+            if (moyasarData.checkoutUrl) {
+              window.location.href = moyasarData.checkoutUrl
+            }
+          }
+        }
+      } else {
+        // Stripe checkout
+        if (data.url) {
+          window.location.href = data.url
+        }
+      }
 
     } catch (error: any) {
       console.error('Error creating checkout:', error)
@@ -509,6 +543,16 @@ function PricingPageClient({ locale, t, isRTL }: { locale: string, t: any, isRTL
   }
 
   const formatPrice = (price: number) => {
+    if (locale === 'ar') {
+      // SAR pricing for Arabic users
+      const sarPrice = price * 3.75; // 1 USD = 3.75 SAR
+      return new Intl.NumberFormat('ar-SA', {
+        style: 'currency',
+        currency: 'SAR',
+        minimumFractionDigits: 2,
+      }).format(sarPrice)
+    }
+    
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -548,6 +592,22 @@ function PricingPageClient({ locale, t, isRTL }: { locale: string, t: any, isRTL
             <p className="mt-4 text-xl text-gray-300 max-w-3xl mx-auto">
               {t.subtitle}
             </p>
+            
+            {/* Payment Provider Info */}
+            {userLocation && (
+              <div className="mt-6 text-center">
+                <Badge variant="secondary" className="text-sm">
+                  {paymentConfig.provider === 'moyasar' 
+                    ? (locale === 'ar' ? 'دفع محلي - ميسّر' : 'Local Payment - Moyasar')
+                    : (locale === 'ar' ? 'دفع دولي - Stripe' : 'International Payment - Stripe')
+                  }
+                  {paymentConfig.currency === 'sar' 
+                    ? ` • ${locale === 'ar' ? 'ريال سعودي' : 'Saudi Riyal'}`
+                    : ` • ${locale === 'ar' ? 'دولار أمريكي' : 'US Dollar'}`
+                  }
+                </Badge>
+              </div>
+            )}
           </div>
 
           {/* Plan Category Toggle */}
@@ -655,10 +715,10 @@ function PricingPageClient({ locale, t, isRTL }: { locale: string, t: any, isRTL
                       </div>
                       <div className="mt-1">
                         <span className="text-lg text-gray-300">
-                          {formatPrice(price)}/yearly
+                          {formatPrice(price)}{t.perYear}
                         </span>
                       </div>
-                      {savings && (
+                      {savings && savings.amount > 0 && (
                         <p className="mt-1 text-sm text-green-600">
                           Save {formatPrice(savings.amount)} ({savings.percentage}% off)
                         </p>
@@ -676,7 +736,7 @@ function PricingPageClient({ locale, t, isRTL }: { locale: string, t: any, isRTL
                           </span>
                         )}
                       </div>
-                      {savings && billingCycle === 'yearly' && (
+                      {savings && savings.amount > 0 && billingCycle === 'yearly' && (
                         <p className="mt-1 text-sm text-green-600">
                           Save {formatPrice(savings.amount)} ({savings.percentage}% off)
                         </p>
@@ -687,9 +747,6 @@ function PricingPageClient({ locale, t, isRTL }: { locale: string, t: any, isRTL
                   <div className="mt-2">
                     <span className="text-lg font-medium text-blue-400">
                       {plan.tokens} {t.tokensPerMonth}
-                      {billingCycle === 'yearly' && price > 0 && (
-                        <span className="text-sm text-green-500"> +10% bonus</span>
-                      )}
                       {t.plans[key as keyof typeof t.plans].limitations && t.plans[key as keyof typeof t.plans].limitations.length > 0 && t.plans[key as keyof typeof t.plans].limitations.some((limit: string) => limit.includes('documents per month') || limit.includes('مستند في الشهر')) && (
                         <span className="text-sm text-gray-400">
                           {' (' + t.plans[key as keyof typeof t.plans].limitations.find((limit: string) => limit.includes('documents per month') || limit.includes('مستند في الشهر')) + ')'}

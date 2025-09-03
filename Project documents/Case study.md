@@ -71,32 +71,32 @@ Creating professional BRDs/PRDs requires specialized expertise that most individ
    - **Cost**: $0
 
 2. **Hobby Plan ($3.80/month)**
-   - **Features**: 50K tokens/month (~15-25 documents), enhanced AI-powered generation
-   - **Annual**: $3.25/month (15% discount + 10% token bonus)
+   - **Features**: 30K tokens/month (~10 documents), enhanced AI-powered generation
+   - **Annual**: $2.85/month (25% discount)
    - **Target**: Individual entrepreneurs, hobbyists
    - **AI Models**: GPT-5 and Claude 4 Sonnet
-   - **Estimated Cost**: $0.50-1.50 per user/month
-   - **Profit Margin**: 80-95%
+   - **Estimated Cost**: $0.75 per user/month
+   - **Profit Margin**: 80%
 
-3. **Professional Plan ($19.80/month)**
-   - **Features**: 100K tokens/month (~30-60 documents), premium AI-powered generation
-   - **Annual**: $16.50/month (15% discount + 10% token bonus)
+3. **Professional Plan ($14.80/month)**
+   - **Features**: 100K tokens/month (~33 documents), premium AI-powered generation
+   - **Annual**: $11.10/month (25% discount)
    - **Target**: Business professionals, consultants
    - **AI Models**: Claude Opus 4 (primary) with Claude 4 Sonnet (fallback)
    - **Estimated Cost**: $3-8 per user/month
    - **Profit Margin**: 70-85%
 
-4. **Business Plan ($16.80/month)**
-   - **Features**: 200K tokens/month (~65-130 documents), enhanced AI + team collaboration
-   - **Annual**: $14.80/month (15% discount + 10% token bonus)
+4. **Business Plan ($29.80/month)**
+   - **Features**: 200K tokens/month (~67 documents), enhanced AI + team collaboration, everything in Professional
+   - **Annual**: $22.35/month (25% discount)
    - **Target**: SMEs, growing companies
    - **AI Models**: GPT-5 and Claude 4 Sonnet
    - **Estimated Cost**: $2-6 per user/month
    - **Profit Margin**: 75-90%
 
-5. **Enterprise Plan ($199/month)**
-   - **Features**: 1M tokens/month (~330-650 documents), premium AI + custom features
-   - **Annual**: $149.90/month (15% discount + 10% token bonus)
+5. **Enterprise Plan ($59.80/month)**
+   - **Features**: 1M tokens/month (~333 documents), premium AI + custom features, priority support
+   - **Annual**: $44.85/month (25% discount)
    - **Target**: Large corporations, government entities
    - **AI Models**: Claude Opus 4 (primary) with Claude 4 Sonnet (fallback)
    - **Estimated Cost**: $30-60 per user/month
@@ -115,12 +115,12 @@ Creating professional BRDs/PRDs requires specialized expertise that most individ
 - **Churn Reduction**: Expected 18% improvement
 
 **Annual Pricing Structure**
-| Plan | Monthly | Annual | Savings | Token Bonus |
-|------|---------|--------|---------|-------------|
-| **Hobby** | $3.80 | $39.00 | 15% | 55K/month |
-| **Professional** | $19.80 | $198.00 | 15% | 110K/month |
-| **Business** | $16.80 | $151.20 | 15% | 220K/month |
-| **Enterprise** | $199.00 | $1,799.00 | 15% | 1.1M/month |
+| Plan | Monthly | Annual | Yearly Rate | Savings | Token Allowance |
+|------|---------|--------|-------------|---------|-----------------|
+| **Hobby** | $3.80 | $34.20 | $2.85/month | 25% | 30K/month |
+| **Professional** | $14.80 | $133.20 | $11.10/month | 25% | 100K/month |
+| **Business** | $29.80 | $268.20 | $22.35/month | 25% | 200K/month |
+| **Enterprise** | $59.80 | $538.20 | $44.85/month | 25% | 1M/month |
 
 ### **Referral System & User Acquisition**
 
@@ -144,13 +144,13 @@ Creating professional BRDs/PRDs requires specialized expertise that most individ
    - **Trigger**: Reward granted when user follows using same email as platform account
 
 4. **Referral Reward 4: Professional Plan Upgrade**
-   - **Action**: Referred user upgrades to Professional Plan ($19.80/month)
+   - **Action**: Referred user upgrades to Professional Plan ($14.80/month)
    - **Reward**: 100,000 tokens per upgrade
    - **Limit**: No limit on number of referrals
    - **Trigger**: Reward granted when referred user upgrades to Professional Plan
 
 5. **Referral Reward 5: Business Plan Conversion**
-   - **Action**: Referred user subscribes to Business Plan ($16.80/month)
+   - **Action**: Referred user subscribes to Business Plan ($29.80/month)
    - **Reward**: 150,000 tokens per conversion
    - **Limit**: No limit on number of referrals
    - **Trigger**: Reward granted when referred user subscribes to Business Plan
@@ -167,7 +167,7 @@ Creating professional BRDs/PRDs requires specialized expertise that most individ
    - **Referrer Reward**: Double tokens equivalent to 20% of referee's upgraded plan value for first month
    - **Referee Reward**: Double tokens equivalent to 20% of their upgraded plan value for first month
    - **Duration**: First month after upgrade only
-   - **Example**: User upgrades to Business Plan ($16.80/month, 200K tokens)
+   - **Example**: User upgrades to Business Plan ($29.80/month, 200K tokens)
      - Referrer gets: 80K tokens (20% of 200K × 2)
      - Referee gets: 400K tokens for first month (instead of 200K)
    - **Limit**: No limit on number of upgrade referrals
@@ -210,8 +210,8 @@ Creating professional BRDs/PRDs requires specialized expertise that most individ
 - **Subscription Management**
   - Free tier: 10K tokens/month, AI-powered generation
   - Hobby tier: $3.80/month for 50K tokens, enhanced AI
-  - Professional tier: $19.80/month for 100K tokens, premium AI
-  - Business tier: $16.80/month for 200K tokens, enhanced AI + collaboration
+  - Professional tier: $14.80/month for 100K tokens, premium AI
+  - Business tier: $29.80/month for 200K tokens, enhanced AI + collaboration
   - Enterprise tier: $199/month for 1M tokens, premium AI + custom features
   - Usage tracking and alerts
   - Payment processing with annual discounts 
@@ -267,7 +267,7 @@ Creating professional BRDs/PRDs requires specialized expertise that most individ
 ## 📝 **Change Log**
 
 **Version 1.1 (August 22, 2025)**:
-- Updated pricing structure: Added Hobby tier ($3.80), corrected Professional ($19.80), Business ($16.80), Enterprise ($199)
+- Updated pricing structure: Hobby ($3.80), Professional ($14.80), Business ($29.80), Enterprise ($59.80)
 - Updated token limits: Free (10K), Hobby (50K), Professional (100K), Business (200K), Enterprise (1M)
 - Updated AI model assignments per tier: Claude Opus 4 for Professional/Enterprise, GPT-5/Claude 4 Sonnet for Hobby/Business, Gemini for Free
 - Updated referral rewards structure to match new pricing tiers

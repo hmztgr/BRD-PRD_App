@@ -74,47 +74,10 @@ export async function GET(request: NextRequest) {
 
     } catch (dbError) {
       console.error('Database query error:', dbError)
-      
-      // Mock data fallback
-      const mockFeedback = [
-        {
-          id: '1',
-          message: 'Great platform for document generation! Very intuitive.',
-          rating: 5,
-          category: 'general',
-          status: 'reviewed',
-          createdAt: new Date(Date.now() - 86400000).toISOString(),
-          user: {
-            id: 'user1',
-            name: 'Ahmed Al-Rashid',
-            email: 'ahmed@example.com'
-          }
-        },
-        {
-          id: '2',
-          message: 'The BRD generation could be more detailed.',
-          rating: 3,
-          category: 'feature_request',
-          status: 'pending',
-          createdAt: new Date(Date.now() - 172800000).toISOString(),
-          user: {
-            id: 'user2',
-            name: 'Sara Abdullah',
-            email: 'sara@example.com'
-          }
-        }
-      ]
-
-      return NextResponse.json({
-        success: true,
-        feedback: mockFeedback,
-        pagination: {
-          page: 1,
-          limit: 20,
-          total: mockFeedback.length,
-          pages: 1
-        }
-      })
+      return NextResponse.json(
+        { error: 'Failed to fetch feedback', details: dbError instanceof Error ? dbError.message : 'Unknown error' },
+        { status: 500 }
+      )
     }
 
   } catch (error) {

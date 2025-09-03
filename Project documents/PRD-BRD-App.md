@@ -78,11 +78,11 @@ An AI-powered web application that helps users create professional Business Requ
 
 #### **1.2 Subscription Management**
 - **Tier Management**
-  - Free tier: $0 for 10K tokens/month, AI-powered generation (free AI models)
-  - Hobby tier: $3.80/month ($3.25/month annually) for 50K tokens/month, enhanced AI-powered generation (GPT-5/Claude 4 Sonnet)
-  - Professional tier: $19.80/month ($16.50/month annually) for 100K tokens/month, premium AI-powered generation (Claude Opus 4 with Claude 4 Sonnet fallback)
-  - Business tier: $16.80/month ($14.80/month annually) for 200K tokens/month, enhanced AI-powered generation (GPT-5/Claude 4 Sonnet), team collaboration
-  - Enterprise tier: $199/month ($149.90/month annually) for 1M tokens/month, premium AI-powered generation (Claude Opus 4 with Claude 4 Sonnet fallback), custom features
+  - Free tier: $0 (0 SAR) for 10K tokens/month, AI-powered generation (free AI models)
+  - Hobby tier: $3.80/month (14.25 SAR) → $2.85/month yearly (10.69 SAR) for 30K tokens/month, enhanced AI-powered generation (GPT-5/Claude 4 Sonnet) - **PRIMARY FREE TRIAL TIER**
+  - Professional tier: $14.80/month (55.50 SAR) → $11.10/month yearly (41.63 SAR) for 100K tokens/month, premium AI-powered generation (Claude Opus 4 with Claude 4 Sonnet fallback)
+  - Business tier: $29.80/month (111.75 SAR) → $22.35/month yearly (83.81 SAR) for 200K tokens/month, enhanced AI-powered generation (GPT-5/Claude 4 Sonnet), everything in Professional, team collaboration
+  - Enterprise tier: $59.80/month (224.25 SAR) → $44.85/month yearly (168.19 SAR) for 1M tokens/month, premium AI-powered generation (Claude Opus 4 with Claude 4 Sonnet fallback), priority support, custom features
 
 - **Usage Tracking & Analytics**
   - Real-time token usage tracking
@@ -91,11 +91,17 @@ An AI-powered web application that helps users create professional Business Requ
   - Historical usage data and trends
 
 - **Payment Processing**
-  - Stripe integration for credit card payments
-  - PayPal support for alternative payment method
-  - Annual payment discounts (15% off + 10% token bonus)
-  - Automatic billing and invoice generation
-  - Payment failure handling and retry logic
+  - **Dual Payment Provider System**:
+    - Stripe integration for international users (USD pricing)
+    - Moyasar integration for Arabic countries (SAR pricing)
+    - Automatic payment provider routing based on user location
+    - Currency conversion at 1 USD = 3.75 SAR exchange rate
+  - **Payment Features**:
+    - Annual payment discounts (25% off for all tiers)
+    - Automatic billing and invoice generation
+    - Payment failure handling and retry logic
+    - Webhook processing for both Stripe and Moyasar
+    - Country-based payment method detection
 
 #### **1.3 Referral System**
 - **Referral Code Generation**
@@ -404,7 +410,11 @@ Based on the example project template structure, the system will generate:
 - **Intelligent Language Detection**: Auto-switch to Arabic for users from Arabic-speaking countries using geolocation API
 - **Seamless Language Switching**: Allow users to toggle between Arabic and English with preference persistence
 - **Cultural Customization**: Saudi business context integration with region-specific templates and compliance features
-- **Currency Display**: SAR and USD pricing with automatic regional currency selection
+- **Dual Currency Display**: 
+  - Arabic Interface: SAR pricing (14.25 ريال for Hobby, 55.50 ريال for Professional, 111.75 ريال for Business, 224.25 ريال for Enterprise)
+  - English Interface: USD pricing ($3.80 Hobby, $14.80 Professional, $29.80 Business, $59.80 Enterprise)
+  - Automatic currency selection based on user location (Saudi Arabia → SAR, International → USD)
+  - Manual currency switching in user settings
 - **Date Formats**: Hijri and Gregorian calendar support with regional preferences
 - **Number Formats**: Arabic and Western numeral systems with automatic detection
 
@@ -556,7 +566,8 @@ Based on the example project template structure, the system will generate:
 - **GPT-5**: Enhanced AI generation service for Hobby and Business tiers
 - **Claude 4 Sonnet**: Enhanced AI generation and fallback service
 - **Google Gemini**: Free AI service for Free tier users
-- **Stripe**: Payment processing and subscription management
+- **Stripe**: Payment processing and subscription management for international users
+- **Moyasar**: Payment processing and subscription management for Arabic countries (SAR)
 - **AWS S3**: File storage and document management
 - **Mailjet**: Email notifications and communications
 
@@ -587,10 +598,10 @@ Based on the example project template structure, the system will generate:
 | DevOps Engineer | Infrastructure Lead | TBD | Pending |
 
 ### **Document Control**
-- **Version**: 1.2
-- **Last Updated**: August 22, 2025
+- **Version**: 1.3
+- **Last Updated**: September 3, 2025
 - **Next Review**: January 31, 2025
-- **Approval Status**: Updated - Pricing and AI Model Specifications Revised
+- **Approval Status**: Updated - Dual Payment System Implementation Documented
 
 ---
 
@@ -601,6 +612,7 @@ Based on the example project template structure, the system will generate:
 | 1.0 | January 17, 2025 | Claude AI | Initial PRD creation with comprehensive feature specifications |
 | 1.1 | August 19, 2025 | Claude AI | Updated localization requirements with full Arabic interface and automatic language detection features |
 | 1.2 | August 22, 2025 | Claude AI | Updated pricing structure, token limits, and AI model specifications based on stakeholder corrections |
+| 1.3 | September 3, 2025 | Claude AI | Updated payment processing to reflect dual payment system implementation (Stripe + Moyasar) with automatic routing |
 
 ---
 
@@ -608,5 +620,5 @@ Based on the example project template structure, the system will generate:
 - **Next Review Date**: January 31, 2025
 - **Approval Required**: Product Manager
 - **Distribution**: Development Team, Stakeholders
-- **Version**: 1.2
-- **Last Updated**: August 22, 2025
+- **Version**: 1.3
+- **Last Updated**: September 3, 2025

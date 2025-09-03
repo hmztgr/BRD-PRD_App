@@ -12,13 +12,14 @@
 
 ## 🎯 **EXECUTIVE SUMMARY**
 
-### **Key Findings**
-- **Current pricing structure is profitable** across all tiers with healthy margins (65-95%)
-- **GPT-5 offers best cost-performance ratio** at $1.25/$10 per million tokens with 5.9% caching savings
-- **Caching impact is modest for document generation** (5-11% savings due to high output costs)
-- **Payment processing fees significantly impact margins** (2-4% of revenue)
-- **Referral rewards reduce initial revenue by ~15-20%** but increase lifetime value
-- **Competitive positioning is strong** with 40-60% lower pricing than major competitors
+### **Key Findings (Updated with 20/80 Input/Output Distribution)**
+- **Current pricing structure remains profitable** across all tiers with adjusted margins (60-85%) due to higher output costs
+- **GPT-5 offers best cost-performance ratio** at $1.25/$10 per million tokens, but 20/80 distribution increases per-document costs by 45%
+- **Output-heavy workload significantly impacts costs** - document generation now costs $0.025 per document vs previous $0.017
+- **Caching impact remains modest** (5-11% savings) but more critical due to higher baseline costs
+- **Payment processing fees impact margins** (2-4% of revenue) but less significant than AI cost increases
+- **Referral rewards reduce initial revenue by ~15-20%** but remain viable with adjusted margins
+- **Competitive positioning remains strong** with updated pricing structure
 
 ### **Strategic Recommendations**
 1. **Optimize AI model assignment**: Use GPT-5 for more tiers to reduce costs
@@ -45,19 +46,19 @@
 
 ### **Cost Per Document Analysis - Three Caching Scenarios**
 
-**For a typical 3,000-token BRD/PRD document generation:**
+**For a typical 3,000-token BRD/PRD document generation (20% input / 80% output):**
 
 #### **Scenario 1: No Caching (0% Cache Usage)**
 *New users, one-off documents, highly customized requirements*
 
-| Model | Input (1,500 tokens) | Output (1,500 tokens) | **Total Cost/Doc** |
+| Model | Input (600 tokens) | Output (2,400 tokens) | **Total Cost/Doc** |
 |-------|---------------------|----------------------|-------------------|
-| **Claude Opus 4** | $0.0225 | $0.1125 | **$0.135** |
-| **Claude Sonnet 4** | $0.0045 | $0.0225 | **$0.027** |
-| **GPT-5** | $0.00188 | $0.015 | **$0.017** |
-| **GPT-4o** | $0.0075 | $0.0225 | **$0.030** |
-| **Gemini Pro 1.5** | $0.00188 | $0.0075 | **$0.009** |
-| **Gemini 2.0 Flash** | $0.00015 | $0.0006 | **$0.001** |
+| **Claude Opus 4** | $0.009 | $0.180 | **$0.189** |
+| **Claude Sonnet 4** | $0.0018 | $0.036 | **$0.038** |
+| **GPT-5** | $0.00075 | $0.024 | **$0.025** |
+| **GPT-4o** | $0.003 | $0.036 | **$0.039** |
+| **Gemini Pro 1.5** | $0.00075 | $0.012 | **$0.013** |
+| **Gemini 2.0 Flash** | $0.00006 | $0.00096 | **$0.001** |
 
 #### **Scenario 2: Average Caching (40-60% Cache Usage)**
 *Regular users with template reuse and personalization*
@@ -575,14 +576,14 @@
 
 ### **Pricing Optimization Summary**
 
-#### **Recommended Pricing Structure**
-| Tier | Current | Recommended | Rationale |
-|------|---------|-------------|-----------|
-| **Free** | $0 (10K tokens) | $0 (10K tokens) | Market penetration |
-| **Hobby** | $3.80 | $4.80 | Better positioning, still 52% cheaper |
-| **Professional** | $19.80 | $19.80 | Optimal sweet spot |
-| **Business** | $16.80 | $19.80 | Clear tier progression |
-| **Enterprise** | $199 | $249 | Premium positioning |
+#### **Recommended Pricing Structure (Updated)**
+| Tier | USD Monthly | USD Yearly | SAR Monthly | SAR Yearly | Token Allowance |
+|------|-------------|------------|-------------|------------|------------------|
+| **Free** | $0 | $0 | 0 SAR | 0 SAR | 10K tokens |
+| **Hobby** | $3.80 | $34.20 | 14.25 SAR | 128.25 SAR | 30K tokens |
+| **Professional** | $14.80 | $133.20 | 55.50 SAR | 499.50 SAR | 100K tokens |
+| **Business** | $29.80 | $268.20 | 111.75 SAR | 1,005.75 SAR | 200K tokens |
+| **Enterprise** | $59.80 | $538.20 | 224.25 SAR | 2,018.25 SAR | 1M tokens |
 
 #### **AI Model Strategy - Performance-First**
 | Tier | Current Model | Performance-First | Quality Positioning |
