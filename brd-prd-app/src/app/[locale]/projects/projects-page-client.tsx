@@ -21,6 +21,23 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import Link from 'next/link'
@@ -108,6 +125,11 @@ export default function ProjectsPageClient({
     country: 'saudi-arabia'
   })
 
+  // Delete project state
+  const [projectToDelete, setProjectToDelete] = useState<Project | null>(null)
+  const [deleteMode, setDeleteMode] = useState<'archive' | 'permanent'>('archive')
+  const [deleting, setDeleting] = useState(false)
+
   const fetchProjects = async () => {
     try {
       setLoading(true)
@@ -167,6 +189,48 @@ export default function ProjectsPageClient({
       alert('Failed to create project')
     } finally {
       setCreating(false)
+    }
+  }
+
+  const handleDeleteProject = async () => {
+    if (!projectToDelete) return
+
+    try {
+      setDeleting(true)
+      
+      const params = new URLSearchParams()
+      if (deleteMode === 'permanent') {
+        params.set('permanent', 'true')
+      }
+
+      const response = await fetch(`/api/projects/${projectToDelete.id}?${params}`, {
+        method: 'DELETE'
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        // Remove project from local state
+        setProjects(prev => prev.filter(p => p.id !== projectToDelete.id))
+        setProjectToDelete(null)
+        
+        // Show success message based on delete mode
+        if (deleteMode === 'permanent') {
+          alert('Project permanently deleted')
+        } else {
+          alert('Project archived successfully')
+        }
+        
+        // Refresh projects list to get updated counts
+        fetchProjects()
+      } else {
+        alert(data.error || 'Failed to delete project')
+      }
+    } catch (error) {
+      console.error('Failed to delete project:', error)
+      alert('Failed to delete project')
+    } finally {
+      setDeleting(false)
     }
   }
 
@@ -436,6 +500,10 @@ export default function ProjectsPageClient({
                   locale={locale}
                   viewMode={viewMode}
                   onUpdate={fetchProjects}
+                  onDelete={(project, deleteMode) => {
+                    setProjectToDelete(project)
+                    setDeleteMode(deleteMode)
+                  }}
                 />
               ))}
             </div>
@@ -469,6 +537,45 @@ export default function ProjectsPageClient({
           </>
         )}
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog 
+        open={!!projectToDelete} 
+        onOpenChange={(open) => !open && setProjectToDelete(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {deleteMode === 'permanent' ? 'Delete Project Permanently' : 'Archive Project'}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {deleteMode === 'permanent' 
+                ? `Are you sure you want to permanently delete "${projectToDelete?.name}"? This action cannot be undone and will remove all project data, conversations, and generated documents.`
+                : `Are you sure you want to archive "${projectToDelete?.name}"? You can restore it later from the archived projects section.`
+              }
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteProject}
+              disabled={deleting}
+              className={deleteMode === 'permanent' ? 'bg-red-600 hover:bg-red-700' : 'bg-orange-600 hover:bg-orange-700'}
+            >
+              {deleting ? (
+                <>
+                  <Icons.spinner className="h-4 w-4 animate-spin mr-2" />
+                  {deleteMode === 'permanent' ? 'Deleting...' : 'Archiving...'}
+                </>
+              ) : (
+                deleteMode === 'permanent' ? 'Delete Permanently' : 'Archive Project'
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
@@ -477,12 +584,14 @@ function ProjectCard({
   project, 
   locale, 
   viewMode, 
-  onUpdate 
+  onUpdate,
+  onDelete
 }: { 
   project: Project
   locale: string
   viewMode: 'grid' | 'list'
   onUpdate: () => void
+  onDelete: (project: Project, deleteMode: 'archive' | 'permanent') => void
 }) {
   const router = useRouter()
 
@@ -538,6 +647,27 @@ function ProjectCard({
                 <Play className="h-4 w-4 mr-1" />
                 Continue
               </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                    <MoreVertical className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => onDelete(project, 'archive')}>
+                    <Archive className="h-4 w-4 mr-2" />
+                    Archive Project
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem 
+                    onClick={() => onDelete(project, 'permanent')}
+                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                  >
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Delete Permanently
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </CardContent>
@@ -559,6 +689,27 @@ function ProjectCard({
             <Badge variant={getStatusBadgeVariant(project.status)} className="text-xs">
               {project.status}
             </Badge>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                  <MoreVertical className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => onDelete(project, 'archive')}>
+                  <Archive className="h-4 w-4 mr-2" />
+                  Archive Project
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem 
+                  onClick={() => onDelete(project, 'permanent')}
+                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete Permanently
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </CardHeader>

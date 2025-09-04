@@ -3,7 +3,8 @@
  * Phase 5: Centralized state management with persistence
  */
 
-import { useReducer, useCallback, useRef, useEffect } from 'react'
+import { useReducer, useCallback, useRef, useEffect, useMemo } from 'react'
+import { debounce } from 'lodash'
 import { 
   GlobalState, 
   StateAction, 
@@ -168,6 +169,10 @@ function multiTabStateReducer(state: GlobalState, action: StateAction): GlobalSt
             isProcessing: true,
             lastUpdate: new Date().toISOString()
           }
+        },
+        uiState: {
+          ...state.uiState,
+          hasUnsavedChanges: true
         }
       }
 
@@ -191,6 +196,10 @@ function multiTabStateReducer(state: GlobalState, action: StateAction): GlobalSt
             hasNewResults: action.payload.update.status === 'completed',
             lastUpdate: new Date().toISOString()
           }
+        },
+        uiState: {
+          ...state.uiState,
+          hasUnsavedChanges: true
         }
       }
 
@@ -206,6 +215,10 @@ function multiTabStateReducer(state: GlobalState, action: StateAction): GlobalSt
             isUploading: action.payload.file.status === 'uploading',
             hasNewUploads: true
           }
+        },
+        uiState: {
+          ...state.uiState,
+          hasUnsavedChanges: true
         }
       }
 
@@ -229,6 +242,10 @@ function multiTabStateReducer(state: GlobalState, action: StateAction): GlobalSt
             failedFiles,
             isUploading: updatedFiles.some(f => f.status === 'uploading' || f.status === 'processing')
           }
+        },
+        uiState: {
+          ...state.uiState,
+          hasUnsavedChanges: true
         }
       }
 
@@ -243,6 +260,10 @@ function multiTabStateReducer(state: GlobalState, action: StateAction): GlobalSt
             totalMilestones: state.tabStates.progress.totalMilestones + 1,
             hasUpdates: true
           }
+        },
+        uiState: {
+          ...state.uiState,
+          hasUnsavedChanges: true
         }
       }
 
@@ -268,6 +289,10 @@ function multiTabStateReducer(state: GlobalState, action: StateAction): GlobalSt
             overallProgress,
             hasUpdates: true
           }
+        },
+        uiState: {
+          ...state.uiState,
+          hasUnsavedChanges: true
         }
       }
 
@@ -282,6 +307,10 @@ function multiTabStateReducer(state: GlobalState, action: StateAction): GlobalSt
             totalTasks: state.tabStates.generate.totalTasks + 1,
             isGenerating: true
           }
+        },
+        uiState: {
+          ...state.uiState,
+          hasUnsavedChanges: true
         }
       }
 
@@ -316,6 +345,10 @@ function multiTabStateReducer(state: GlobalState, action: StateAction): GlobalSt
             isGenerating: queuedTasks.some(t => t.status === 'generating'),
             hasNewCompletions: action.payload.update.status === 'completed'
           }
+        },
+        uiState: {
+          ...state.uiState,
+          hasUnsavedChanges: true
         }
       }
 
@@ -384,32 +417,6 @@ export function useMultiTabState(projectId?: string) {
   const [state, dispatch] = useReducer(multiTabStateReducer, createInitialState(projectId))
   const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   
-  // Auto-save functionality
-  const scheduleAutoSave = useCallback(() => {
-    if (autoSaveTimeoutRef.current) {
-      clearTimeout(autoSaveTimeoutRef.current)
-    }
-    
-    if (state.uiState.autoSaveEnabled && state.uiState.hasUnsavedChanges) {
-      autoSaveTimeoutRef.current = setTimeout(() => {
-        saveState()
-      }, state.uiState.autoSaveInterval)
-    }
-  }, [state.uiState.autoSaveEnabled, state.uiState.hasUnsavedChanges, state.uiState.autoSaveInterval])
-
-  // Effect to trigger auto-save when state changes
-  useEffect(() => {
-    if (state.isInitialized && state.uiState.hasUnsavedChanges) {
-      scheduleAutoSave()
-    }
-    
-    return () => {
-      if (autoSaveTimeoutRef.current) {
-        clearTimeout(autoSaveTimeoutRef.current)
-      }
-    }
-  }, [state.uiState.hasUnsavedChanges, scheduleAutoSave])
-
   // State management actions
   const actions = {
     // Project actions
@@ -509,31 +516,56 @@ export function useMultiTabState(projectId?: string) {
 
       if (response.ok) {
         dispatch({ type: 'MARK_SAVED', payload: { timestamp: new Date() } })
-        actions.addNotification({
-          id: Date.now().toString(),
-          type: 'success',
-          title: 'Progress Saved',
-          message: 'All tab states have been saved successfully',
-          tabSource: state.uiState.activeTab,
-          isRead: false,
-          createdAt: new Date().toISOString()
-        })
+        dispatch({ type: 'ADD_NOTIFICATION', payload: { 
+          notification: {
+            id: Date.now().toString(),
+            type: 'success',
+            title: 'Auto-saved',
+            message: 'All changes saved automatically',
+            tabSource: state.uiState.activeTab,
+            isRead: false,
+            createdAt: new Date().toISOString()
+          }
+        }})
       } else {
         throw new Error('Save failed')
       }
     } catch (error) {
       console.error('Failed to save state:', error)
-      actions.addNotification({
-        id: Date.now().toString(),
-        type: 'error',
-        title: 'Save Failed',
-        message: 'Failed to save progress. Please try again.',
-        tabSource: state.uiState.activeTab,
-        isRead: false,
-        createdAt: new Date().toISOString()
-      })
+      dispatch({ type: 'ADD_NOTIFICATION', payload: { 
+        notification: {
+          id: Date.now().toString(),
+          type: 'error',
+          title: 'Auto-save Failed',
+          message: 'Failed to save progress automatically. Please try manual save.',
+          tabSource: state.uiState.activeTab,
+          isRead: false,
+          createdAt: new Date().toISOString()
+        }
+      }})
     }
-  }, [state, actions])
+  }, [state, dispatch])
+
+  // Debounced auto-save function (200ms delay to prevent excessive API calls)
+  const debouncedAutoSave = useMemo(
+    () => debounce(() => {
+      if (state.uiState.autoSaveEnabled && state.uiState.hasUnsavedChanges && state.project.id) {
+        saveState()
+      }
+    }, 200),
+    [saveState, state.uiState.autoSaveEnabled, state.uiState.hasUnsavedChanges, state.project.id]
+  )
+
+  // Effect to trigger instant auto-save when state changes
+  useEffect(() => {
+    if (state.isInitialized && state.uiState.hasUnsavedChanges && state.project.id) {
+      debouncedAutoSave()
+    }
+    
+    return () => {
+      debouncedAutoSave.cancel()
+    }
+  }, [state.uiState.hasUnsavedChanges, state.isInitialized, state.project.id, debouncedAutoSave])
 
   const resumeState = useCallback(async (projectId: string) => {
     try {

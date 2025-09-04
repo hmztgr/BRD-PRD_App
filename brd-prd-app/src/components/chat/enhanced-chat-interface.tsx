@@ -144,14 +144,15 @@ export function EnhancedChatInterface({
   const isRTL = locale === 'ar'
   
   // Chat state
-  const [messages, setMessages] = useState<Message[]>([
-    {
+  const [messages, setMessages] = useState<Message[]>(
+    // Don't set initial welcome message if we have a projectId (we'll load from server)
+    projectId ? [] : [{
       id: '1',
       role: 'assistant',
       content: mode === 'advanced' ? t.advancedWelcome(userName) : t.standardWelcome(userName),
       timestamp: new Date()
-    }
-  ])
+    }]
+  )
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [conversationId, setConversationId] = useState<string | null>(null)
@@ -160,6 +161,7 @@ export function EnhancedChatInterface({
   // Project state (for persistence)
   const [currentProject, setCurrentProject] = useState<Project | null>(null)
   const [autoSaveInterval, setAutoSaveInterval] = useState<NodeJS.Timeout | null>(null)
+  const [projectLoading, setProjectLoading] = useState(!!projectId) // Loading if we have a projectId to load
   
   // Planning state (for advanced mode)
   const [planningSession, setPlanningSession] = useState<PlanningSession | null>(null)
@@ -222,7 +224,10 @@ export function EnhancedChatInterface({
   // Load or create project on mount
   useEffect(() => {
     const initializeProject = async () => {
-      if (mode === 'standard') return // Standard mode doesn't need project persistence
+      if (mode === 'standard') {
+        setProjectLoading(false)
+        return // Standard mode doesn't need project persistence
+      }
 
       try {
         if (projectId) {
@@ -240,6 +245,7 @@ export function EnhancedChatInterface({
             if (resumeResponse.ok) {
               const { sessionState } = await resumeResponse.json()
               if (sessionState.conversation && sessionState.conversation.messages.length > 0) {
+                console.log('Restored messages:', sessionState.conversation.messages.length)
                 setMessages(sessionState.conversation.messages.map((msg: any) => ({
                   id: msg.id,
                   role: msg.role,
@@ -247,6 +253,14 @@ export function EnhancedChatInterface({
                   timestamp: new Date(msg.createdAt || msg.timestamp)
                 })))
                 setConversationId(sessionState.conversation.id)
+              } else {
+                // If no conversation messages, show welcome message
+                setMessages([{
+                  id: '1',
+                  role: 'assistant',
+                  content: mode === 'advanced' ? t.advancedWelcome(userName) : t.standardWelcome(userName),
+                  timestamp: new Date()
+                }])
               }
               if (sessionState.session) {
                 const sessionData = sessionState.session.sessionData as any
@@ -257,6 +271,14 @@ export function EnhancedChatInterface({
                   setCanGenerateDocument(sessionData.uiState?.canGenerateDocument || false)
                 }
               }
+            } else {
+              // If session resume fails, show welcome message
+              setMessages([{
+                id: '1',
+                role: 'assistant',
+                content: mode === 'advanced' ? t.advancedWelcome(userName) : t.standardWelcome(userName),
+                timestamp: new Date()
+              }])
             }
           }
         } else {
@@ -277,6 +299,13 @@ export function EnhancedChatInterface({
           if (response.ok) {
             const project = await response.json()
             setCurrentProject(project)
+            // Set welcome message for new project
+            setMessages([{
+              id: '1',
+              role: 'assistant',
+              content: mode === 'advanced' ? t.advancedWelcome(userName) : t.standardWelcome(userName),
+              timestamp: new Date()
+            }])
             // Update URL to include project ID
             const url = new URL(window.location.href)
             url.searchParams.set('projectId', project.id)
@@ -285,6 +314,15 @@ export function EnhancedChatInterface({
         }
       } catch (error) {
         console.error('Failed to initialize project:', error)
+        // Show welcome message on error
+        setMessages([{
+          id: '1',
+          role: 'assistant',
+          content: mode === 'advanced' ? t.advancedWelcome(userName) : t.standardWelcome(userName),
+          timestamp: new Date()
+        }])
+      } finally {
+        setProjectLoading(false)
       }
     }
 
@@ -764,7 +802,15 @@ export function EnhancedChatInterface({
     return (
       <>
         <div className="flex-1 overflow-y-auto p-4 space-y-4 max-h-[400px]">
-          {messages.map((message) => (
+          {projectLoading ? (
+            <div className="flex items-center justify-center py-8">
+              <div className="flex items-center gap-3">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                <span className="text-gray-600">Loading project...</span>
+              </div>
+            </div>
+          ) : (
+            messages.map((message) => (
             <div
               key={message.id}
               className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
@@ -854,7 +900,8 @@ export function EnhancedChatInterface({
                 </div>
               </div>
             </div>
-          ))}
+            ))
+          )}
           <div ref={messagesEndRef} />
         </div>
 

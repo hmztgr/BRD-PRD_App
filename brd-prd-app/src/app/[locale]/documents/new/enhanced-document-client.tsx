@@ -25,7 +25,9 @@ import {
   TrendingUp,
   Bell,
   Save,
-  Pause
+  Pause,
+  CheckCircle,
+  Loader2
 } from 'lucide-react'
 
 // Import centralized state management
@@ -124,7 +126,43 @@ function NotificationCenter() {
   )
 }
 
-// Save Progress Button Component
+// Auto-save status indicator component
+function AutoSaveIndicator() {
+  const { hasUnsavedChanges, isLoading } = useProjectActions()
+  const context = useMultiTabContext()
+  const lastSaved = context.state.uiState.lastSaved
+  
+  if (isLoading) {
+    return (
+      <div className="flex items-center text-sm text-blue-400">
+        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+        Saving...
+      </div>
+    )
+  }
+  
+  if (!hasUnsavedChanges && lastSaved) {
+    return (
+      <div className="flex items-center text-sm text-green-400">
+        <CheckCircle className="w-4 h-4 mr-2" />
+        All changes saved
+      </div>
+    )
+  }
+  
+  if (hasUnsavedChanges) {
+    return (
+      <div className="flex items-center text-sm text-yellow-400">
+        <RefreshCw className="w-4 h-4 mr-2" />
+        Auto-saving...
+      </div>
+    )
+  }
+  
+  return null
+}
+
+// Save Progress Button Component (now optional manual save)
 function SaveProgressButton() {
   const { saveState, hasUnsavedChanges, isLoading } = useProjectActions()
   
@@ -134,10 +172,11 @@ function SaveProgressButton() {
       disabled={!hasUnsavedChanges || isLoading}
       variant="outline"
       size="sm"
-      className={hasUnsavedChanges ? 'border-green-500 text-green-600' : ''}
+      className={hasUnsavedChanges ? 'border-green-500 text-green-600' : 'opacity-50'}
+      title={hasUnsavedChanges ? 'Force save now' : 'All changes are saved'}
     >
       <Save className="w-4 h-4 mr-2" />
-      Save Progress
+      {hasUnsavedChanges ? 'Save Now' : 'Saved'}
     </Button>
   )
 }
@@ -234,13 +273,16 @@ function DocumentClientContent({
             </div>
           </div>
           
-          {/* Save Progress Button */}
-          <div className="flex items-center space-x-2">
-            <SaveProgressButton />
-            <Button variant="outline" size="sm">
-              <Pause className="w-4 h-4 mr-2" />
-              Pause Session
-            </Button>
+          {/* Auto-save Status & Manual Save */}
+          <div className="flex items-center space-x-4">
+            <AutoSaveIndicator />
+            <div className="flex items-center space-x-2">
+              <SaveProgressButton />
+              <Button variant="outline" size="sm">
+                <Pause className="w-4 h-4 mr-2" />
+                Pause Session
+              </Button>
+            </div>
             
             {/* Notification Badge */}
             {notifications.filter(n => !n.isRead).length > 0 && (

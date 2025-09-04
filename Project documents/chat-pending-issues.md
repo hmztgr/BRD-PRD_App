@@ -698,6 +698,41 @@ The implementation demonstrates:
 
 This represents the most important part of the Project Persistence feature as requested by the user: "users should be able to save their progress then they can resume and the AI model should be able to remember/read all the progress done earlier from the summary created."
 
+## 🚨 NEW CRITICAL ISSUES (December 4, 2025)
+
+### Issue #1: No Delete Project Functionality
+- **Severity:** 🔴 **HIGH** - Basic CRUD operation missing
+- **Discovery Date:** December 4, 2025
+- **Current State:** Projects page only shows "Continue Project" button
+- **Missing Feature:** No delete button or option visible on project cards
+- **Impact:** Users cannot remove unwanted or test projects, leading to clutter
+- **User Experience:** Poor - accumulation of projects without cleanup ability
+- **Required Fix:** Add delete button with confirmation dialog to project cards
+
+### Issue #2: Continue Project Doesn't Actually Resume
+- **Severity:** 🚨 **CRITICAL** - Core persistence feature broken
+- **Discovery Date:** December 4, 2025  
+- **Current Behavior:** 
+  - Clicking "Continue Project" navigates to Advanced Mode
+  - Starts completely fresh session with no previous context
+  - No conversation history loaded
+  - No project state restoration
+  - AI has no memory of previous interactions
+- **Expected Behavior:**
+  - Should load all previous conversation messages
+  - Should restore UI state (tabs, settings, etc.)
+  - AI should have context of all previous planning/research
+  - Should continue from exact point where user left off
+- **Root Cause:** Session resume functionality not properly integrated
+- **Impact:** **COMPLETE FAILURE** of project persistence - defeats entire purpose of the feature
+
+### Issue #3: AI Response Speed Suspicion
+- **Observation:** Advanced Mode AI responses appear almost instantly
+- **Concern:** Response speed suggests possible hardcoded/template responses
+- **Example:** Mobile coffee cart analysis appears immediately with full Saudi Arabia context
+- **Investigation Needed:** Verify if responses are genuinely AI-generated or pre-written templates
+- **Impact:** If hardcoded, undermines the entire Advanced Mode value proposition
+
 ## Notes
 
 - Both modes successfully handle the same business idea with dramatically different approaches
@@ -706,3 +741,4 @@ This represents the most important part of the Project Persistence feature as re
 - Minor technical issues don't significantly impact core functionality
 - **Project Persistence System**: ✅ **BACKEND COMPLETE** - 98% implementation complete, comprehensive testing framework established
 - **Frontend UI Issues**: 🔴 **CRITICAL** - Project management UI needs immediate fixes for production readiness
+- **Session Persistence**: 🚨 **BROKEN** - Continue Project feature doesn't actually restore any session data
