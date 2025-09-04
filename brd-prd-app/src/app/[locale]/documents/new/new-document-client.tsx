@@ -77,8 +77,8 @@ export function NewDocumentClient({
       setMode(modeFromUrl)
     }
     
-    // Get project ID from URL if exists
-    const projectFromUrl = searchParams?.get('projectId')
+    // Get project ID from URL if exists (check both 'projectId' and 'project' parameters)
+    const projectFromUrl = searchParams?.get('projectId') || searchParams?.get('project')
     if (projectFromUrl) {
       setProjectId(projectFromUrl)
     }
@@ -224,29 +224,35 @@ export function NewDocumentClient({
             </TabsList>
           </div>
 
-          <div className="flex-1 overflow-hidden">
-            {/* Chat Tab - Use simple chat interface */}
-            <TabsContent value="chat" className="h-full m-0 overflow-auto">
+          <div className="flex-1 overflow-hidden relative">
+            {/* Chat Tab - Always mounted, CSS visibility control */}
+            <div 
+              className={`absolute inset-0 h-full overflow-auto ${activeTab === 'chat' ? 'block' : 'hidden'}`}
+            >
               <div className="p-6 h-full">
                 <ChatInterface 
                   userName={userName} 
                   locale={locale}
                 />
               </div>
-            </TabsContent>
+            </div>
 
-            {/* Upload Tab - Same as advanced mode */}
-            <TabsContent value="upload" className="h-full m-0 overflow-auto">
+            {/* Upload Tab - Always mounted, CSS visibility control */}
+            <div 
+              className={`absolute inset-0 h-full overflow-auto ${activeTab === 'upload' ? 'block' : 'hidden'}`}
+            >
               <div className="p-6">
                 <DocumentUploader
                   onFilesUploaded={handleFilesUploaded}
                   locale={locale}
                 />
               </div>
-            </TabsContent>
+            </div>
 
-            {/* Research Tab - Limited functionality for standard mode */}
-            <TabsContent value="research" className="h-full m-0 overflow-auto">
+            {/* Research Tab - Always mounted, CSS visibility control */}
+            <div 
+              className={`absolute inset-0 h-full overflow-auto ${activeTab === 'research' ? 'block' : 'hidden'}`}
+            >
               <div className="p-6">
                 <div className="text-center py-12">
                   <Search className="h-16 w-16 mx-auto text-muted-foreground/50 mb-4" />
@@ -260,10 +266,12 @@ export function NewDocumentClient({
                   </Button>
                 </div>
               </div>
-            </TabsContent>
+            </div>
 
-            {/* Progress Tab - Basic version */}
-            <TabsContent value="roadmap" className="h-full m-0 overflow-auto">
+            {/* Progress Tab - Always mounted, CSS visibility control */}
+            <div 
+              className={`absolute inset-0 h-full overflow-auto ${activeTab === 'roadmap' ? 'block' : 'hidden'}`}
+            >
               <div className="p-6">
                 <div className="space-y-6">
                   <h3 className="text-lg font-semibold">Selected Research Insights</h3>
@@ -283,10 +291,12 @@ export function NewDocumentClient({
                   )}
                 </div>
               </div>
-            </TabsContent>
+            </div>
 
-            {/* Generate Tab - Multi-Document Generation (same as Advanced Mode) */}
-            <TabsContent value="generate" className="h-full m-0 overflow-auto">
+            {/* Generate Tab - Always mounted, CSS visibility control */}
+            <div 
+              className={`absolute inset-0 h-full overflow-auto ${activeTab === 'generate' ? 'block' : 'hidden'}`}
+            >
               <div className="p-6">
                 <MultiDocumentGenerator
                   sessionId={sessionId || undefined}
@@ -298,7 +308,7 @@ export function NewDocumentClient({
                   onDocumentReady={handleDocumentReady}
                 />
               </div>
-            </TabsContent>
+            </div>
           </div>
         </Tabs>
       </div>
@@ -358,9 +368,11 @@ export function NewDocumentClient({
             </TabsList>
           </div>
 
-          <div className="flex-1 overflow-hidden">
-            {/* Planning Chat Tab */}
-            <TabsContent value="chat" className="h-full m-0">
+          <div className="flex-1 overflow-hidden relative">
+            {/* Planning Chat Tab - Always mounted, CSS visibility control */}
+            <div 
+              className={`absolute inset-0 h-full ${activeTab === 'chat' ? 'block' : 'hidden'}`}
+            >
               <div className="h-full flex">
                 {/* Main Chat Area */}
                 <div className="flex-1 p-6 flex flex-col min-h-0">
@@ -388,10 +400,12 @@ export function NewDocumentClient({
                   </div>
                 </div>
               </div>
-            </TabsContent>
+            </div>
 
-            {/* Document Upload Tab */}
-            <TabsContent value="upload" className="h-full m-0">
+            {/* Document Upload Tab - Always mounted, CSS visibility control */}
+            <div 
+              className={`absolute inset-0 h-full ${activeTab === 'upload' ? 'block' : 'hidden'}`}
+            >
               <div className="h-full flex">
                 <div className="flex-1 p-6">
                   <DocumentUploader
@@ -408,10 +422,12 @@ export function NewDocumentClient({
                   />
                 </div>
               </div>
-            </TabsContent>
+            </div>
 
-            {/* Research Tab */}
-            <TabsContent value="research" className="h-full m-0 overflow-auto">
+            {/* Research Tab - Always mounted, CSS visibility control */}
+            <div 
+              className={`absolute inset-0 h-full overflow-auto ${activeTab === 'research' ? 'block' : 'hidden'}`}
+            >
               <div className="p-6">
                 <DataGatheringPanel
                   sessionId={sessionId || 'default'}
@@ -420,10 +436,12 @@ export function NewDocumentClient({
                   onFindingSelect={handleFindingSelect}
                 />
               </div>
-            </TabsContent>
+            </div>
 
-            {/* Progress Roadmap Tab */}
-            <TabsContent value="roadmap" className="h-full m-0 overflow-auto">
+            {/* Progress Roadmap Tab - Always mounted, CSS visibility control */}
+            <div 
+              className={`absolute inset-0 h-full overflow-auto ${activeTab === 'roadmap' ? 'block' : 'hidden'}`}
+            >
               <div className="p-6">
                 <ProgressRoadmap
                   sessionId={sessionId || 'default'}
@@ -433,10 +451,12 @@ export function NewDocumentClient({
                   onExportRoadmap={() => console.log('Export roadmap')}
                 />
               </div>
-            </TabsContent>
+            </div>
 
-            {/* Multi-Document Generation Tab */}
-            <TabsContent value="generate" className="h-full m-0 overflow-auto">
+            {/* Multi-Document Generation Tab - Always mounted, CSS visibility control */}
+            <div 
+              className={`absolute inset-0 h-full overflow-auto ${activeTab === 'generate' ? 'block' : 'hidden'}`}
+            >
               <div className="p-6">
                 <MultiDocumentGenerator
                   sessionId={sessionId || undefined}
@@ -448,7 +468,7 @@ export function NewDocumentClient({
                   onDocumentReady={handleDocumentReady}
                 />
               </div>
-            </TabsContent>
+            </div>
           </div>
         </Tabs>
       </div>

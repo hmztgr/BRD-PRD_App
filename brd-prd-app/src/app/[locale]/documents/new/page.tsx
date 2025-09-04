@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth/next'
 import { redirect } from 'next/navigation'
 import { authOptions } from '@/lib/auth'
 import { Sidebar } from '@/components/layout/sidebar'
-import { NewDocumentClient } from './new-document-client'
+import EnhancedDocumentClient from './enhanced-document-client'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 
@@ -54,19 +54,8 @@ export default async function NewDocumentPage({ params }: NewDocumentPageProps) 
       </aside>
       
       <main className="flex-1 overflow-hidden">
-        {/* Breadcrumb */}
-        <div className="p-6 pb-0">
-          <Link 
-            href={`/${locale}/dashboard`}
-            className={`inline-flex items-center text-sm text-muted-foreground hover:text-primary ${isRTL ? 'flex-row-reverse' : ''}`}
-          >
-            <ArrowLeft className={`h-4 w-4 ${isRTL ? 'ml-1 rotate-180' : 'mr-1'}`} />
-            {t.backToDashboard}
-          </Link>
-        </div>
-
-        {/* Client Component with all integrated features */}
-        <NewDocumentClient
+        {/* Enhanced Client Component with Phase 5 Centralized State Management */}
+        <EnhancedDocumentClient
           userName={session.user.name || session.user.email || 'User'}
           locale={locale}
           translations={t}

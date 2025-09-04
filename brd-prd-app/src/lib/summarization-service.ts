@@ -186,7 +186,7 @@ export class ConversationSummarizationService {
    */
   getContextStats(context: ConversationContext): {
     totalMessages: number
-    activeMess�ages: number
+    activeMessages: number
     summaries: number
     totalTokens: number
     compressionSavings: number

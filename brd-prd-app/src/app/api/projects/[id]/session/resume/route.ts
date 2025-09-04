@@ -7,13 +7,23 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  let id: string
+  let session: any
   try {
-    const session = await getServerSession(authOptions)
+    session = await getServerSession(authOptions)
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { id } = await params
+    const paramsResult = await params
+    id = paramsResult.id
+
+    // Log the resume request for debugging
+    console.log('Session resume request:', {
+      projectId: id,
+      userId: session.user.id,
+      timestamp: new Date().toISOString()
+    })
 
     // Verify project ownership and get full project data
     const project = await prisma.project.findFirst({
@@ -147,9 +157,18 @@ export async function POST(
     })
 
   } catch (error) {
-    console.error('Session resume error:', error)
+    console.error('Session resume error:', {
+      error: error instanceof Error ? error.message : error,
+      stack: error instanceof Error ? error.stack : undefined,
+      projectId: id,
+      userId: session?.user?.id,
+      timestamp: new Date().toISOString()
+    })
     return NextResponse.json(
-      { error: 'Failed to resume session' },
+      { 
+        error: 'Failed to resume session',
+        details: process.env.NODE_ENV === 'development' ? error instanceof Error ? error.message : String(error) : undefined
+      },
       { status: 500 }
     )
   }
@@ -159,13 +178,16 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  let id: string
+  let session: any
   try {
-    const session = await getServerSession(authOptions)
+    session = await getServerSession(authOptions)
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { id } = await params
+    const paramsResult = await params
+    id = paramsResult.id
 
     // Get project session history
     const project = await prisma.project.findFirst({

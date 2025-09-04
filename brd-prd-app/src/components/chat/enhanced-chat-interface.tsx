@@ -176,7 +176,20 @@ export function EnhancedChatInterface({
 
   // Auto-save function for project sessions
   const autoSaveSession = async () => {
-    if (!currentProject || !conversationId) return
+    // Add debugging for auto-save calls
+    if (!currentProject?.id) {
+      console.warn('Auto-save skipped: currentProject or currentProject.id is undefined', {
+        currentProject: currentProject,
+        projectId: currentProject?.id,
+        conversationId
+      })
+      return
+    }
+    
+    if (!conversationId) {
+      console.warn('Auto-save skipped: conversationId is undefined')
+      return
+    }
 
     try {
       await fetch(`/api/projects/${currentProject.id}/session/save`, {
@@ -216,9 +229,9 @@ export function EnhancedChatInterface({
           // Load existing project
           const response = await fetch(`/api/projects/${projectId}`)
           if (response.ok) {
-            const project = await response.json()
-            setCurrentProject(project)
-            setSelectedCountry(project.country || 'saudi-arabia')
+            const data = await response.json()
+            setCurrentProject(data.project)
+            setSelectedCountry(data.project.country || 'saudi-arabia')
             
             // Try to resume session
             const resumeResponse = await fetch(`/api/projects/${projectId}/session/resume`, {
@@ -278,9 +291,37 @@ export function EnhancedChatInterface({
     initializeProject()
   }, [projectId, mode])
 
+  // Initialize planning session for Advanced Mode
+  useEffect(() => {
+    if (mode === 'advanced' && currentProject && !planningSession) {
+      // Create a new planning session for Advanced Mode
+      const newPlanningSession: PlanningSession = {
+        id: `session-${Date.now()}`,
+        status: 'active',
+        currentStep: 'initial',
+        completedSteps: [],
+        researchFindings: [],
+        insights: []
+      }
+      setPlanningSession(newPlanningSession)
+    }
+  }, [mode, currentProject, planningSession])
+
   // Set up auto-save interval
   useEffect(() => {
-    if (mode === 'advanced' && currentProject) {
+    // Clear existing interval first
+    if (autoSaveInterval) {
+      clearInterval(autoSaveInterval)
+      setAutoSaveInterval(null)
+    }
+
+    // Only set up auto-save if we have all required data
+    if (mode === 'advanced' && currentProject?.id && conversationId) {
+      console.log('Setting up auto-save interval', {
+        projectId: currentProject.id,
+        conversationId,
+        mode
+      })
       const interval = setInterval(autoSaveSession, 30000) // Auto-save every 30 seconds
       setAutoSaveInterval(interval)
       return () => {
@@ -288,7 +329,7 @@ export function EnhancedChatInterface({
         setAutoSaveInterval(null)
       }
     }
-  }, [currentProject, conversationId, messages, mode])
+  }, [currentProject?.id, conversationId, messages.length, mode])
 
   // Cleanup on unmount
   useEffect(() => {
@@ -528,6 +569,86 @@ export function EnhancedChatInterface({
     }
   }
 
+  const pauseSession = async () => {
+    if (!currentProject) return
+
+    try {
+      // First save the current progress
+      await saveProgress()
+      
+      // Update project status to paused
+      const response = await fetch(`/api/projects/${currentProject.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          status: 'paused'
+        })
+      })
+
+      if (response.ok) {
+        setPlanningSession(prev => prev ? { ...prev, status: 'paused' } : null)
+        
+        const pauseMessage: Message = {
+          id: 'pause-' + Date.now(),
+          role: 'system',
+          content: isRTL ? 'تم إيقاف الجلسة مؤقتاً وحفظ التقدم' : 'Session paused and progress saved',
+          timestamp: new Date()
+        }
+        setMessages(prev => [...prev, pauseMessage])
+      }
+    } catch (error) {
+      console.error('Error pausing session:', error)
+    }
+  }
+
+  const resumeSession = async () => {
+    if (!currentProject) return
+
+    try {
+      // Resume session by loading latest state
+      const response = await fetch(`/api/projects/${currentProject.id}/session/resume`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+
+      if (response.ok) {
+        const sessionData = await response.json()
+        
+        // Update project status to active
+        await fetch(`/api/projects/${currentProject.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            status: 'active'
+          })
+        })
+
+        setPlanningSession(prev => prev ? { ...prev, status: 'active' } : null)
+        
+        // Restore messages if available
+        if (sessionData.messages && sessionData.messages.length > 0) {
+          setMessages(sessionData.messages)
+        }
+        
+        const resumeMessage: Message = {
+          id: 'resume-' + Date.now(),
+          role: 'system',
+          content: isRTL ? 'تم استئناف الجلسة بنجاح' : 'Session resumed successfully',
+          timestamp: new Date()
+        }
+        setMessages(prev => [...prev, resumeMessage])
+      }
+    } catch (error) {
+      console.error('Error resuming session:', error)
+    }
+  }
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
@@ -555,9 +676,11 @@ export function EnhancedChatInterface({
               variant="outline"
               size="sm"
               onClick={() => {
-                setPlanningSession(prev => 
-                  prev ? { ...prev, status: prev.status === 'active' ? 'paused' : 'active' } : null
-                )
+                if (planningSession?.status === 'active') {
+                  pauseSession()
+                } else {
+                  resumeSession()
+                }
               }}
             >
               {planningSession.status === 'active' ? (

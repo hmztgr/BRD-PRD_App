@@ -767,3 +767,88 @@ node:internal/async_hooks (130:17)
 
 
 ok, i noticed you assumed 50% 50% distrubition between input and output from my      ││   experince input is usually way lower so lets assume about 20% input and 80% output   ││   also adjust the numbers in the @"Project documents\PRD-BRD-App.md" and               ││   @free_month_cost_analysis.md  according to this @"uploads\BRD-PRD App prices.csv"    ││   implement those changes and those changed below \                                    ││   - in business plan change "Everything in Hobby" to "Everything in Professional"\     ││   - in Enterprise plan change "24/7 premium support" to "Priority support"\            ││   - in Enterprise plan change "Unlimited tokens" to "1M tokens per month"\ 
+
+
+
+
+
+
+
+
+<important>
+
+**important**
+
+i noticed this AI responce happend almost instantly is it hardcoded responce?
+
+"
+Excellent! A mobile coffee cart in Riyadh presents a promising opportunity, given the city's vibrant culture and large population.  However, success requires careful planning, especially considering the Saudi Arabian market’s unique characteristics. Let's delve into a comprehensive analysis.  We'll start with refining your core concept.
+
+
+**1. Understanding Business Idea and Vision:**
+
+* **Concept Refinement:**  Beyond "mobile coffee cart," let's be specific. What type of coffee will you specialize in? (e.g., specialty coffee, traditional Arabic coffee, international blends, etc.)  Will you offer pastries, sandwiches, or other food items?  What will be your unique selling proposition (USP)? What makes your coffee cart different and better than existing options?  (e.g., ethically sourced beans, unique brewing methods, a specific ambiance, etc.)
+
+* **Brand Identity:**  What is the name of your business? What is your brand's personality and target image? (e.g., modern and sleek, traditional and authentic, quirky and fun).  Do you have a preliminary logo concept?
+
+* **Vision and Mission:**  What is your long-term vision for the business? (e.g., expanding to multiple carts, opening a brick-and-mortar location, franchising).  What is your mission statement – what problem are you solving and how?
+
+
+**2. Market Analysis and Target Audience:**
+
+* **Market Research:** What is the current coffee market landscape in Riyadh? Are there many existing coffee carts or shops?  What are their strengths and weaknesses? What are the average prices for similar products?  Have you conducted any primary research (e.g., surveys, interviews with potential customers)?
+
+* **Target Audience:** Who is your ideal customer?  Be specific: age, gender, income level, lifestyle, occupation, coffee preferences.  Where do they spend their time? (e.g., near universities, business districts, shopping malls). What are their motivations for buying coffee?
+
+* **Location Strategy:**  Where in Riyadh do you plan to operate?  Consider foot traffic, proximity to potential customers, accessibility, and permit requirements.  Will you be stationary or mobile (e.g., attending events, festivals)?  Are there specific regulations regarding mobile food vendors in Riyadh? (We'll explore this in detail later).
+
+
+**3. Strategic Planning and Competitive Advantage:**
+
+* **Competitive Analysis:**  Beyond identifying competitors, analyze their pricing, marketing strategies, menu offerings, and customer reviews.  How will you differentiate yourself?
+
+* **Value Proposition:**  Clearly articulate the value you offer to your customers. What makes your coffee cart worth their money and time?
+
+* **Growth Strategy:** How do you plan to grow your business over the next 3-5 years? (e.g., expanding locations, increasing menu offerings, developing a loyalty program).
+
+
+**4. Financial Modeling and Projections:**
+
+* **Startup Costs:**  List all initial expenses: cart purchase or lease, equipment, permits, licenses, initial inventory, marketing materials, insurance.
+
+* **Operating Costs:**  Project monthly expenses: rent (if applicable), utilities, supplies (coffee beans, milk, sugar, etc.), staff salaries (if any), maintenance, marketing, etc.
+
+* **Revenue Projections:**  Estimate your daily/monthly/annual revenue based on your pricing, sales volume projections, and market analysis.
+
+* **Profitability Analysis:**  Calculate your projected profit margins and break-even point.
+
+
+**5. Marketing and Operations Plan:**
+
+* **Marketing Strategy:** How will you attract customers? (e.g., social media marketing, local partnerships, promotions, events).  Consider the cultural nuances of the Saudi Arabian market.
+
+* **Operations Plan:**  Detail your daily operations, including sourcing of supplies, preparation of coffee, customer service, inventory management, waste disposal.  How will you manage logistics for a mobile cart?
+
+* **Technology:** Will you use a POS system?  How will you handle online ordering (if applicable)?
+
+
+**6. Risk Analysis and Mitigation:**
+
+* **Regulatory Compliance:**  Identify all necessary permits and licenses required to operate a food business in Riyadh.  Research specific regulations related to mobile food vendors.  This is crucial.
+
+* **Financial Risks:**  Identify potential financial risks (e.g., low sales, unexpected expenses, economic downturn).  How will you mitigate these risks?
+
+* **Operational Risks:**  Identify potential operational risks (e.g., equipment malfunctions, supply chain disruptions, theft). How will you mitigate these risks?
+
+
+**7. Legal and Regulatory Considerations:**
+
+* **Business Structure:** Which legal structure will your business have (Sole Proprietorship, LLC, etc.)? This impacts taxation and liability.
+* **Permits and Licenses:**  We need to thoroughly research the specific permits and licenses required in Riyadh for a mobile food cart business. This will vary depending on your location and offerings.
+* **Zakat and Tax implications:** Understanding the Saudi Arabian tax system is critical for accurate financial projections.
+* **Compliance with Saudi labor laws:** If you plan to hire employees, you need to understand and comply with Saudi labor regulations.
+
+
+Once we have thoroughly addressed these points, we will be ready to generate your comprehensive document suite: Business Requirements Document (BRD), Product Requirements Document (PRD), Business Plan, Feasibility Study, and Investor Pitch Deck.  Let's begin with answering the questions above.  Please provide as much detail as possible.
+"
+</important>

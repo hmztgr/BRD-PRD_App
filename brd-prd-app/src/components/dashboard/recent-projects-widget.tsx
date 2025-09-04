@@ -125,7 +125,7 @@ export function RecentProjectsWidget({ locale, translations: t }: RecentProjects
                     <Clock className="h-3 w-3" />
                     {formatDistanceToNow(new Date(project.lastActivity), { addSuffix: true })}
                   </span>
-                  <span>{project.counts?.documents || 0} {t.documents}</span>
+                  <span>{project._count?.documents || 0} {t.documents}</span>
                   <span>{project.confidence}% {t.confidence}</span>
                 </div>
               </div>

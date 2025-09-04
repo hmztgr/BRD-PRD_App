@@ -487,7 +487,7 @@ function ProjectCard({
   const router = useRouter()
 
   const handleContinueProject = () => {
-    router.push(`/${locale}/documents/new?mode=advanced&project=${project.id}`)
+    router.push(`/${locale}/documents/new?mode=advanced&projectId=${project.id}`)
   }
 
   if (viewMode === 'list') {

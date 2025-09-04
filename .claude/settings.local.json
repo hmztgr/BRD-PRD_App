@@ -151,7 +151,9 @@
       "Bash(dir srcappapiprojects)",
       "WebFetch(domain:platform.openai.com)",
       "WebFetch(domain:openai.com)",
-      "WebFetch(domain:docs.moyasar.com)"
+      "WebFetch(domain:docs.moyasar.com)",
+      "Bash(start http://localhost:3001/en/projects)",
+      "mcp__playwright__browser_network_requests"
     ],
     "deny": [],
     "ask": [],

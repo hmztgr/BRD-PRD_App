@@ -7,13 +7,16 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  let id: string | undefined
+  let session: any
   try {
-    const session = await getServerSession(authOptions)
+    session = await getServerSession(authOptions)
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { id } = await params
+    const paramsResult = await params
+    id = paramsResult.id
     const body = await req.json()
     const { 
       conversationId, 
@@ -24,6 +27,16 @@ export async function POST(
       currentTab = 'chat',
       uiState = {}
     } = body
+
+    // Log the save request for debugging
+    console.log('Session save request:', {
+      projectId: id,
+      userId: session.user.id,
+      messageCount: messages.length,
+      conversationId,
+      currentTab,
+      timestamp: new Date().toISOString()
+    })
 
     // Verify project ownership
     const project = await prisma.project.findFirst({
@@ -70,14 +83,20 @@ export async function POST(
           update: {
             projectId: id,
             updatedAt: new Date(),
-            activeTokens: sessionTokens
+            metadata: {
+              activeTokens: sessionTokens,
+              messageCount: messages.length
+            }
           },
           create: {
             id: conversationId,
             userId: session.user.id,
             projectId: id,
-            activeTokens: sessionTokens,
-            status: 'active'
+            status: 'active',
+            metadata: {
+              activeTokens: sessionTokens,
+              messageCount: messages.length
+            }
           }
         })
 
@@ -94,9 +113,11 @@ export async function POST(
               conversationId,
               role: msg.role,
               content: msg.content,
-              tokenCount: Math.ceil((msg.content?.length || 0) / 4),
               createdAt: msg.createdAt ? new Date(msg.createdAt) : new Date(),
-              metadata: msg.metadata
+              metadata: {
+                ...msg.metadata,
+                tokenCount: msg.tokenCount || Math.ceil((msg.content?.length || 0) / 4)
+              }
             }))
           })
         }
@@ -154,9 +175,18 @@ export async function POST(
     })
 
   } catch (error) {
-    console.error('Session save error:', error)
+    console.error('Session save error:', {
+      error: error instanceof Error ? error.message : error,
+      stack: error instanceof Error ? error.stack : undefined,
+      projectId: id || 'unknown',
+      userId: session?.user?.id || 'unknown',
+      timestamp: new Date().toISOString()
+    })
     return NextResponse.json(
-      { error: 'Failed to save session' },
+      { 
+        error: 'Failed to save session',
+        details: process.env.NODE_ENV === 'development' ? error instanceof Error ? error.message : String(error) : undefined
+      },
       { status: 500 }
     )
   }
