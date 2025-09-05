@@ -1,0 +1,16 @@
+# Windows reserved device names that get created accidentally
+nul
+con
+prn
+aux
+com[1-9]
+lpt[1-9]
+
+# Temporary files created by scripts
+*.tmp
+*.temp
+
+# Project-specific temporary files
+uploads/
+temp/
+tmp/

@@ -77,13 +77,3 @@ tmp/
 # Backup files
 *.backup
 *.bak
-
-
-echo "# Windows reserved names" >> .gitignore
-echo "nul" >> .gitignore
-echo "con" >> .gitignore
-echo "prn" >> .gitignore
-echo "aux" >> .gitignore
-echo "com[1-9]" >> .gitignore
-echo "lpt[1-9]" >> .gitignore
-echo "brd-prd-app/nul" >> .gitignore
