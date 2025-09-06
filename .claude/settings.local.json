@@ -206,7 +206,8 @@
       "Read(/C:\\projects\\Cursor projects\\BRD-PRD App claude\\brd-prd-app\\src\\components\\chat/**)",
       "Read(/C:\\projects\\Cursor projects\\BRD-PRD App claude\\brd-prd-app\\src\\app\\api\\chat\\advanced-conversation/**)",
       "Read(/C:\\projects\\Cursor projects\\BRD-PRD App claude\\brd-prd-app\\src\\app\\api\\chat\\advanced-conversation/**)",
-      "Read(/C:\\projects\\Cursor projects\\BRD-PRD App claude\\brd-prd-app/**)"
+      "Read(/C:\\projects\\Cursor projects\\BRD-PRD App claude\\brd-prd-app/**)",
+      "mcp__playwright__browser_resize"
     ],
     "deny": [],
     "ask": [],

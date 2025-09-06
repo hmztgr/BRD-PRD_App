@@ -58,9 +58,9 @@ export default function Home({ params }: HomeProps) {
 
       {/* Features Section */}
       <section className="w-full py-12 md:py-24 lg:py-32 bg-white dark:bg-gray-950">
-        <div className="container px-4 md:px-6">
-          <div className="grid gap-6 items-center">
-            <div className="flex flex-col justify-center space-y-8 text-center">
+        <div className="container px-4 md:px-6 mx-auto">
+          <div className="flex flex-col items-center justify-center gap-6">
+            <div className="flex flex-col justify-center items-center space-y-8 text-center">
               <div className="space-y-2">
                 <h2 className="text-3xl font-bold sm:text-5xl">
                   {locale === 'ar' 
@@ -77,9 +77,9 @@ export default function Home({ params }: HomeProps) {
               </div>
             </div>
             
-            <div className="mx-auto max-w-6xl py-12">
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 lg:gap-12 place-items-center justify-items-center">
-              <div className="flex flex-col items-center text-center gap-4 w-80 max-w-sm">
+            <div className="mx-auto max-w-7xl py-12">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 lg:gap-12 justify-items-center items-center place-content-center">
+              <div className="flex flex-col items-center justify-center text-center gap-4 w-full max-w-sm mx-auto">
                 <div className="flex flex-col items-center gap-3">
                   <FileText className="h-8 w-8 text-primary" />
                   <h3 className="text-xl font-bold">
@@ -94,7 +94,7 @@ export default function Home({ params }: HomeProps) {
                 </p>
               </div>
               
-              <div className="flex flex-col items-center text-center gap-4 w-80 max-w-sm">
+              <div className="flex flex-col items-center justify-center text-center gap-4 w-full max-w-sm mx-auto">
                 <div className="flex flex-col items-center gap-3">
                   <Globe className="h-8 w-8 text-primary" />
                   <h3 className="text-xl font-bold">
@@ -109,7 +109,7 @@ export default function Home({ params }: HomeProps) {
                 </p>
               </div>
               
-              <div className="flex flex-col items-center text-center gap-4 w-80 max-w-sm">
+              <div className="flex flex-col items-center justify-center text-center gap-4 w-full max-w-sm mx-auto">
                 <div className="flex flex-col items-center gap-3">
                   <Zap className="h-8 w-8 text-primary" />
                   <h3 className="text-xl font-bold">
@@ -124,7 +124,7 @@ export default function Home({ params }: HomeProps) {
                 </p>
               </div>
               
-              <div className="flex flex-col items-center text-center gap-4 w-80 max-w-sm">
+              <div className="flex flex-col items-center justify-center text-center gap-4 w-full max-w-sm mx-auto">
                 <div className="flex flex-col items-center gap-3">
                   <Shield className="h-8 w-8 text-primary" />
                   <h3 className="text-xl font-bold">
@@ -139,7 +139,7 @@ export default function Home({ params }: HomeProps) {
                 </p>
               </div>
               
-              <div className="flex flex-col items-center text-center gap-4 w-80 max-w-sm">
+              <div className="flex flex-col items-center justify-center text-center gap-4 w-full max-w-sm mx-auto">
                 <div className="flex flex-col items-center gap-3">
                   <Users className="h-8 w-8 text-primary" />
                   <h3 className="text-xl font-bold">
@@ -154,7 +154,7 @@ export default function Home({ params }: HomeProps) {
                 </p>
               </div>
               
-              <div className="flex flex-col items-center text-center gap-4 w-80 max-w-sm">
+              <div className="flex flex-col items-center justify-center text-center gap-4 w-full max-w-sm mx-auto">
                 <div className="flex flex-col items-center gap-3">
                   <Sparkles className="h-8 w-8 text-primary" />
                   <h3 className="text-xl font-bold">
